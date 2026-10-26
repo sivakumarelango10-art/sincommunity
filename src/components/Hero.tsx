@@ -1,15 +1,25 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { SITE } from "../config/site";
-import { TEAM, portrait, portraitSrcSet } from "../data/team";
+import { TEAM, portrait, portraitSrcSet, type TeamMember } from "../data/team";
 import { gsap, useGSAP, SplitText, EASE, finePointer } from "../motion/gsap";
 import { useMotionEnabled } from "../motion/MotionContext";
-import { IconPlay, JoinButton, Logo } from "./ui";
+import { IconPause, IconPlay, JoinButton, Logo } from "./ui";
+import { HeroRotator, type RotatorHandle } from "./HeroRotator";
 import "./Hero.css";
 
-/** People shown in the hero composition (the full team is introduced in the team section). */
 const useIsoLayout = typeof window === "undefined" ? useEffect : useLayoutEffect;
 
-const HERO_PEOPLE = ["karmjith", "elango-s", "dhanusri-t"].map((id) => TEAM.find((m) => m.id === id)!);
+const pick = (ids: string[]) => ids.map((id) => TEAM.find((m) => m.id === id)).filter((m): m is TeamMember => !!m);
+/** Hero composition: the founder stays in the centre; the side frames move through the people
+    around him (left: co-founders and founding advisor, right: the team), so nobody appears twice. */
+const FOUNDER = pick(["elango-s"])[0];
+const LEFT = pick(["karmjith", "prajith", "aaditya-r-m"]);
+const RIGHT = pick(["dhanusri-t", "vaishnavi-m", "meghana-p-banda", "dhakshatha", "ishita-das", "mohana-priya-g"]);
+const PORTRAIT_SIZES = "(min-width: 960px) 160px, 30vw";
+
+/* one rhythm for both frames: they take turns, each change completes before the next begins */
+const FIRST_HOLD = 2.6;  // after the hero entrance
+const GAP = 0.9;         // between one frame finishing and the other starting
 
 interface HeroProps {
   /** "wait" while the opening story plays, "go" to run the entrance */
@@ -25,6 +35,75 @@ export function Hero({ entrance, fromIntro, onWatchStory }: HeroProps) {
   const tl = useRef<gsap.core.Timeline | null>(null);
   const [guide, setGuide] = useState<{ d: string; w: number; h: number } | null>(null);
   const guideDrawn = useRef(false);
+
+  /* ---- rotating portraits: shared controller */
+  const left = useRef<RotatorHandle>(null);
+  const right = useRef<RotatorHandle>(null);
+  const [full, setFull] = useState(false);        // other photos are added once the page has loaded
+  const [userPaused, setUserPaused] = useState(false);
+  const [held, setHeld] = useState(false);        // hover or keyboard focus on the portraits
+  const [inView, setInView] = useState(true);
+  const started = entrance === "go";
+
+  useEffect(() => {
+    if (!motion || !started || full) return;
+    let cancelled = false;
+    const add = () => { if (!cancelled) setFull(true); };
+    const idle = () => {
+      if (typeof window.requestIdleCallback === "function") window.requestIdleCallback(add, { timeout: 1500 });
+      else setTimeout(add, 400);
+    };
+    if (document.readyState === "complete") idle();
+    else window.addEventListener("load", idle, { once: true });
+    return () => { cancelled = true; window.removeEventListener("load", idle); };
+  }, [motion, started, full]);
+
+  useEffect(() => {
+    const visual = root.current?.querySelector<HTMLElement>(".hero__visual");
+    if (!visual) return;
+    const io = new IntersectionObserver(([e]) => setInView(e.isIntersecting), { threshold: 0.15 });
+    io.observe(visual);
+    const hold = () => setHeld(true);
+    const release = (e: Event) => {
+      if (e.type === "focusout" && visual.contains((e as FocusEvent).relatedTarget as Node)) return;
+      setHeld(false);
+    };
+    visual.addEventListener("pointerenter", hold);
+    visual.addEventListener("pointerleave", release);
+    visual.addEventListener("focusin", hold);
+    visual.addEventListener("focusout", release);
+    return () => {
+      io.disconnect();
+      visual.removeEventListener("pointerenter", hold);
+      visual.removeEventListener("pointerleave", release);
+      visual.removeEventListener("focusin", hold);
+      visual.removeEventListener("focusout", release);
+    };
+  }, []);
+
+  const rotating = motion && full && !userPaused && !held && inView;
+  const turn = useRef(0);
+  useEffect(() => {
+    if (!rotating) return;
+    let alive = true;
+    let call: gsap.core.Tween | null = null;
+    const frames = [right, left];
+    const tick = async () => {
+      const r = frames[turn.current % frames.length].current;
+      turn.current++;
+      const changed = r ? await r.advance() : false;
+      if (alive) call = gsap.delayedCall(changed ? GAP : 0.5, tick);
+    };
+    call = gsap.delayedCall(FIRST_HOLD, tick);
+    // pausing lets a change already under way finish smoothly; it just doesn't start another
+    return () => { alive = false; call?.kill(); };
+  }, [rotating]);
+
+  useEffect(() => {
+    if (motion) return;
+    left.current?.settle();
+    right.current?.settle();
+  }, [motion]);
 
   /* the guide line: from the spark beside the eyebrow, under the headline, to the Join button */
   const measure = useCallback(() => {
@@ -164,15 +243,25 @@ export function Hero({ entrance, fromIntro, onWatchStory }: HeroProps) {
               <path className="hero__link" d="M84 76 C 83 88, 68 93, 50 92" />
               <circle className="hero__ring" cx="50" cy="92" r="11.5" />
             </svg>
-            {HERO_PEOPLE.map((m, i) => (
-              <figure key={m.id} className={`hero__person hero__person--${i + 1}`} data-depth={[0.6, 1, 0.75][i]}>
-                <div className="hero__frame">
-                  <img src={portrait(m.id, 480)} srcSet={portraitSrcSet(m.id)} sizes="(min-width: 960px) 160px, 30vw"
-                    width={480} height={600} alt={`${m.name}, ${m.role}`} style={{ objectPosition: m.focus }}
-                    fetchPriority={i === 1 ? "high" : "auto"} decoding="async" />
-                </div>
-              </figure>
-            ))}
+            <figure className="hero__person hero__person--1" data-depth={0.6}>
+              <HeroRotator ref={left} people={LEFT} full={full} sizes={PORTRAIT_SIZES} />
+            </figure>
+            <figure className="hero__person hero__person--2" data-depth={1}>
+              <div className="hero__frame">
+                <img src={portrait(FOUNDER.id, 480)} srcSet={portraitSrcSet(FOUNDER.id)} sizes={PORTRAIT_SIZES}
+                  width={480} height={600} alt={`${FOUNDER.name}, ${FOUNDER.role}`} style={{ objectPosition: FOUNDER.focus }}
+                  fetchPriority="high" decoding="async" />
+              </div>
+            </figure>
+            <figure className="hero__person hero__person--3" data-depth={0.75}>
+              <HeroRotator ref={right} people={RIGHT} full={full} sizes={PORTRAIT_SIZES} />
+              {motion && full && (
+                <button type="button" className="hero__rot-toggle" onClick={() => setUserPaused((v) => !v)}
+                  aria-label={userPaused ? "Play the team photos" : "Pause the team photos"}>
+                  {userPaused ? <IconPlay /> : <IconPause />}
+                </button>
+              )}
+            </figure>
             <div className="hero__badge" data-depth="0.35">
               <Logo size={112} eager alt="SINC logo: three people joined around a shared centre" />
             </div>
