@@ -1,0 +1,242 @@
+{
+  "elango-s": {
+    "source": "elango-s-founder.png",
+    "width": 720,
+    "height": 1280,
+    "face": {
+      "x": 0.565,
+      "y": 0.585,
+      "headHeight": 0.175
+    },
+    "crops": {
+      "portrait": {
+        "left": 56,
+        "top": 450,
+        "right": 720,
+        "bottom": 1280
+      },
+      "square": {
+        "left": 127,
+        "top": 502,
+        "right": 687,
+        "bottom": 1062
+      }
+    }
+  },
+  "karmjith": {
+    "source": "karmjith-co-founder.jpeg",
+    "width": 720,
+    "height": 1280,
+    "face": {
+      "x": 0.59,
+      "y": 0.395,
+      "headHeight": 0.16
+    },
+    "crops": {
+      "portrait": {
+        "left": 113,
+        "top": 255,
+        "right": 720,
+        "bottom": 1014
+      },
+      "square": {
+        "left": 169,
+        "top": 280,
+        "right": 681,
+        "bottom": 792
+      }
+    }
+  },
+  "prajith": {
+    "source": "prajith-co-founder.jpeg",
+    "width": 720,
+    "height": 1280,
+    "face": {
+      "x": 0.59,
+      "y": 0.3,
+      "headHeight": 0.125
+    },
+    "crops": {
+      "portrait": {
+        "left": 188,
+        "top": 188,
+        "right": 662,
+        "bottom": 781
+      },
+      "square": {
+        "left": 225,
+        "top": 208,
+        "right": 625,
+        "bottom": 608
+      }
+    }
+  },
+  "vaishnavi-m": {
+    "source": "vaishnavi-m-tester.jpeg",
+    "width": 960,
+    "height": 1280,
+    "face": {
+      "x": 0.545,
+      "y": 0.455,
+      "headHeight": 0.15
+    },
+    "crops": {
+      "portrait": {
+        "left": 239,
+        "top": 348,
+        "right": 808,
+        "bottom": 1059
+      },
+      "square": {
+        "left": 283,
+        "top": 371,
+        "right": 763,
+        "bottom": 851
+      }
+    }
+  },
+  "dhakshatha": {
+    "source": "dhakshatha-designer.jpeg",
+    "width": 451,
+    "height": 821,
+    "face": {
+      "x": 0.575,
+      "y": 0.33,
+      "headHeight": 0.17
+    },
+    "crops": {
+      "portrait": {
+        "left": 37,
+        "top": 100,
+        "right": 451,
+        "bottom": 617
+      },
+      "square": {
+        "left": 85,
+        "top": 117,
+        "right": 434,
+        "bottom": 466
+      }
+    }
+  },
+  "ishita-das": {
+    "source": "ishita-das-designer.jpeg",
+    "width": 610,
+    "height": 813,
+    "face": {
+      "x": 0.48,
+      "y": 0.135,
+      "headHeight": 0.13
+    },
+    "crops": {
+      "portrait": {
+        "left": 81,
+        "top": 0,
+        "right": 504,
+        "bottom": 528
+      },
+      "square": {
+        "left": 117,
+        "top": 0,
+        "right": 469,
+        "bottom": 352
+      }
+    }
+  },
+  "dhanusri-t": {
+    "source": "dhanusri-t.jpeg",
+    "width": 1536,
+    "height": 2048,
+    "face": {
+      "x": 0.47,
+      "y": 0.66,
+      "headHeight": 0.11
+    },
+    "crops": {
+      "portrait": {
+        "left": 388,
+        "top": 1076,
+        "right": 1056,
+        "bottom": 1911
+      },
+      "square": {
+        "left": 440,
+        "top": 1104,
+        "right": 1004,
+        "bottom": 1667
+      }
+    }
+  },
+  "aaditya-r-m": {
+    "source": "aaditya-r-m-founding-advisor.jpeg",
+    "width": 960,
+    "height": 1280,
+    "face": {
+      "x": 0.49,
+      "y": 0.31,
+      "headHeight": 0.2
+    },
+    "crops": {
+      "portrait": {
+        "left": 140,
+        "top": 95,
+        "right": 800,
+        "bottom": 920
+      },
+      "square": {
+        "left": 195,
+        "top": 135,
+        "right": 735,
+        "bottom": 675
+      }
+    }
+  },
+  "mohana-priya-g": {
+    "source": "mohana-priya-g-designer.jpeg",
+    "width": 1200,
+    "height": 1600,
+    "face": {
+      "x": 0.545,
+      "y": 0.175,
+      "headHeight": 0.125
+    },
+    "crops": {
+      "portrait": {
+        "left": 389,
+        "top": 20,
+        "right": 922,
+        "bottom": 686
+      },
+      "square": {
+        "left": 417,
+        "top": 32,
+        "right": 893,
+        "bottom": 508
+      }
+    }
+  },
+  "meghana-p-banda": {
+    "source": "meghana-p-banda-tester.jpeg",
+    "width": 1086,
+    "height": 1300,
+    "face": {
+      "x": 0.5,
+      "y": 0.55,
+      "headHeight": 0.3
+    },
+    "crops": {
+      "portrait": {
+        "left": 145,
+        "top": 300,
+        "right": 945,
+        "bottom": 1300
+      },
+      "square": {
+        "left": 195,
+        "top": 390,
+        "right": 895,
+        "bottom": 1090
+      }
+    }
+  }
+}

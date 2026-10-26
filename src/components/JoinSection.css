@@ -1,0 +1,37 @@
+.join {
+  position: relative; overflow: clip; isolation: isolate; background: var(--surface); color: #fff;
+  padding-block: clamp(5rem, 4rem + 6vw, 9rem);
+}
+.join__bg { position: absolute; inset: 0; z-index: -1; background: var(--blue); }
+.join__anchor { position: relative; margin-top: clamp(3.5rem, 7vw, 6.5rem); }
+.join__art {
+  position: absolute; left: 50%; top: 50%; width: 1440px; height: 800px; max-width: none;
+  margin: -300px 0 0 -720px; pointer-events: none; overflow: visible;
+}
+.join__path { fill: none; stroke: rgba(255, 255, 255, 0.85); stroke-width: 2.5; stroke-linecap: round; }
+.join__orbit { fill: none; stroke: rgba(255, 255, 255, 0.22); stroke-width: 1.5; stroke-dasharray: 3 9; }
+
+.join__inner { position: relative; display: flex; flex-direction: column; align-items: center; text-align: center; }
+.join__badge {
+  position: relative; display: grid; place-items: center; width: clamp(128px, 14vw, 168px); aspect-ratio: 1;
+  border-radius: 50%; background: #fff; box-shadow: 0 30px 70px -20px rgba(8, 28, 68, 0.55);
+}
+.join__badge img { width: 74%; height: auto; }
+.join__pulse { position: absolute; inset: 0; border-radius: 50%; border: 2px solid #fff; opacity: 0; }
+
+.join__title {
+  position: relative;
+  margin-top: clamp(2.5rem, 5vw, 4rem);
+  font-size: var(--fs-display); line-height: 1.02; letter-spacing: var(--tracking-display); color: #fff;
+}
+.join__mask { display: block; overflow: hidden; padding-bottom: 0.06em; }
+.join__title-line { display: block; }
+.join__sub { position: relative; margin-top: var(--space-5); font-size: var(--fs-lead); color: var(--on-blue-soft); font-weight: 600; }
+.join__actions { position: relative; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: var(--space-4) var(--space-6); margin-top: var(--space-6); }
+.join .btn-white { min-height: 58px; padding: 0 32px; font-size: 1.05rem; }
+.join__login { color: #fff; }
+.join__login:hover, .join__login:focus-visible { color: #fff; }
+
+@media (max-width: 640px) {
+  .join__art { opacity: 0.6; }
+}

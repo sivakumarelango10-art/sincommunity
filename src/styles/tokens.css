@@ -1,0 +1,90 @@
+/* SINC design tokens — colours, type, spacing, radii, shadows and motion. */
+:root {
+  /* colour */
+  --blue: #1c59ee;
+  --blue-deep: #1034a8;
+  --navy: #081c44;
+  --bg: #fbfcff;
+  --surface: #f0f5ff;
+  --surface-2: #e6eeff;
+  --text: #141d32;
+  --text-soft: #46516b;       /* 7.6:1 on --bg */
+  --text-faint: #5d6782;      /* 5.6:1 on --bg */
+  --border: #dce3ef;
+  --border-strong: #c3cfe6;
+  --white: #ffffff;
+  --on-blue: #ffffff;
+  --on-blue-soft: #d9e4ff;    /* 7.9:1 on --blue-deep */
+  --on-navy-soft: #b9c8ec;    /* 9.3:1 on --navy */
+  --line: var(--blue);
+  --focus: #1c59ee;
+
+  /* type */
+  --font-display: "Sora Variable", "Sora", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-body: "Manrope Variable", "Manrope", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --fs-hero: clamp(2.7rem, 1.2rem + 6.4vw, 7.4rem);
+  --fs-display: clamp(2.3rem, 1.2rem + 4.2vw, 5.4rem);
+  --fs-h2: clamp(2rem, 1.25rem + 2.9vw, 4rem);
+  --fs-h3: clamp(1.35rem, 1.05rem + 1.1vw, 2rem);
+  --fs-lead: clamp(1.08rem, 0.98rem + 0.45vw, 1.3rem);
+  --fs-body: clamp(1rem, 0.96rem + 0.18vw, 1.125rem);
+  --fs-small: 0.9375rem;
+  --fs-label: 0.8125rem;
+  --lh-tight: 1.02;
+  --lh-heading: 1.1;
+  --lh-body: 1.62;
+  --tracking-display: -0.035em;
+  --tracking-label: 0.14em;
+
+  /* space */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+  --space-9: 6rem;
+  --space-section: clamp(5rem, 3.5rem + 7vw, 10rem);
+  --gutter: clamp(1rem, 0.4rem + 3vw, 3rem);
+  --max: 1280px;
+  --header-h: 72px;
+
+  /* shape */
+  --radius-s: 10px;
+  --radius-m: 16px;
+  --radius-l: 24px;
+  --radius-xl: 36px;
+  --radius-pill: 999px;
+
+  /* depth */
+  --shadow-s: 0 1px 2px rgba(8, 28, 68, 0.06), 0 2px 8px rgba(8, 28, 68, 0.05);
+  --shadow-m: 0 10px 30px -12px rgba(16, 52, 168, 0.22), 0 2px 6px rgba(8, 28, 68, 0.05);
+  --shadow-l: 0 30px 70px -28px rgba(16, 52, 168, 0.38), 0 6px 18px rgba(8, 28, 68, 0.06);
+
+  /* motion — mirrored in src/motion/gsap.ts */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-soft: cubic-bezier(0.33, 1, 0.68, 1);
+  --dur-fast: 180ms;
+  --dur-base: 400ms;
+  --dur-section: 850ms;
+}
+
+/* Motion off (footer toggle or OS reduced-motion): CSS transitions and animations become instant.
+   Transitions are removed outright: a tiny duration would make every property (sizes included)
+   transition, so layout measured right after a change would read the old values. */
+html[data-motion="off"] {
+  --dur-fast: 1ms;
+  --dur-base: 1ms;
+  --dur-section: 1ms;
+}
+html[data-motion="off"] *,
+html[data-motion="off"] *::before,
+html[data-motion="off"] *::after {
+  animation-duration: 1ms !important;
+  animation-iteration-count: 1 !important;
+  transition: none !important;
+  scroll-behavior: auto !important;
+}

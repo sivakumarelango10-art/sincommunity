@@ -1,0 +1,102 @@
+.team { background: var(--bg); }
+.team__head { display: flex; flex-direction: column; gap: var(--space-4); max-width: 760px; margin-bottom: clamp(3rem, 6vw, 5rem); }
+
+.team__group-label {
+  display: flex; align-items: center; gap: 12px; margin-bottom: var(--space-5);
+  font-size: var(--fs-label); font-weight: 800; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--text-faint);
+}
+.team__group-label::after { content: ""; flex: 1; height: 1px; background: var(--border); }
+.team__group-label--team { margin-top: clamp(3.5rem, 7vw, 6rem); }
+
+.team__founding { position: relative; }
+.team__thread { position: absolute; left: 0; top: 2.4rem; width: 100%; height: calc(100% - 2.4rem); z-index: 0; pointer-events: none; overflow: visible; }
+.team__thread path { fill: none; stroke: var(--blue); stroke-width: 2.5; stroke-linecap: round; vector-effect: non-scaling-stroke; opacity: 0.55; }
+
+.team__founding-grid {
+  position: relative; z-index: 1;
+  display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: clamp(1rem, 2.5vw, 2rem); align-items: start;
+}
+.member--lead { grid-column: 1 / span 6; grid-row: 1 / span 2; }
+.member--co:nth-child(2) { grid-column: 7 / span 3; grid-row: 1; }
+.member--co:nth-child(3) { grid-column: 10 / span 3; grid-row: 1; margin-top: 14%; }
+/* the founding advisor: a wide card under the co-founders, photo beside the name */
+.member.member--advisor {
+  grid-column: 7 / span 6; grid-row: 2; margin-top: clamp(1.5rem, 3vw, 2.5rem);
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: clamp(1rem, 2.5vw, 2rem); align-items: end;
+}
+.member--advisor .member__caption { padding-bottom: var(--space-2); }
+
+.team__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(1.5rem, 3vw, 2.5rem) clamp(1rem, 2.5vw, 2rem); }
+@media (min-width: 1200px) { .team__grid { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
+
+.member { margin: 0; display: flex; flex-direction: column; gap: var(--space-4); }
+.member__photo {
+  position: relative; display: block; width: 100%; aspect-ratio: 4 / 5; padding: 0; border: 0;
+  border-radius: var(--radius-l); overflow: hidden; background: var(--surface-2); cursor: zoom-in;
+  box-shadow: var(--shadow-m);
+  transition: box-shadow var(--dur-base) var(--ease-out);
+}
+.member--lead .member__photo { border-radius: var(--radius-xl); }
+.member__photo img { width: 100%; height: 108%; margin-top: -4%; object-fit: cover; transition: filter var(--dur-base); }
+.member__photo::after { /* a blue edge that draws in on hover/focus */
+  content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: inset 0 0 0 0 var(--blue);
+  transition: box-shadow var(--dur-base) var(--ease-out);
+}
+.member__photo:hover { box-shadow: var(--shadow-l); }
+.member__photo:hover::after, .member__photo:focus-visible::after { box-shadow: inset 0 0 0 4px var(--blue); }
+
+.member__caption { display: flex; flex-direction: column; gap: 4px; }
+.member__name { font-size: clamp(1.15rem, 1rem + 0.6vw, 1.5rem); letter-spacing: -0.02em; line-height: 1.2; overflow-wrap: anywhere; }
+.member--lead .member__name { font-size: clamp(1.6rem, 1.2rem + 1.4vw, 2.5rem); }
+.member__role {
+  font-size: var(--fs-label); font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--blue);
+  line-height: 1.4; overflow-wrap: anywhere;
+}
+
+@media (max-width: 959px) {
+  .team__thread { display: none; }
+  .member--lead .member__photo { aspect-ratio: auto; height: min(125vw, 78svh, 720px); }
+  .member--lead .member__photo img { height: 108%; }
+  .team__founding-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-6) var(--space-4); }
+  .member--lead { grid-column: 1 / -1; }
+  .member--lead, .member--co:nth-child(2), .member--co:nth-child(3), .member--advisor { grid-row: auto; }
+  .member--co:nth-child(2), .member--co:nth-child(3) { grid-column: auto; margin-top: 0; }
+  .member.member--advisor { grid-row: auto; grid-column: 1 / -1; margin-top: 0; column-gap: var(--space-4); }
+  .team__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-6) var(--space-4); }
+}
+@media (max-width: 639px) {
+  .team__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  /* an odd last card sits centred instead of alone at the left */
+  .team__grid > .member:last-child:nth-child(odd) { grid-column: 1 / -1; width: calc(50% - var(--space-4) / 2); justify-self: center; }
+}
+@media (max-width: 359px) {
+  .team__grid, .team__founding-grid { grid-template-columns: 1fr; }
+  .team__grid > .member:last-child:nth-child(odd) { width: 100%; }
+  .member.member--advisor { grid-template-columns: 1fr; row-gap: var(--space-4); }
+}
+
+/* ---------------------------------------------------------------- portrait viewer */
+.viewer {
+  width: min(92vw, 860px); max-width: none; max-height: 92vh; padding: 0; border: 0; background: transparent; overflow: visible;
+}
+.viewer::backdrop { background: rgba(8, 28, 68, 0.72); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+.viewer__card {
+  position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 0.8fr); align-items: end;
+  background: var(--white); border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--shadow-l);
+}
+.viewer__photo { aspect-ratio: 4 / 5; overflow: hidden; background: var(--surface-2); }
+.viewer__photo img { width: 100%; height: 100%; object-fit: cover; }
+.viewer__info { padding: clamp(1.5rem, 4vw, 3rem); }
+.viewer__name { font-size: clamp(1.8rem, 1.2rem + 2vw, 3rem); letter-spacing: -0.03em; }
+.viewer__role { margin-top: var(--space-3); font-size: var(--fs-label); font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--blue); }
+.viewer__close {
+  position: absolute; top: 14px; right: 14px; display: grid; place-items: center; width: 48px; height: 48px;
+  border-radius: 50%; border: 0; background: var(--white); color: var(--navy); box-shadow: var(--shadow-m);
+  transition: transform var(--dur-fast) var(--ease-soft), background-color var(--dur-fast);
+}
+.viewer__close:hover { transform: rotate(90deg); background: var(--surface); }
+@media (max-width: 640px) {
+  .viewer__card { grid-template-columns: 1fr; }
+  .viewer__photo { aspect-ratio: 4 / 4.4; }
+  .viewer__info { padding: var(--space-5); }
+}

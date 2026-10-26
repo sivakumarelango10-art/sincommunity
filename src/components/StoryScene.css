@@ -1,0 +1,51 @@
+.story-scene { width: 100%; height: auto; overflow: visible; --t: 900ms; }
+.story-scene * { transition-timing-function: var(--ease-in-out); }
+
+/* people */
+.ss-node {
+  transform: translate(var(--fx), var(--fy));
+  transition: transform var(--t) var(--ease-in-out);
+}
+.ss-node-ring { fill: #fff; stroke: var(--blue); stroke-width: 3; }
+.ss-node-dot { fill: var(--blue); transition: transform 600ms var(--ease-out); transform-box: fill-box; transform-origin: center; }
+.ss-tail {
+  fill: none; stroke: var(--blue); stroke-width: 3; stroke-linecap: round;
+  stroke-dasharray: 1; stroke-dashoffset: 0;
+  transition: stroke-dashoffset var(--t), opacity var(--t);
+}
+
+/* reaching (stage 1 only) */
+.ss-reach {
+  fill: none; stroke: var(--blue); stroke-width: 2.5; stroke-linecap: round;
+  stroke-dasharray: 1; stroke-dashoffset: 1; opacity: 0.85;
+  transition: stroke-dashoffset var(--t), opacity var(--t);
+}
+
+/* shared space (stage 2+) */
+.ss-spoke, .ss-edge, .ss-out-line {
+  fill: none; stroke: var(--blue); stroke-width: 3; stroke-linecap: round;
+  stroke-dasharray: 1; stroke-dashoffset: 1;
+  transition: stroke-dashoffset var(--t);
+}
+.ss-edge { stroke-width: 2; stroke: var(--blue-deep); }
+.ss-out-line { stroke-width: 2; stroke-dasharray: 1; }
+.ss-hub { opacity: 0; transform: scale(0.6); transform-origin: 300px 300px; transition: opacity var(--t), transform var(--t) var(--ease-out); }
+.ss-hub-ring { fill: #fff; stroke: var(--blue); stroke-width: 2.5; }
+.ss-hub-ring--outer { fill: none; stroke-opacity: 0.25; stroke-width: 1.5; }
+.ss-field { fill: var(--blue); opacity: 0; transition: opacity var(--t); }
+.ss-out-node { fill: #fff; stroke: var(--blue); stroke-width: 2.5; opacity: 0; transform-box: fill-box; transform-origin: center; transform: scale(0.3); transition: opacity 500ms, transform 700ms var(--ease-out); }
+
+/* stage 1 */
+.story-scene[data-stage="1"] .ss-reach { stroke-dashoffset: 0; }
+/* stage 2+ : people move closer, tails absorbed, spokes connect them to a shared space */
+.story-scene:is([data-stage="2"], [data-stage="3"], [data-stage="4"]) .ss-node { transform: translate(var(--nx), var(--ny)); }
+.story-scene:is([data-stage="2"], [data-stage="3"], [data-stage="4"]) .ss-tail { stroke-dashoffset: 1; opacity: 0; }
+.story-scene:is([data-stage="2"], [data-stage="3"], [data-stage="4"]) .ss-spoke { stroke-dashoffset: 0; }
+.story-scene:is([data-stage="2"], [data-stage="3"], [data-stage="4"]) .ss-hub { opacity: 1; transform: none; }
+/* stage 3+ : everyone connected */
+.story-scene:is([data-stage="3"], [data-stage="4"]) .ss-edge { stroke-dashoffset: 0; }
+.story-scene:is([data-stage="3"], [data-stage="4"]) .ss-field { opacity: 0.07; }
+.story-scene[data-stage="3"] .ss-node-dot { transform: scale(1.35); }
+/* stage 4 : opening outward */
+.story-scene[data-stage="4"] .ss-out-line { stroke-dashoffset: 0; }
+.story-scene[data-stage="4"] .ss-out-node { opacity: 1; transform: none; }

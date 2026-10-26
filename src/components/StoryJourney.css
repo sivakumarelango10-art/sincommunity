@@ -1,0 +1,116 @@
+.story { position: relative; padding-block: var(--space-section); }
+
+.story__inner { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-7); }
+.story__header { display: flex; flex-direction: column; gap: var(--space-4); margin-bottom: var(--space-7); }
+.story__title { font-size: var(--fs-display); letter-spacing: var(--tracking-display); line-height: 1; }
+
+.story__chapters { display: flex; flex-direction: column; gap: clamp(3.5rem, 8vw, 6rem); }
+.chapter { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr); gap: clamp(1.5rem, 4vw, 4rem); align-items: center; }
+.chapter__scene { max-width: 360px; width: 100%; justify-self: center; }
+.chapter__kicker {
+  display: flex; align-items: center; gap: 12px; margin-bottom: var(--space-4);
+  font-size: var(--fs-label); font-weight: 800; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--text-faint);
+}
+.chapter__kicker span { color: var(--blue); }
+.chapter__title { font-size: var(--fs-h2); letter-spacing: -0.035em; line-height: 1.06; max-width: 16ch; }
+.chapter__title mark {
+  color: inherit; padding: 0 0.08em; margin: 0 -0.04em; border-radius: 0.12em;
+  background: linear-gradient(transparent 58%, rgba(28, 89, 238, 0.2) 58%) left / 0% 100% no-repeat;
+  transition: background-size 900ms var(--ease-out) 150ms, color 600ms;
+  -webkit-box-decoration-break: clone; box-decoration-break: clone;
+}
+.chapter.is-active .chapter__title mark { background-size: 100% 100%; color: var(--blue-deep); }
+html[data-motion="off"] .chapter__title mark { background-size: 100% 100%; color: var(--blue-deep); }
+.chapter__body { margin-top: var(--space-5); max-width: 46ch; font-size: var(--fs-lead); color: var(--text-soft); line-height: 1.6; }
+
+.story__visual { display: none; }
+
+@media (max-width: 767px) {
+  .chapter { grid-template-columns: 1fr; }
+  .chapter__scene { max-width: 260px; justify-self: start; }
+}
+
+/* ---------------------------------------------------------------- pinned sequence (every screen, motion on)
+   Default: upright phones and tablets — title, scene, progress and chapter stacked in one screen.
+   Wide screens and short landscape screens (further down): text beside the scene. */
+.story.is-pinned { padding-block: 0; }
+.story.is-pinned .story__stage { height: calc(100vh - var(--header-h)); height: calc(100svh - var(--header-h)); display: flex; align-items: stretch; }
+.story.is-pinned .story__inner {
+  height: 100%; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: clamp(0.75rem, 2.2svh, 1.5rem); padding-block: clamp(0.9rem, 3svh, 2rem);
+}
+.story.is-pinned .story__text { display: contents; }
+.story.is-pinned .story__header { grid-row: 1; margin-bottom: 0; gap: var(--space-2); }
+.story.is-pinned .story__title { font-size: clamp(1.8rem, 1.2rem + 2.6vw, 2.8rem); }
+.story.is-pinned .story__visual {
+  grid-row: 2; display: grid; grid-template-rows: minmax(0, 1fr) auto; justify-items: center;
+  gap: clamp(0.6rem, 1.8svh, 1.1rem); min-height: 0;
+}
+.story.is-pinned .story__visual .story-scene { width: 100%; height: 100%; min-height: 0; }
+.story.is-pinned .story__chapters { grid-row: 3; display: grid; gap: 0; }
+.story.is-pinned .chapter { grid-area: 1 / 1; grid-template-columns: 1fr; align-items: start; }
+.story.is-pinned .chapter__scene { display: none; }
+.story.is-pinned .chapter__kicker { margin-bottom: var(--space-3); }
+.story.is-pinned .chapter__title { font-size: clamp(1.5rem, 1.05rem + 2.2vw, 2.4rem); max-width: 20ch; }
+.story.is-pinned .chapter__body { margin-top: var(--space-3); font-size: clamp(0.97rem, 0.9rem + 0.35vw, 1.1rem); line-height: 1.55; }
+/* progress runs across, under the scene */
+.story.is-pinned .story__progress { position: relative; height: auto; width: min(100%, 340px); }
+.story.is-pinned .story__progress-track { position: absolute; left: 16px; right: 16px; top: 50%; width: auto; height: 3px; margin-top: -1.5px; }
+.story.is-pinned .story__progress-fill { transform-origin: left center; transform: scaleX(var(--p, 0)); }
+.story.is-pinned .story__steps { position: relative; flex: 1; flex-direction: row; }
+.story.is-pinned .story__step span { width: 32px; height: 32px; }
+/* very small screens: a little more room for the words */
+.story.is-pinned.is-tight .story__header .eyebrow { display: none; }
+.story.is-pinned.is-tight .story__title { font-size: 1.5rem; }
+.story.is-pinned.is-tight .chapter__kicker { margin-bottom: var(--space-2); }
+.story.is-pinned.is-tight .chapter__title { font-size: 1.35rem; }
+.story.is-pinned.is-tight .chapter__body { font-size: 0.92rem; line-height: 1.5; }
+
+/* text beside the scene */
+@media (min-width: 1024px) and (min-height: 640px), (max-height: 639.98px) and (min-aspect-ratio: 5/4) {
+  .story.is-pinned .story__stage { align-items: center; }
+  .story.is-pinned .story__inner {
+    height: auto; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: none;
+    align-items: center; gap: clamp(2rem, 5vw, 6rem); padding-block: 0;
+  }
+  .story.is-pinned .story__text { display: block; }
+  .story.is-pinned .story__header { margin-bottom: var(--space-6); gap: var(--space-4); }
+  .story.is-pinned .story__title { font-size: clamp(2.6rem, 1.6rem + 2.6vw, 4.4rem); }
+  .story.is-pinned .story__visual { grid-row: auto; grid-template-rows: none; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: var(--space-6); }
+  .story.is-pinned .story__visual .story-scene { height: auto; max-height: calc(100svh - var(--header-h) - 120px); }
+  .story.is-pinned .chapter__kicker { margin-bottom: var(--space-4); }
+  .story.is-pinned .chapter__title { font-size: clamp(2rem, 1.2rem + 2.1vw, 3.4rem); max-width: 16ch; }
+  .story.is-pinned .chapter__body { margin-top: var(--space-5); font-size: var(--fs-lead); line-height: 1.6; }
+  /* progress runs down, beside the scene */
+  .story.is-pinned .story__progress { position: static; height: min(360px, 52vh); width: auto; }
+  .story.is-pinned .story__progress-track { position: relative; left: auto; right: auto; top: auto; width: 3px; height: auto; margin-top: 0; }
+  .story.is-pinned .story__progress-fill { transform-origin: center top; transform: scaleY(var(--p, 0)); }
+  .story.is-pinned .story__steps { flex: none; flex-direction: column; }
+  .story.is-pinned .story__step span { width: 34px; height: 34px; }
+}
+/* short landscape screens (phones turned sideways, short laptop windows) */
+@media (max-height: 639.98px) and (min-aspect-ratio: 5/4) {
+  .story.is-pinned .story__inner { grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); gap: clamp(1.25rem, 4vw, 4rem); }
+  .story.is-pinned .story__header { margin-bottom: clamp(0.6rem, 3svh, 1.5rem); gap: var(--space-2); }
+  .story.is-pinned .story__title { font-size: clamp(1.45rem, 0.5rem + 4.6svh, 2.8rem); }
+  .story.is-pinned .chapter__kicker { margin-bottom: var(--space-2); }
+  .story.is-pinned .chapter__title { font-size: clamp(1.25rem, 0.4rem + 4.2svh, 2.4rem); max-width: 22ch; }
+  .story.is-pinned .chapter__body { margin-top: var(--space-3); font-size: clamp(0.88rem, 0.6rem + 1.4svh, 1.05rem); line-height: 1.5; }
+  .story.is-pinned .story__visual { gap: var(--space-4); }
+  .story.is-pinned .story__visual .story-scene { max-height: calc(100svh - var(--header-h) - 40px); }
+  .story.is-pinned .story__progress { height: min(300px, calc(100svh - var(--header-h) - 60px)); }
+  .story.is-pinned .story__step span { width: 28px; height: 28px; font-size: 0.7rem; }
+}
+
+.story__progress { display: flex; gap: 14px; height: min(360px, 52vh); }
+.story__progress-track { position: relative; width: 3px; border-radius: 3px; background: var(--border); overflow: hidden; }
+.story__progress-fill { position: absolute; inset: 0; background: var(--blue); transform-origin: top; transform: scaleY(0); }
+.story__steps { display: flex; flex-direction: column; justify-content: space-between; }
+.story__step span {
+  display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%;
+  font-size: 0.75rem; font-weight: 800; color: var(--text-faint);
+  border: 1.5px solid var(--border-strong); background: var(--bg);
+  transition: background-color var(--dur-base), color var(--dur-base), border-color var(--dur-base), transform var(--dur-base) var(--ease-out);
+}
+.story__step.is-done span { border-color: var(--blue); color: var(--blue); }
+.story__step.is-current span { background: var(--blue); border-color: var(--blue); color: #fff; transform: scale(1.12); }

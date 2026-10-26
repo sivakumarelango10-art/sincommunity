@@ -1,0 +1,107 @@
+.eco {
+  color: #fff; background: var(--surface);
+  padding-block: var(--space-section);
+  position: relative; overflow: clip; isolation: isolate;
+}
+.eco__bg { position: absolute; inset: 0; z-index: -1; background: var(--navy); }
+.eco .heading-xl { color: #fff; max-width: 15ch; }
+.eco__head { display: flex; flex-direction: column; gap: var(--space-4); }
+.eco__intro { max-width: 60ch; font-size: var(--fs-lead); color: var(--on-navy-soft); line-height: 1.6; }
+
+/* ---------------------------------------------------------------- pathway */
+.eco__path { position: relative; margin-top: clamp(3rem, 6vw, 5rem); aspect-ratio: 1200 / 300; }
+.eco__svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.eco__track { fill: none; stroke: rgba(255, 255, 255, 0.22); stroke-width: 2; }
+.eco__progress {
+  fill: none; stroke: #6e98ff; stroke-width: 4; stroke-linecap: round;
+  stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 700ms var(--ease-in-out);
+}
+.eco__progress.is-on { stroke-dashoffset: 0; }
+.eco__return { fill: none; stroke: rgba(160, 188, 255, 0.55); stroke-width: 1.5; stroke-dasharray: 4 8; }
+.eco__return-label {
+  position: absolute; left: 50%; top: 100%; translate: -50% -40%;
+  font-size: var(--fs-label); font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: #a9c1ff;
+  background: var(--navy); padding: 4px 12px; white-space: nowrap; border-radius: 999px;
+}
+
+.eco__nodes { position: absolute; inset: 0; }
+.eco__node {
+  position: absolute; left: var(--x); top: var(--y); translate: -50% -17px; /* dot centre sits on the path */
+  display: grid; justify-items: center; gap: 4px; padding: 6px; min-width: 88px;
+  background: none; border: 0; color: #fff; border-radius: var(--radius-m);
+}
+.eco__node-dot {
+  width: 22px; height: 22px; border-radius: 50%; background: var(--navy); border: 2.5px solid rgba(255, 255, 255, 0.5);
+  transition: transform var(--dur-base) var(--ease-out), background-color var(--dur-base), border-color var(--dur-base), box-shadow var(--dur-base);
+}
+.eco__node-num { margin-top: 10px; font-size: 0.75rem; font-weight: 800; letter-spacing: 0.1em; color: #a9c1ff; }
+.eco__node-name { font-family: var(--font-display); font-weight: 700; font-size: clamp(0.95rem, 0.7rem + 0.6vw, 1.15rem); white-space: nowrap; color: var(--on-navy-soft); transition: color var(--dur-fast); }
+.eco__node:hover .eco__node-dot { transform: scale(1.2); border-color: #fff; }
+.eco__node:hover .eco__node-name { color: #fff; }
+.eco__node[data-state="done"] .eco__node-dot { background: #6e98ff; border-color: #6e98ff; }
+.eco__node[data-state="active"] .eco__node-dot {
+  background: #fff; border-color: #fff; transform: scale(1.3);
+  box-shadow: 0 0 0 8px rgba(110, 152, 255, 0.28), 0 0 0 18px rgba(110, 152, 255, 0.1);
+}
+.eco__node[data-state="active"] .eco__node-name { color: #fff; }
+
+/* ---------------------------------------------------------------- detail */
+.eco__detail {
+  margin-top: clamp(4rem, 7vw, 6rem);
+  display: grid; grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr); gap: clamp(1.5rem, 4vw, 4rem); align-items: center;
+  padding: clamp(1.5rem, 3.5vw, 3rem); border-radius: var(--radius-xl);
+  background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.12);
+  min-height: 300px;
+}
+.eco__detail-art { max-width: 280px; width: 100%; justify-self: center; }
+.eco-art { width: 100%; height: auto; overflow: visible; }
+.eco-art__line { fill: none; stroke: #8fb0ff; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.eco-art__line--dash { stroke-dasharray: 0.03 0.03; stroke-width: 2; opacity: 0.8; }
+.eco-art__node { fill: var(--navy); stroke: #fff; stroke-width: 2.5; }
+.eco-art__dot { fill: #fff; }
+.eco-art__fill { fill: rgba(110, 152, 255, 0.18); }
+.eco-art__block { stroke: #8fb0ff; stroke-width: 1.5; }
+
+.eco__count { font-size: var(--fs-label); font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: #a9c1ff; }
+.eco__line { margin-top: var(--space-3); font-size: clamp(1.7rem, 1.1rem + 1.8vw, 2.75rem); letter-spacing: -0.03em; color: #fff; }
+.eco__desc { margin-top: var(--space-4); max-width: 52ch; color: var(--on-navy-soft); font-size: var(--fs-lead); }
+.eco__controls { display: flex; align-items: center; gap: 10px; margin-top: var(--space-6); flex-wrap: wrap; }
+.eco__step {
+  display: grid; place-items: center; width: 52px; height: 52px; border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.4); background: transparent; color: #fff;
+  transition: background-color var(--dur-fast), border-color var(--dur-fast), transform var(--dur-fast) var(--ease-soft);
+}
+.eco__step:hover { background: #fff; color: var(--navy); border-color: #fff; }
+.eco__step:first-child:hover .icon { transform: translateX(-3px); }
+.eco__step:nth-child(2):hover .icon { transform: translateX(3px); }
+.eco__step .icon { transition: transform var(--dur-fast) var(--ease-soft); }
+.eco__next { margin-left: 8px; font-weight: 700; color: var(--on-navy-soft); }
+
+/* ---------------------------------------------------------------- vertical sequence on smaller screens */
+.eco__vline { display: none; }
+@media (max-width: 899px) {
+  .eco__path { aspect-ratio: auto; }
+  .eco__svg, .eco__return-label { display: none; }
+  .eco__nodes { position: relative; display: flex; flex-direction: column; gap: 4px; padding-left: 4px; }
+  .eco__vline { /* the connecting line; its fill follows the selected stage */
+    display: block; position: absolute; left: 21px; top: 30px; bottom: 56px; width: 2px; border-radius: 2px;
+    background: rgba(255, 255, 255, 0.22); overflow: hidden;
+  }
+  .eco__vfill {
+    position: absolute; inset: 0; background: #fff; transform-origin: 50% 0%; transform: scaleY(var(--eco-p, 0));
+    transition: transform 700ms var(--ease-in-out);
+  }
+  .eco__node {
+    position: relative; left: auto; top: auto; translate: none;
+    display: flex; align-items: center; justify-items: start; gap: 14px; min-height: 52px; padding: 8px 6px; text-align: left;
+  }
+  .eco__node-num { margin: 0; min-width: 22px; order: 2; }
+  .eco__node-name { order: 3; font-size: 1.15rem; }
+  .eco__node-dot { flex: none; position: relative; z-index: 1; }
+  .eco__nodes::after {
+    content: "Opportunities inspire new ideas ↺"; display: block; margin: 10px 0 0 44px;
+    font-size: var(--fs-label); font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: #a9c1ff;
+  }
+  .eco__detail { grid-template-columns: 1fr; margin-top: var(--space-6); }
+  .eco__detail-art { max-width: 200px; justify-self: start; }
+}
