@@ -33,8 +33,8 @@ const DEFAULT_OG = { path: "/images/brand/sinc-og.jpg", width: 1200, height: 630
 export const ROUTES: RouteMeta[] = [
   {
     id: "home", path: "/", file: "index.html", indexable: true, changefreq: "weekly", priority: 1,
-    // preferred picture for this page in Google results and link previews: the founder's photo
-    ogImage: { path: "/images/team/elango-s-founder-sinc.jpg", width: 664, height: 830, alt: "Elango S, Founder of SINC" },
+    // link previews (WhatsApp, LinkedIn, Instagram…) show the SINC logo (default og:image);
+    // Google results are pointed at the founder's photo through primaryImageOfPage below
     images: ["/images/team/elango-s-founder-sinc.jpg", "/images/brand/sinc-logo.jpeg"],
     // brand searches (SINC, sincommunity, the full name) match the title; the description is the short explanation
     title: "SINC – Society for Innovation, Network & Collaboration",
