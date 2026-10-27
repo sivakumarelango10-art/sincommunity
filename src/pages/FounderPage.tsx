@@ -10,7 +10,6 @@ const photo = (size: 480 | 800) => `/images/team/${FOUNDER.photo}-${size}.webp?v
 export function FounderPage({ route }: { route: RouteMeta }) {
   const extra = [
     { id: "education", title: "Education", items: FOUNDER.education },
-    { id: "experience", title: "Experience", items: FOUNDER.experience },
     { id: "achievements", title: "Achievements", items: FOUNDER.achievements },
   ].filter((s) => s.items.length > 0);
 
@@ -24,7 +23,7 @@ export function FounderPage({ route }: { route: RouteMeta }) {
         <div className="founder-hero__text">
           <p className="eyebrow" data-reveal>Founder</p>
           <h1 className="page-hero__title" data-reveal>{FOUNDER.name}</h1>
-          <p className="founder-hero__role" data-reveal>{FOUNDER.title} · {SITE.fullName}</p>
+          <p className="founder-hero__role" data-reveal>{FOUNDER.title} · {FOUNDER.headline}</p>
           <p className="lead" data-reveal>{FOUNDER.intro}</p>
           <div data-reveal><ProfileLinks links={FOUNDER.links} person={FOUNDER.name} /></div>
         </div>
@@ -65,6 +64,30 @@ export function FounderPage({ route }: { route: RouteMeta }) {
           <ul className="prose prose-list" data-reveal>{s.items.map((i) => <li key={i}>{i}</li>)}</ul>
         </section>
       ))}
+
+      {FOUNDER.projects.length > 0 && (
+        <section className="page-section container" aria-labelledby="projects-title">
+          <h2 id="projects-title" className="page-section__title" data-reveal>Projects Elango has built</h2>
+          <ul className="project-grid">
+            {FOUNDER.projects.map((p) => (
+              <li key={p.name} className="project-card" data-reveal>
+                <h3>{p.name}</h3>
+                <p>{p.text}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {FOUNDER.skills.length > 0 && (
+        <section className="page-section container split" aria-labelledby="skills-title">
+          <h2 id="skills-title" className="page-section__title" data-reveal>Skills</h2>
+          <div data-reveal>
+            <ul className="chip-list chip-list--quiet">{FOUNDER.skills.map((k) => <li key={k}>{k}</li>)}</ul>
+            {FOUNDER.languages.length > 0 && <p className="founder-langs">Languages: {FOUNDER.languages.join(", ")}</p>}
+          </div>
+        </section>
+      )}
 
       <section className="page-cta container" aria-labelledby="founder-cta">
         <h2 id="founder-cta" className="page-cta__title" data-reveal>Built with a team, for a community.</h2>

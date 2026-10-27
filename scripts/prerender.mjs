@@ -28,9 +28,10 @@ const urls = ROUTES.filter((r) => r.indexable).map((r) => [
   `    <lastmod>${today}</lastmod>`,
   r.changefreq ? `    <changefreq>${r.changefreq}</changefreq>` : null,
   r.priority != null ? `    <priority>${r.priority.toFixed(1)}</priority>` : null,
+  ...(r.images ?? []).map((img) => `    <image:image><image:loc>${SITE_URL}${img}</image:loc></image:image>`),
   "  </url>",
 ].filter(Boolean).join("\n"));
-await writeFile(dist("sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.join("\n")}\n</urlset>\n`);
+await writeFile(dist("sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n${urls.join("\n")}\n</urlset>\n`);
 await writeFile(dist("robots.txt"), `# Everything on this site is public, including the CSS, JavaScript and images Google needs to render it.\nUser-agent: *\nAllow: /\n\nSitemap: ${SITE_URL}/sitemap.xml\n`);
 console.log(`wrote sitemap.xml (${urls.length} pages) and robots.txt`);
 

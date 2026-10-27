@@ -23,6 +23,8 @@ export interface RouteMeta {
   ogType?: "website" | "profile";
   ogImage?: { path: string; width: number; height: number; alt: string };
   changefreq?: "weekly" | "monthly" | "yearly";
+  /** images listed for this page in the sitemap (helps them appear in image search) */
+  images?: string[];
   priority?: number;
 }
 
@@ -31,9 +33,10 @@ const DEFAULT_OG = { path: "/images/brand/sinc-og.jpg", width: 1200, height: 630
 export const ROUTES: RouteMeta[] = [
   {
     id: "home", path: "/", file: "index.html", indexable: true, changefreq: "weekly", priority: 1,
+    images: ["/images/brand/sinc-logo.jpeg"],
     // brand searches (SINC, sincommunity, the full name) match the title; the description is the short explanation
     title: "SINC – Society for Innovation, Network & Collaboration",
-    description: "SINC (Society for Innovation, Network & Collaboration) is a technology community where developers, designers, students and founders connect and build together.",
+    description: "SINC (Society for Innovation, Network & Collaboration) is a Bengaluru technology community where developers, designers, students and founders build together.",
   },
   {
     id: "about", path: "/about", file: "about.html", crumb: "About SINC", indexable: true, changefreq: "monthly", priority: 0.8,
@@ -43,18 +46,20 @@ export const ROUTES: RouteMeta[] = [
   {
     id: "founder", path: "/founder", file: "founder.html", crumb: "Founder", indexable: true, changefreq: "monthly", priority: 0.8, ogType: "profile",
     title: "Elango S, Founder of SINC | Technology Community",
-    description: "Meet Elango S, founder of SINC: why he started a technology community for collaboration, what he leads, and his vision for the people who build together.",
+    description: "Elango S is the founder of SINC and a B.Tech CSE (AI & ML) student at Yenepoya University, Bengaluru. His vision for SINC, what he leads, and his projects.",
     ogImage: { path: "/images/team/elango-s-founder-sinc.jpg", width: 664, height: 830, alt: "Elango S, Founder of SINC" },
+    images: ["/images/team/elango-s-founder-sinc.jpg"],
   },
   {
     id: "team", path: "/team", file: "team.html", crumb: "Meet the team", indexable: true, changefreq: "monthly", priority: 0.7,
+    images: TEAM.map((m) => `/images/team/${m.id}-portrait-800.webp`),
     title: "Meet the SINC Team | Founder, Co-Founders & Team",
     description: "The people building SINC: founder Elango S, co-founders Karmjit SG and Prajith P, founding advisor Aaditya R M, and the SINC team.",
   },
   {
     id: "contact", path: "/contact", file: "contact.html", crumb: "Contact", indexable: true, changefreq: "yearly", priority: 0.5,
     title: "Contact SINC | Technology Community",
-    description: "How to reach SINC, follow the community on Instagram, and join or log in to the SINC platform.",
+    description: "Contact SINC by email or Instagram. SINC is incubated at Yenepoya (Deemed-to-be University), Bengaluru Campus, Bengaluru, Karnataka.",
   },
   {
     id: "privacy", path: "/privacy", file: "privacy.html", crumb: "Privacy Policy", indexable: true, changefreq: "yearly", priority: 0.3,
@@ -97,7 +102,23 @@ function organization() {
     description: SITE.definition,
     slogan: SITE.tagline,
     founder: { "@id": FOUNDER_ID },
+    email: SITE.email,
+    address: postalAddress(),
+    contactPoint: { "@type": "ContactPoint", contactType: "general enquiries", email: SITE.email, availableLanguage: ["English", "Tamil"] },
     sameAs: [SITE.social.instagram.url],
+  };
+}
+
+const UNIVERSITY = { "@type": "CollegeOrUniversity", name: SITE.incubator, address: postalAddress() };
+
+function postalAddress() {
+  return {
+    "@type": "PostalAddress",
+    streetAddress: SITE.address.street,
+    addressLocality: SITE.address.locality,
+    addressRegion: SITE.address.region,
+    postalCode: SITE.address.postalCode,
+    addressCountry: SITE.address.country,
   };
 }
 
@@ -107,7 +128,10 @@ function founderPerson() {
     "@id": FOUNDER_ID,
     name: FOUNDER.name,
     jobTitle: FOUNDER.role,
-    description: FOUNDER.intro,
+    description: `${FOUNDER.intro} ${FOUNDER.headline}.`,
+    affiliation: UNIVERSITY,
+    knowsAbout: FOUNDER.skills,
+    knowsLanguage: FOUNDER.languages,
     image: absolute("/images/team/elango-s-founder-sinc.jpg"),
     url: absolute("/founder"),
     worksFor: { "@id": ORG_ID },

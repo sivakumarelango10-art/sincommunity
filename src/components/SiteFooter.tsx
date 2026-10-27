@@ -30,7 +30,14 @@ export function SiteFooter({ onReplay, onHome = true }: FooterProps) {
               <p className="footer__full">{SITE.fullName} · {SITE.domain}</p>
             </div>
           </div>
-          <p className="footer__tagline">{SITE.tagline}</p>
+          <div className="footer__contact">
+            <p className="footer__tagline">{SITE.tagline}</p>
+            <p className="footer__where">
+              <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+              <span aria-hidden="true"> · </span>
+              <a href="/contact">Incubated at {SITE.incubator}, {SITE.address.locality}</a>
+            </p>
+          </div>
         </div>
 
         <div className="footer__cols">

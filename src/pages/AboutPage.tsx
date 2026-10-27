@@ -43,6 +43,16 @@ export function AboutPage({ route }: { route: RouteMeta }) {
         </div>
       </section>
 
+      <section className="page-section container split" aria-labelledby="based-title">
+        <h2 id="based-title" className="page-section__title" data-reveal>Where SINC is based</h2>
+        <div className="prose" data-reveal>
+          <p>
+            SINC is incubated at <strong>{SITE.incubator}</strong> in {SITE.address.locality}, {SITE.address.region}, where
+            its founder, Elango S, is a student. Anyone can join the community online through the SINC platform.
+          </p>
+        </div>
+      </section>
+
       <section className="page-section container" aria-labelledby="who-title">
         <h2 id="who-title" className="page-section__title" data-reveal>Who SINC brings together</h2>
         <ul className="tag-grid">

@@ -17,7 +17,8 @@ export function PrivacyPage({ route }: { route: RouteMeta }) {
       <article className="page-section container legal prose">
         <h2>What this website collects</h2>
         <p>
-          This website does not ask for your name, email address or any other personal details. It has no sign-up or
+          This website does not ask for your name, email address or any other personal details. If you choose to email
+          SINC, your message and email address are used only to reply to you. It has no sign-up or
           contact forms, no advertising, and no analytics or tracking tools, and it does not set cookies.
         </p>
 
@@ -50,7 +51,7 @@ export function PrivacyPage({ route }: { route: RouteMeta }) {
 
         <h2>Questions</h2>
         <p>
-          Send SINC a message on Instagram at{" "}
+          Email <a href={`mailto:${SITE.email}`}>{SITE.email}</a>, or send SINC a message on Instagram at{" "}
           <a href={SITE.social.instagram.url} target="_blank" rel="noopener noreferrer">{SITE.social.instagram.handle}</a>.
         </p>
       </article>
@@ -103,7 +104,7 @@ export function TermsPage({ route }: { route: RouteMeta }) {
 
         <h2>Questions</h2>
         <p>
-          Send SINC a message on Instagram at{" "}
+          Email <a href={`mailto:${SITE.email}`}>{SITE.email}</a>, or send SINC a message on Instagram at{" "}
           <a href={SITE.social.instagram.url} target="_blank" rel="noopener noreferrer">{SITE.social.instagram.handle}</a>.
         </p>
       </article>

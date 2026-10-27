@@ -1,7 +1,7 @@
 import { SITE } from "../config/site";
 import { FOUNDER } from "../data/founder";
 import type { RouteMeta } from "../seo/routes";
-import { IconArrowUpRight, IconInstagram, IconLinkedIn } from "../components/ui";
+import { IconArrowUpRight, IconInstagram, IconLinkedIn, IconMail, IconPin } from "../components/ui";
 import { PageHero, PageShell } from "./PageShell";
 
 export function ContactPage({ route }: { route: RouteMeta }) {
@@ -11,15 +11,34 @@ export function ContactPage({ route }: { route: RouteMeta }) {
       <PageHero
         eyebrow="Contact"
         title={<>Talk to <span className="accent">SINC.</span></>}
-        lede="The quickest way to reach the SINC team is a message on Instagram."
+        lede="Email SINC or send a message on Instagram. SINC is incubated at Yenepoya (Deemed-to-be University), Bengaluru Campus."
       />
       <section className="page-section container" aria-label="Ways to reach SINC">
         <ul className="contact-grid">
           <li className="contact-card" data-reveal>
+            <IconMail />
+            <h2>Email</h2>
+            <p>Questions, partnerships and collaboration requests.</p>
+            <a className="btn" href={`mailto:${SITE.email}`}>{SITE.email.split("@")[0]}<wbr />@{SITE.email.split("@")[1]}</a>
+          </li>
+          <li className="contact-card" data-reveal>
+            <IconPin />
+            <h2>Where SINC is based</h2>
+            <address className="contact-address">
+              SINC, incubated at {SITE.incubator}<br />
+              {SITE.address.street}<br />
+              {SITE.address.locality}, {SITE.address.region} {SITE.address.postalCode}<br />
+              {SITE.address.countryName}
+            </address>
+            <a className="btn btn-ghost" href={SITE.mapUrl} target="_blank" rel="noopener noreferrer">
+              Open in Google Maps <IconArrowUpRight /><span className="sr-only">(opens in a new tab)</span>
+            </a>
+          </li>
+          <li className="contact-card" data-reveal>
             <IconInstagram />
             <h2>Message us on Instagram</h2>
             <p>Questions, ideas and collaboration requests: send SINC a direct message.</p>
-            <a className="btn" href={SITE.social.instagram.url} target="_blank" rel="noopener noreferrer">
+            <a className="btn btn-ghost" href={SITE.social.instagram.url} target="_blank" rel="noopener noreferrer">
               {SITE.social.instagram.handle} <IconArrowUpRight /><span className="sr-only">(opens Instagram in a new tab)</span>
             </a>
           </li>

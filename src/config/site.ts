@@ -14,6 +14,19 @@ export const SITE = {
   /** other names people search for; used in structured data so Google connects them to this site */
   alternateNames: ["SINC Community", "sincommunity", "sincommunity.in", "Society for Innovation, Network & Collaboration"],
   domain: "sincommunity.in",
+  /** public contact address for SINC (supplied by SINC) */
+  email: "sivakumarelango10@gmail.com",
+  /** SINC is incubated at the founder's university campus (supplied by SINC) */
+  incubator: "Yenepoya (Deemed-to-be University), Bengaluru Campus",
+  address: {
+    street: "Tower 3B, BCIT, Bhartiya City, Thanisandra Main Road, Kannuru",
+    locality: "Bengaluru",
+    region: "Karnataka",
+    postalCode: "560064",
+    country: "IN",
+    countryName: "India",
+  },
+  mapUrl: "https://www.google.com/maps/search/?api=1&query=Yenepoya+(Deemed-to-be+University)+Bengaluru+Campus%2C+Tower+3B%2C+BCIT%2C+Bhartiya+City%2C+Thanisandra+Main+Road%2C+Kannuru%2C+Bengaluru+560064",
   /** one-line definition used in copy and structured data */
   definition: "SINC is a technology-focused community and collaboration ecosystem where ambitious people connect, collaborate, learn, build and grow together.",
   belief: "No one should have to pursue their ambitions alone.",
