@@ -95,7 +95,7 @@ To show the full story again to everyone (for example after changing it), change
 | anything else | The SINC 404 page, served with a real 404 status |
 
 `npm run build` writes each page as its own HTML file (`dist/about.html` and so on) with its own title, description,
-canonical link (`https://sincommunity.in/...`), social sharing tags and structured data, plus `dist/sitemap.xml`
+canonical link (`https://www.sincommunity.in/...`, the address Vercel serves; `sincommunity.in` redirects there), social sharing tags and structured data, plus `dist/sitemap.xml`
 and `dist/robots.txt`. `vercel.json` serves them at clean addresses (`/about`), redirects `/about/` and
 `/about.html` to `/about`, and caches the hashed files in `assets/` for a year.
 

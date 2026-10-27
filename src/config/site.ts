@@ -4,7 +4,7 @@
 export const PLATFORM_URL = "https://sinc-platform.vercel.app/login";
 
 /** The production address. Canonical links, the sitemap and structured data are built from it. */
-export const SITE_URL = "https://sincommunity.in";
+export const SITE_URL = "https://www.sincommunity.in"; // Vercel redirects sincommunity.in here
 
 export const SITE = {
   name: "SINC",
