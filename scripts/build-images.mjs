@@ -2,7 +2,7 @@
 // Originals live in assets-original/ and are never modified.
 // Run with:  npm run images
 import sharp from "sharp";
-import { readFile, mkdir } from "node:fs/promises";
+import { readFile, mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -57,9 +57,38 @@ for (const size of [160, 480, 900]) {
   await sharp(src("sinc-logo-mark-transparent.png")).resize({ width: size }).webp({ quality: 90, alphaQuality: 100 }).toFile(out(`brand/sinc-mark-${size}.webp`));
 }
 await sharp(src("sinc-logo.jpeg")).resize(1200, 630, { fit: "contain", background: "#FBFCFF" }).jpeg({ quality: 88 }).toFile(out("brand/sinc-og.jpg"));
-// favicons for browsers and search results (Google needs a square icon, a multiple of 48 px)
-for (const size of [48, 96, 192]) {
-  await sharp(src("sinc-logo.jpeg")).resize(size, size).png().toFile(path.join(root, "public", `favicon-${size}.png`));
+// Site icons for browser tabs, Google results and home screens, all from the real logo mark
+// (transparent artwork, trimmed and centred on a square so it stays legible at 16-48 px).
+{
+  const mark = sharp(src("sinc-logo-mark-transparent.png")).trim();
+  const { info } = await mark.clone().toBuffer({ resolveWithObject: true });
+  const side = Math.round(Math.max(info.width, info.height) * 1.1); // ~5% breathing room each side
+  const square = await mark.clone()
+    .extend({
+      top: Math.floor((side - info.height) / 2), bottom: Math.ceil((side - info.height) / 2),
+      left: Math.floor((side - info.width) / 2), right: Math.ceil((side - info.width) / 2),
+      background: { r: 0, g: 0, b: 0, alpha: 0 },
+    })
+    .png().toBuffer();
+  for (const size of [16, 32, 48, 96, 192, 512]) {
+    await sharp(square).resize(size, size).png({ compressionLevel: 9, palette: size >= 192 }).toFile(path.join(root, "public", `favicon-${size}.png`));
+  }
+  // home-screen icon: on white, because iOS fills transparent areas with black
+  await sharp(square).resize(150, 150).extend({ top: 15, bottom: 15, left: 15, right: 15, background: "#ffffff" })
+    .flatten({ background: "#ffffff" }).png().toFile(path.join(root, "public", "apple-touch-icon.png"));
+  // favicon.ico (16, 32 and 48 px) — the file Google and many browsers request first.
+  // An .ico can hold PNG images directly: a 6-byte header, a 16-byte entry per image, then the PNGs.
+  const pngs = await Promise.all([16, 32, 48].map((s) => sharp(square).resize(s, s).png().toBuffer().then((b) => ({ s, b }))));
+  const head = Buffer.alloc(6 + 16 * pngs.length);
+  head.writeUInt16LE(0, 0); head.writeUInt16LE(1, 2); head.writeUInt16LE(pngs.length, 4);
+  let offset = head.length;
+  pngs.forEach(({ s, b }, i) => {
+    const e = 6 + 16 * i;
+    head.writeUInt8(s, e); head.writeUInt8(s, e + 1); head.writeUInt8(0, e + 2); head.writeUInt8(0, e + 3);
+    head.writeUInt16LE(1, e + 4); head.writeUInt16LE(32, e + 6); head.writeUInt32LE(b.length, e + 8); head.writeUInt32LE(offset, e + 12);
+    offset += b.length;
+  });
+  await writeFile(path.join(root, "public", "favicon.ico"), Buffer.concat([head, ...pngs.map((p) => p.b)]));
+  console.log("site icons done");
 }
-await sharp(src("sinc-logo.jpeg")).resize(180, 180).png().toFile(path.join(root, "public", "apple-touch-icon.png"));
 console.log("brand images done");
