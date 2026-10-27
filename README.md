@@ -65,6 +65,14 @@ The same commands work in macOS/Linux terminals.
 - To add a person: put the original in `assets-original/`, add an entry in `photo-crops.json`, run `npm run images`, then add them to `src/data/team.ts`.
 - After replacing a photo, increase `PHOTO_REV` in `src/data/team.ts` so visitors' browsers load the new image instead of a cached one.
 
+### Leadership profile photos
+
+Each leader's own profile page shows their photo under a file named for the person and role
+(`karmjit-sg-co-founder-sinc.jpg` and so on, listed in `src/data/leader-photos.json`). That file is
+used only on that profile, and as its share image and structured-data image, so search engines tie the
+photo to the page that names the person. The home, team and leadership pages use the general
+`<id>-portrait-*.webp` files. `npm run images` makes both from the same crop.
+
 ### Logo
 
 `assets-original/sinc-logo.jpeg` is the supplied logo. `sinc-logo-mark-transparent.png` is the same artwork with the white background removed, used where the logo sits on blue or pale backgrounds. Optimised sizes are in `public/images/brand/`.
@@ -155,7 +163,7 @@ Production build and TypeScript check, then browser tests in Chromium:
   blocked storage, keyboard use, every control, touch scrolling on phone and tablet profiles).
 - Every page: status codes, titles, descriptions, canonical links, robots tags, one `h1`, image alt text,
   structured data, internal links, redirects, the 404 page, sitemap, robots.txt and llms.txt; on each leadership
-  profile, that the visible name and role match its Person data (207 checks, against a local
+  profile, that the visible name and role match its Person data (223 checks, against a local
   server that follows `vercel.json` the way Vercel does).
 - No horizontal overflow and no console errors at 360, 390, 768, 1024, 1440 and 1920 px and on landscape phones.
 - Lighthouse (local, simulated throttling) for performance, accessibility, best practices and SEO.

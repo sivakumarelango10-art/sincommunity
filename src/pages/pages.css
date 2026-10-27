@@ -179,3 +179,9 @@
 .timeline-list span { color: var(--text-soft); }
 .timeline-list__when { font-size: var(--fs-small); color: var(--text-faint) !important; }
 .timeline-list p { margin: var(--space-3) 0 0; max-width: 62ch; color: var(--text-soft); line-height: var(--lh-body); }
+
+/* the profile photo and its caption */
+.leader-photo { margin: 0; display: grid; gap: var(--space-3); width: 100%; max-width: 540px; }
+.leader-photo .founder-hero__photo { max-width: none; }
+.leader-photo__caption { font-size: var(--fs-small); color: var(--text-faint); }
+@media (max-width: 900px) { .leader-photo { max-width: 420px; } }

@@ -4,9 +4,9 @@ import type { RouteMeta } from "../seo/routes";
 import { ProfileLinks } from "../components/ProfileLinks";
 import { IconArrowRight, JoinButton } from "../components/ui";
 import { LEADERS } from "../data/leadership";
+import { LeaderPhoto } from "../components/LeaderPhoto";
 import { PageShell } from "./PageShell";
 
-const photo = (size: 480 | 800) => `/images/team/${FOUNDER.photo}-${size}.webp?v=3`;
 
 export function FounderPage({ route }: { route: RouteMeta }) {
   const extra = [
@@ -17,10 +17,7 @@ export function FounderPage({ route }: { route: RouteMeta }) {
   return (
     <PageShell route={route} current="team">
       <header className="founder-hero container">
-        <figure className="founder-hero__photo" data-reveal="mask">
-          <img src={photo(800)} srcSet={`${photo(480)} 480w, ${photo(800)} 664w`} sizes="(min-width: 900px) 40vw, 90vw"
-            width={664} height={830} alt={FOUNDER.photoAlt} fetchPriority="high" decoding="async" />
-        </figure>
+        <LeaderPhoto leader={LEADERS[0]} />
         <div className="founder-hero__text">
           <p className="eyebrow" data-reveal>Founder</p>
           <h1 className="page-hero__title" data-reveal>{FOUNDER.name}</h1>

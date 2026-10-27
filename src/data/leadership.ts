@@ -6,6 +6,8 @@
 import { TEAM, type TeamMember } from "./team";
 import { FOUNDER } from "./founder";
 import { PROFILES, type LeaderProfile } from "./profiles";
+import LEADER_PHOTOS from "./leader-photos.json";
+import PHOTO_SIZES from "./photo-sizes.json";
 
 export interface Leader {
   member: TeamMember;
@@ -17,6 +19,10 @@ export interface Leader {
   description: string;
   /** verified biography paragraphs */
   bio: string[];
+  /** profile photo file stem in public/images/team (named for the person and role) */
+  photo: string;
+  /** its pixel size: width, height */
+  photoSize: [number, number];
   /** supplied background (education, experience, projects, skills…); see profiles.ts */
   profile?: LeaderProfile;
 }
@@ -45,7 +51,9 @@ const make = (id: string, slug: string, summary: (m: TeamMember) => string, bio:
   }
   const profile = PROFILES[id];
   if (profile?.description) description = profile.description;
-  return { member: m, slug, path: `/leadership/${slug}`, summary: summary(m), description, bio: profile?.bio ?? bio, profile };
+  const photo = (LEADER_PHOTOS as Record<string, string>)[id];
+  const [pw, ph] = (PHOTO_SIZES as Record<string, number[]>)[id];
+  return { member: m, slug, path: `/leadership/${slug}`, summary: summary(m), description, bio: profile?.bio ?? bio, profile, photo, photoSize: [pw, ph] };
 };
 
 export const LEADERS: Leader[] = [

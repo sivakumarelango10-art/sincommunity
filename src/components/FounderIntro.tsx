@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import { FOUNDER } from "../data/founder";
+import { portrait } from "../data/team";
 import { FOUNDER_PATH } from "../data/leadership";
 import { SITE } from "../config/site";
 import { useSectionReveal } from "../motion/hooks";
@@ -7,7 +8,8 @@ import { ProfileLinks } from "./ProfileLinks";
 import { IconArrowRight } from "./ui";
 import "./FounderIntro.css";
 
-const photo = (size: 480 | 800) => `/images/team/${FOUNDER.photo}-${size}.webp?v=3`;
+// the general portrait; the descriptively named file is kept for the founder's own profile page
+const photo = (size: 480 | 800) => portrait(FOUNDER.id, size);
 
 /** Home page: the founder, his reason for starting SINC, and a link to the full profile. */
 export function FounderIntro() {

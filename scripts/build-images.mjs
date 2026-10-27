@@ -44,19 +44,24 @@ for (const [key, info] of Object.entries(crops)) {
   await writeFile(path.join(root, "src", "data", "photo-sizes.json"), JSON.stringify(sizes, null, 2) + "\n");
 }
 
-// Founder profile photo: the same crop as the portrait, named for search and sharing.
+// Leadership profile photos: the same crop as each portrait, under a descriptive file name
+// (src/data/leader-photos.json) that is used only on that person's own profile page, so search
+// engines associate the photo with the page that names the person.
 {
-  const info = crops["elango-s"];
-  const box = info.crops.portrait;
-  const width = box.right - box.left, height = box.bottom - box.top;
-  const base = sharp(src(info.source)).rotate().extract({ left: box.left, top: box.top, width, height });
-  for (const size of [480, 800]) {
-    const target = Math.min(size, width);
-    await base.clone().resize({ width: target, withoutEnlargement: true }).webp({ quality: 84, effort: 5 }).toFile(out(`team/elango-s-founder-sinc-${size}.webp`));
+  const named = JSON.parse(await readFile(path.join(root, "src", "data", "leader-photos.json"), "utf8"));
+  for (const [key, name] of Object.entries(named)) {
+    const info = crops[key];
+    const box = info.crops.portrait;
+    const width = box.right - box.left, height = box.bottom - box.top;
+    const base = sharp(src(info.source)).rotate().extract({ left: box.left, top: box.top, width, height });
+    for (const size of [480, 800]) {
+      const target = Math.min(size, width);
+      await base.clone().resize({ width: target, withoutEnlargement: true }).webp({ quality: 84, effort: 5 }).toFile(out(`team/${name}-${size}.webp`));
+    }
+    // JPEG: the image the profile page shows, and its social preview and structured-data image
+    await base.clone().resize({ width: Math.min(800, width), withoutEnlargement: true }).jpeg({ quality: 86, mozjpeg: true }).toFile(out(`team/${name}.jpg`));
   }
-  // JPEG for social previews and structured data (widest support)
-  await base.clone().resize({ width: Math.min(800, width), withoutEnlargement: true }).jpeg({ quality: 86, mozjpeg: true }).toFile(out("team/elango-s-founder-sinc.jpg"));
-  console.log("founder profile photo done");
+  console.log("leadership profile photos done");
 }
 
 // Logo: the supplied JPEG (white ground) and the transparent mark derived from the same artwork.

@@ -1,9 +1,9 @@
 import { SITE } from "../config/site";
 import { LEADERS, type Leader } from "../data/leadership";
-import { portrait, portraitSrcSet, focusClass } from "../data/team";
 import type { RouteMeta } from "../seo/routes";
 import { IconArrowRight, JoinButton } from "../components/ui";
 import { ProfileLinks } from "../components/ProfileLinks";
+import { LeaderPhoto } from "../components/LeaderPhoto";
 import { PageShell } from "./PageShell";
 
 /** Profile for a co-founder or the founding advisor: confirmed name, designation, approved photo
@@ -21,11 +21,7 @@ export function LeaderProfilePage({ route, leader }: { route: RouteMeta; leader:
   return (
     <PageShell route={route} current="team">
       <header className="founder-hero container">
-        <figure className="founder-hero__photo" data-reveal="mask">
-          <img src={portrait(m.id, 800)} srcSet={portraitSrcSet(m.id)} sizes="(min-width: 900px) 40vw, 90vw"
-            width={480} height={600} alt={`${m.name}, ${m.role} of SINC — ${SITE.fullName}`} fetchPriority="high" decoding="async"
-            className={focusClass(m)} />
-        </figure>
+        <LeaderPhoto leader={leader} />
         <div className="founder-hero__text">
           <p className="eyebrow" data-reveal>{m.role}</p>
           <h1 className="page-hero__title" data-reveal>{m.name}</h1>

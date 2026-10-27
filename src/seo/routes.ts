@@ -7,7 +7,6 @@ import { SITE, SITE_URL } from "../config/site";
 import { FOUNDER } from "../data/founder";
 import { TEAM, type TeamMember } from "../data/team";
 import { LEADERS, FOUNDER_PATH, leaderForMember, type Leader } from "../data/leadership";
-import PHOTO_SIZES from "../data/photo-sizes.json";
 
 export type RouteId = "home" | "about" | "leadership" | "leader" | "team" | "contact" | "privacy" | "terms" | "not-found";
 
@@ -41,7 +40,7 @@ export const ROUTES: RouteMeta[] = [
     id: "home", path: "/", file: "index.html", indexable: true, changefreq: "weekly", priority: 1,
     // link previews (WhatsApp, LinkedIn, Instagram…) show the SINC logo (default og:image);
     // Google results are pointed at the founder's photo through primaryImageOfPage below
-    images: ["/images/team/elango-s-founder-sinc.jpg", "/images/brand/sinc-logo.jpeg"],
+    images: ["/images/team/elango-s-portrait-800.webp", "/images/brand/sinc-logo.jpeg"],
     // brand searches (SINC, sincommunity, the full name) match the title; the description is the short explanation
     title: "SINC | Society for Innovation, Network & Collaboration",
     description: "SINC, the Society for Innovation, Network & Collaboration, is a Bengaluru technology community where developers, designers and founders build together.",
@@ -53,7 +52,7 @@ export const ROUTES: RouteMeta[] = [
   },
   {
     id: "leadership", path: "/leadership", file: "leadership.html", crumb: "Leadership", indexable: true, changefreq: "monthly", priority: 0.8,
-    images: LEADERS.map((l) => leaderImage(l)),
+    images: LEADERS.map((l) => `/images/team/${l.member.id}-portrait-800.webp`),
     title: "SINC Leadership | Founder, Co-Founders & Founding Advisor",
     description: "SINC is led by founder Elango S, co-founders Karmjit SG and Prajith P, and founding advisor Aaditya R M. Their roles and profiles.",
   },
@@ -96,12 +95,13 @@ export const ROUTES: RouteMeta[] = [
 ];
 
 /** the approved portrait used for a leader in previews, structured data and the sitemap */
+/** the profile page's own photo (named for the person and role, shown only on that page) */
 function leaderImage(l: Leader): string {
-  return l.member.role === "Founder" ? "/images/team/elango-s-founder-sinc.jpg" : `/images/team/${l.member.id}-portrait-800.webp`;
+  return `/images/team/${l.photo}.jpg`;
 }
 
 function leaderImageSize(l: Leader) {
-  const [width, height] = (PHOTO_SIZES as Record<string, number[]>)[l.member.id] ?? [664, 830];
+  const [width, height] = l.photoSize;
   return { width, height };
 }
 
@@ -160,7 +160,7 @@ function leaderPerson(l: Leader) {
     name: l.member.name,
     jobTitle: l.member.role,
     description: l.summary,
-    image: absolute(leaderImage(l)),
+    image: { "@type": "ImageObject", url: absolute(leaderImage(l)), ...leaderImageSize(l), caption: `${l.member.name}, ${l.member.role} of SINC` },
     url: absolute(l.path),
     worksFor: { "@id": ORG_ID },
   };
@@ -232,14 +232,18 @@ export function structuredData(r: RouteMeta): object | null {
   if (!r.indexable) return null;
   const graph: object[] = [];
   if (r.id === "home") {
-    const founderPhoto = { "@type": "ImageObject", url: absolute("/images/team/elango-s-founder-sinc.jpg"), width: 664, height: 830, caption: "Elango S, Founder of SINC" };
+    // the founder's general portrait, shown on the home page (his named profile photo stays on his profile)
+    const founderPhoto = { "@type": "ImageObject", url: absolute("/images/team/elango-s-portrait-800.webp"), width: 664, height: 830, caption: "Elango S, Founder of SINC" };
     graph.push(organization(), { "@type": "WebSite", "@id": SITE_ID, url: absolute("/"), name: SITE.name, alternateName: SITE.alternateNames, publisher: { "@id": ORG_ID }, inLanguage: "en" },
       webPage(r, "WebPage", { primaryImageOfPage: founderPhoto, image: founderPhoto }));
   } else {
     const types: Partial<Record<RouteId, string>> = { about: "AboutPage", leader: "ProfilePage", leadership: "CollectionPage", contact: "ContactPage" };
     const extra: Record<string, unknown> = { breadcrumb: { "@id": `${absolute(r.path)}#breadcrumb` } };
     const leader = r.leaderSlug ? LEADERS.find((l) => l.slug === r.leaderSlug) : undefined;
-    if (leader) extra.mainEntity = { "@id": personId(leader) };
+    if (leader) {
+      extra.mainEntity = { "@id": personId(leader) };
+      extra.primaryImageOfPage = { "@type": "ImageObject", url: absolute(leaderImage(leader)), ...leaderImageSize(leader), caption: `${leader.member.name}, ${leader.member.role} of SINC` };
+    }
     if (r.id === "leadership") extra.mainEntity = { "@type": "ItemList", itemListElement: LEADERS.map((l, i) => ({ "@type": "ListItem", position: i + 1, item: { "@id": personId(l) } })) };
     graph.push(webPage(r, types[r.id] ?? "WebPage", extra), breadcrumb(r), organization());
     if (leader) graph.push(leaderPerson(leader));

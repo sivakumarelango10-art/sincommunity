@@ -5,7 +5,7 @@ import type { RouteMeta } from "../seo/routes";
 import { IconArrowRight, JoinButton } from "../components/ui";
 import { PageHero, PageShell } from "./PageShell";
 
-const founderPhoto = (size: 480 | 800) => `/images/team/elango-s-founder-sinc-${size}.webp?v=3`;
+const founderPhoto = (size: 480 | 800) => portrait("elango-s", size); // profile pages keep the named files
 
 /** The leadership directory: the four owner-confirmed leaders, each linking to a profile page. */
 export function LeadershipPage({ route }: { route: RouteMeta }) {
