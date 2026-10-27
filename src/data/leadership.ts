@@ -5,6 +5,7 @@
  */
 import { TEAM, type TeamMember } from "./team";
 import { FOUNDER } from "./founder";
+import { PROFILES, type LeaderProfile } from "./profiles";
 
 export interface Leader {
   member: TeamMember;
@@ -14,8 +15,10 @@ export interface Leader {
   summary: string;
   /** search description for the profile page (under 160 characters) */
   description: string;
-  /** verified biography paragraphs (none supplied yet for co-founders and the advisor) */
+  /** verified biography paragraphs */
   bio: string[];
+  /** supplied background (education, experience, projects, skills…); see profiles.ts */
+  profile?: LeaderProfile;
 }
 
 const ORG = "SINC (Society for Innovation, Network & Collaboration)";
@@ -40,7 +43,9 @@ const make = (id: string, slug: string, summary: (m: TeamMember) => string, bio:
     const d = `${base}: ${list(items.slice(0, n))}.`;
     if (d.length <= 160) { description = d; break; }
   }
-  return { member: m, slug, path: `/leadership/${slug}`, summary: summary(m), description, bio };
+  const profile = PROFILES[id];
+  if (profile?.description) description = profile.description;
+  return { member: m, slug, path: `/leadership/${slug}`, summary: summary(m), description, bio: profile?.bio ?? bio, profile };
 };
 
 export const LEADERS: Leader[] = [

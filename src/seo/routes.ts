@@ -164,7 +164,17 @@ function leaderPerson(l: Leader) {
     url: absolute(l.path),
     worksFor: { "@id": ORG_ID },
   };
-  if (l.member.id !== FOUNDER.id) return base;
+  if (l.member.id !== FOUNDER.id) {
+    const pr = l.profile;
+    if (!pr) return base;
+    return {
+      ...base,
+      description: pr.bio[0] ?? l.summary,
+      // finished courses → alumniOf; a course still running (ends after the build year) → affiliation
+      ...educationLinks(pr.education ?? []),
+      ...(pr.skills?.length ? { knowsAbout: pr.skills } : {}),
+    };
+  }
   return {
     ...base,
     description: `${FOUNDER.intro} ${FOUNDER.headline}.`,
@@ -173,6 +183,14 @@ function leaderPerson(l: Leader) {
     knowsLanguage: FOUNDER.languages,
     sameAs: FOUNDER.links.map((x) => x.url),
   };
+}
+function educationLinks(list: { school: string; when?: string }[]) {
+  const year = new Date().getFullYear();
+  const ends = (w?: string) => Number(w?.match(/(\d{4})\s*$/)?.[1] ?? 0);
+  const org = (e: { school: string }) => ({ "@type": "EducationalOrganization", name: e.school });
+  const done = list.filter((e) => ends(e.when) && ends(e.when) <= year).map(org);
+  const current = list.filter((e) => ends(e.when) > year).map(org);
+  return { ...(done.length ? { alumniOf: done } : {}), ...(current.length ? { affiliation: current } : {}) };
 }
 const teamPerson = (m: TeamMember) => {
   const l = leaderForMember(m.id);

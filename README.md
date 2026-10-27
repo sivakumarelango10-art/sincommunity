@@ -104,9 +104,11 @@ canonical link (`https://www.sincommunity.in/...`, the address Vercel serves; `s
 `dist/robots.txt` and `dist/llms.txt` (a plain-text summary of SINC and its pages for AI tools, generated from the same data). `vercel.json` serves them at clean addresses (`/about`), redirects `/about/` and
 `/about.html` to `/about`, redirects `/founder` to `/leadership/elango-s`, and caches the hashed files in `assets/` for a year.
 
-To add a biography for a co-founder or the advisor: add the verified paragraphs as the last argument of their
-`make(...)` call in `src/data/leadership.ts`. The profile shows a "Biography" section once it has text. Only add
-public profile links (LinkedIn and so on) that the person has confirmed.
+To add a co-founder's or the advisor's details: add an entry for their team id in `src/data/profiles.ts`
+(biography, education, experience, projects, skills, certifications, achievements, activities; every field is
+optional). The profile page and its structured data pick them up automatically; empty fields are not shown.
+Aaditya R M's entry, taken from his résumé, is the example. Never add phone numbers, personal email addresses,
+home towns or grades. Only add public profile links (LinkedIn and so on) that the person has confirmed.
 
 To add a page: add it to `ROUTES` in `src/seo/routes.ts`, create its component in `src/pages/`, add it to
 `RoutePage` in `src/App.tsx`, and (if it belongs in the footer) to `PAGES` in `src/config/site.ts`.
@@ -122,7 +124,8 @@ src/
   data/team.ts              the team members
   data/content.ts           all section copy and FAQs
   data/founder.ts           founder profile (verified details only)
-  data/leadership.ts        the four leadership profiles (addresses, summaries, biographies)
+  data/leadership.ts        the four leadership profiles (addresses, summaries)
+  data/profiles.ts          supplied background for co-founders and the advisor (bio, education, projects…)
   seo/routes.ts             pages, titles, descriptions, canonical links, structured data
   seo/llms.ts               llms.txt
   pages/                    About, Leadership, LeaderProfile, Founder, Team, Contact, Privacy, Terms, 404 (+ PageShell)
@@ -152,7 +155,7 @@ Production build and TypeScript check, then browser tests in Chromium:
   blocked storage, keyboard use, every control, touch scrolling on phone and tablet profiles).
 - Every page: status codes, titles, descriptions, canonical links, robots tags, one `h1`, image alt text,
   structured data, internal links, redirects, the 404 page, sitemap, robots.txt and llms.txt; on each leadership
-  profile, that the visible name and role match its Person data (191 checks, against a local
+  profile, that the visible name and role match its Person data (196 checks, against a local
   server that follows `vercel.json` the way Vercel does).
 - No horizontal overflow and no console errors at 360, 390, 768, 1024, 1440 and 1920 px and on landscape phones.
 - Lighthouse (local, simulated throttling) for performance, accessibility, best practices and SEO.
