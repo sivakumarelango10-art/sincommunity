@@ -105,3 +105,17 @@
   .eco__detail { grid-template-columns: 1fr; margin-top: var(--space-6); }
   .eco__detail-art { max-width: 200px; justify-self: start; }
 }
+
+/* node positions on the 1200×300 path, and the progress fill per active stage (no inline styles) */
+.eco__node--0 { --x: 5.8333%; --y: 66.6667%; }
+.eco__node--1 { --x: 23.3333%; --y: 36.6667%; }
+.eco__node--2 { --x: 40.8333%; --y: 63.3333%; }
+.eco__node--3 { --x: 58.3333%; --y: 33.3333%; }
+.eco__node--4 { --x: 75.8333%; --y: 60%; }
+.eco__node--5 { --x: 93.3333%; --y: 31.6667%; }
+.eco__nodes[data-active="0"] { --eco-p: 0; }
+.eco__nodes[data-active="1"] { --eco-p: 0.2; }
+.eco__nodes[data-active="2"] { --eco-p: 0.4; }
+.eco__nodes[data-active="3"] { --eco-p: 0.6; }
+.eco__nodes[data-active="4"] { --eco-p: 0.8; }
+.eco__nodes[data-active="5"] { --eco-p: 1; }

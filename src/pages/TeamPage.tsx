@@ -1,4 +1,4 @@
-import { TEAM, portrait, portraitSrcSet, type TeamMember } from "../data/team";
+import { TEAM, portrait, portraitSrcSet, focusClass, type TeamMember } from "../data/team";
 import { FOUNDER } from "../data/founder";
 import { leaderForMember } from "../data/leadership";
 import type { RouteMeta } from "../seo/routes";
@@ -15,7 +15,7 @@ function ProfileCard({ m, size = "md" }: { m: TeamMember; size?: "lg" | "md" | "
         <img src={portrait(m.id, size === "sm" ? 480 : 800)} srcSet={portraitSrcSet(m.id)}
           sizes={size === "lg" ? "(min-width: 900px) 30vw, 90vw" : "(min-width: 900px) 22vw, 46vw"}
           width={480} height={600} loading={size === "lg" ? "eager" : "lazy"} decoding="async"
-          alt={`${m.name}, ${m.role} at SINC`} style={{ objectPosition: m.focus }} />
+          alt={`${m.name}, ${m.role} at SINC`} className={focusClass(m)} />
       </div>
       <div className="profile-card__body">
         <h3 className="profile-card__name">{m.name}</h3>

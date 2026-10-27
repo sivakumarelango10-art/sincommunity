@@ -107,7 +107,7 @@ canonical link (`https://www.sincommunity.in/...`, the address Vercel serves; `s
 To add a co-founder's or the advisor's details: add an entry for their team id in `src/data/profiles.ts`
 (biography, education, experience, projects, skills, certifications, achievements, activities; every field is
 optional). The profile page and its structured data pick them up automatically; empty fields are not shown.
-Aaditya R M's entry, taken from his résumé, is the example. Never add phone numbers, personal email addresses,
+The co-founders' and the advisor's entries come from their résumés. Never add phone numbers, personal email addresses,
 home towns or grades. Only add public profile links (LinkedIn and so on) that the person has confirmed.
 
 To add a page: add it to `ROUTES` in `src/seo/routes.ts`, create its component in `src/pages/`, add it to
@@ -155,7 +155,7 @@ Production build and TypeScript check, then browser tests in Chromium:
   blocked storage, keyboard use, every control, touch scrolling on phone and tablet profiles).
 - Every page: status codes, titles, descriptions, canonical links, robots tags, one `h1`, image alt text,
   structured data, internal links, redirects, the 404 page, sitemap, robots.txt and llms.txt; on each leadership
-  profile, that the visible name and role match its Person data (196 checks, against a local
+  profile, that the visible name and role match its Person data (207 checks, against a local
   server that follows `vercel.json` the way Vercel does).
 - No horizontal overflow and no console errors at 360, 390, 768, 1024, 1440 and 1920 px and on landscape phones.
 - Lighthouse (local, simulated throttling) for performance, accessibility, best practices and SEO.

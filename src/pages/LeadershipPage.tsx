@@ -1,6 +1,6 @@
 import { SITE } from "../config/site";
 import { LEADERS } from "../data/leadership";
-import { portrait, portraitSrcSet } from "../data/team";
+import { portrait, portraitSrcSet, focusClass } from "../data/team";
 import type { RouteMeta } from "../seo/routes";
 import { IconArrowRight, JoinButton } from "../components/ui";
 import { PageHero, PageShell } from "./PageShell";
@@ -30,7 +30,7 @@ export function LeadershipPage({ route }: { route: RouteMeta }) {
                       srcSet={isFounder ? `${founderPhoto(480)} 480w, ${founderPhoto(800)} 664w` : portraitSrcSet(l.member.id)}
                       sizes={isFounder ? "(min-width: 900px) 34vw, 90vw" : "(min-width: 900px) 22vw, 46vw"}
                       width={isFounder ? 664 : 480} height={isFounder ? 830 : 600} loading={i === 0 ? "eager" : "lazy"} decoding="async"
-                      alt={`${l.member.name}, ${l.member.role} of SINC — ${SITE.fullName}`} style={{ objectPosition: l.member.focus }} />
+                      alt={`${l.member.name}, ${l.member.role} of SINC — ${SITE.fullName}`} className={focusClass(l.member)} />
                   </span>
                   <span className="leader-card__body">
                     <span className="leader-card__role">{l.member.role}</span>

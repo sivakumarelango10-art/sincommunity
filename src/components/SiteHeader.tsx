@@ -158,7 +158,7 @@ export function SiteHeader({ onHome = true, current = null }: HeaderProps) {
     <header className={`site-header${scrolled ? " is-scrolled" : ""}${menuOpen ? " menu-open" : ""}`}>
       <div className="site-header__inner">
         <a className="brand" href={onHome ? "#top" : "/"} aria-label={onHome ? `${SITE.name} — back to top` : `${SITE.name} — home`}>
-          <span className="brand__logo" data-brand-logo><Logo size={40} eager /></span>
+          <span className="brand__logo" data-brand-logo><Logo size={40} eager alt="SINC logo" /></span>
           <span className="brand__word">SINC</span>
         </a>
 

@@ -6,6 +6,8 @@ import { IconArrowLeft, IconArrowRight } from "./ui";
 import "./Ecosystem.css";
 
 /* node positions along the desktop pathway (viewBox 1200 x 300) */
+// node positions and the progress fill are mirrored in Ecosystem.css (.eco__node--N, [data-active]),
+// so the prerendered markup carries no inline styles; change both together
 const PTS = [[70, 200], [280, 110], [490, 190], [700, 100], [910, 180], [1120, 95]];
 const seg = (i: number) => {
   const [x0, y0] = PTS[i], [x1, y1] = PTS[i + 1];
@@ -130,14 +132,13 @@ export function Ecosystem() {
           </svg>
           <span className="eco__return-label">Opportunities inspire new ideas</span>
 
-          <div className="eco__nodes" role="tablist" aria-label="Ecosystem stages" style={{ ["--eco-p" as string]: active / (STAGES.length - 1) }}>
+          <div className="eco__nodes" role="tablist" aria-label="Ecosystem stages" data-active={active}>
             {/* smaller screens: the vertical pathway and its progress */}
             <span className="eco__vline" aria-hidden="true"><span className="eco__vfill" /></span>
             {STAGES.map((s, i) => (
-              <button key={s.id} id={`eco-tab-${i}`} type="button" role="tab" className="eco__node"
+              <button key={s.id} id={`eco-tab-${i}`} type="button" role="tab" className={`eco__node eco__node--${i}`}
                 aria-selected={i === active} aria-controls="eco-panel" tabIndex={i === active ? 0 : -1}
                 data-state={i < active ? "done" : i === active ? "active" : "next"}
-                style={{ ["--x" as string]: `${(PTS[i][0] / 1200) * 100}%`, ["--y" as string]: `${(PTS[i][1] / 300) * 100}%` }}
                 onClick={() => select(i)} onKeyDown={(e) => onKey(e, i)}>
                 <span className="eco__node-dot" aria-hidden="true" />
                 <span className="eco__node-num">0{i + 1}</span>

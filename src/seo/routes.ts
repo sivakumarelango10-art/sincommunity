@@ -43,8 +43,8 @@ export const ROUTES: RouteMeta[] = [
     // Google results are pointed at the founder's photo through primaryImageOfPage below
     images: ["/images/team/elango-s-founder-sinc.jpg", "/images/brand/sinc-logo.jpeg"],
     // brand searches (SINC, sincommunity, the full name) match the title; the description is the short explanation
-    title: "SINC – Society for Innovation, Network & Collaboration",
-    description: "SINC (Society for Innovation, Network & Collaboration) is a Bengaluru technology community where developers, designers, students and founders build together.",
+    title: "SINC | Society for Innovation, Network & Collaboration",
+    description: "SINC, the Society for Innovation, Network & Collaboration, is a Bengaluru technology community where developers, designers and founders build together.",
   },
   {
     id: "about", path: "/about", file: "about.html", crumb: "About SINC", indexable: true, changefreq: "monthly", priority: 0.8,
@@ -173,6 +173,7 @@ function leaderPerson(l: Leader) {
       // finished courses → alumniOf; a course still running (ends after the build year) → affiliation
       ...educationLinks(pr.education ?? []),
       ...(pr.skills?.length ? { knowsAbout: pr.skills } : {}),
+      ...(pr.links?.length ? { sameAs: pr.links.map((x) => x.url) } : {}),
     };
   }
   return {
@@ -184,12 +185,13 @@ function leaderPerson(l: Leader) {
     sameAs: FOUNDER.links.map((x) => x.url),
   };
 }
-function educationLinks(list: { school: string; when?: string }[]) {
+function educationLinks(list: { school: string; when?: string; current?: boolean }[]) {
   const year = new Date().getFullYear();
-  const ends = (w?: string) => Number(w?.match(/(\d{4})\s*$/)?.[1] ?? 0);
+  const ends = (w?: string) => Number(w?.match(/(\d{4})(?!.*\d{4})/)?.[1] ?? 0); // the last year mentioned
   const org = (e: { school: string }) => ({ "@type": "EducationalOrganization", name: e.school });
-  const done = list.filter((e) => ends(e.when) && ends(e.when) <= year).map(org);
-  const current = list.filter((e) => ends(e.when) > year).map(org);
+  const isCurrent = (e: { when?: string; current?: boolean }) => e.current ?? ends(e.when) > year;
+  const done = list.filter((e) => !isCurrent(e) && ends(e.when) > 0).map(org);
+  const current = list.filter(isCurrent).map(org);
   return { ...(done.length ? { alumniOf: done } : {}), ...(current.length ? { affiliation: current } : {}) };
 }
 const teamPerson = (m: TeamMember) => {

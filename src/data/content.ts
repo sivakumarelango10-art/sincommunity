@@ -205,7 +205,12 @@ export const FAQS = [
   {
     id: "leaders",
     q: "Who founded SINC, and who leads it?",
-    a: "SINC was founded by Elango S. Its co-founders are Karmjit SG and Prajith P, and its founding advisor is Aaditya R M.",
+    a: "SINC was founded by Elango S. Its co-founders are Karmjit SG and Prajith P, and its founding advisor is Aaditya R M. Their profiles and photographs are on the leadership page at sincommunity.in/leadership.",
+  },
+  {
+    id: "official",
+    q: "What is SINC’s official website, and how do I contact SINC?",
+    a: "SINC’s official website is sincommunity.in, its official Instagram account is @sincommunity.in, and its contact email is contact@sincommunity.in. SINC, the Society for Innovation, Network & Collaboration, is not connected with other organisations, companies or communities that use the names SINC or SIN.",
   },
   {
     id: "who",

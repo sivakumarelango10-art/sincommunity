@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { TEAM, portrait, portraitSrcSet, type TeamMember } from "../data/team";
+import { TEAM, portrait, portraitSrcSet, focusClass, type TeamMember } from "../data/team";
 import { gsap, useGSAP, EASE } from "../motion/gsap";
 import { useDeferredMotion, useMotionEnabled } from "../motion/MotionContext";
 import { lockScroll, useSectionReveal } from "../motion/hooks";
@@ -13,7 +13,7 @@ function Card({ m, size, onOpen }: { m: TeamMember; size: "lead" | "co" | "advis
         aria-label={`View a larger photo of ${m.name}, ${m.role}`} onClick={(e) => onOpen(m, e.currentTarget)}>
         <img src={portrait(m.id, size === "lead" ? 800 : 480)} srcSet={portraitSrcSet(m.id)}
           sizes={size === "lead" ? "(min-width: 960px) 38vw, 92vw" : "(min-width: 960px) 22vw, 46vw"}
-          width={480} height={600} loading="lazy" decoding="async" alt="" style={{ objectPosition: m.focus }} />
+          width={480} height={600} loading="lazy" decoding="async" alt={`${m.name}, ${m.role} at SINC`} className={focusClass(m)} />
       </button>
       <figcaption className="member__caption" data-reveal>
         <h3 className="member__name">{m.name}</h3>
@@ -46,7 +46,7 @@ function PortraitViewer({ member, onClose }: { member: TeamMember | null; onClos
       {member && (
         <div className="viewer__card">
           <div className="viewer__photo">
-            <img src={portrait(member.id, 800)} width={800} height={1000} alt={`${member.name}, ${member.role} at SINC`} style={{ objectPosition: member.focus }} />
+            <img src={portrait(member.id, 800)} width={800} height={1000} alt={`${member.name}, ${member.role} at SINC`} className={focusClass(member)} />
           </div>
           <div className="viewer__info">
             <h2 id="viewer-name" className="viewer__name">{member.name}</h2>

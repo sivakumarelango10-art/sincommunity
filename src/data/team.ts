@@ -34,6 +34,9 @@ export const TEAM: TeamMember[] = [
 ];
 
 /** bump after replacing any photo, so browsers fetch the new images instead of cached ones */
+/** class that crops a portrait at the member's focus point (rules in styles/base.css, no inline styles) */
+export const focusClass = (m: { focus: string }) => `pf-${m.focus.replace(/%/g, "").trim().replace(/\s+/, "-")}`;
+
 const PHOTO_REV = "3";
 export const portrait = (id: string, size: 480 | 800 = 480) => `/images/team/${id}-portrait-${size}.webp?v=${PHOTO_REV}`;
 export const square = (id: string, size: 320 | 640 = 320) => `/images/team/${id}-square-${size}.webp?v=${PHOTO_REV}`;

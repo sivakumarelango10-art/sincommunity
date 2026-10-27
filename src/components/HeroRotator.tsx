@@ -1,5 +1,5 @@
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
-import { portrait, portraitSrcSet, type TeamMember } from "../data/team";
+import { portrait, portraitSrcSet, focusClass, type TeamMember } from "../data/team";
 import { gsap } from "../motion/gsap";
 
 /**
@@ -88,11 +88,10 @@ export const HeroRotator = forwardRef<RotatorHandle, Props>(function HeroRotator
   return (
     <div className="hero__frame hero__rot" ref={frame}>
       {shown.map((m, i) => (
-        <img key={m.id} className="hero__rot-img" src={portrait(m.id, 480)} srcSet={portraitSrcSet(m.id)}
+        <img key={m.id} className={`hero__rot-img ${focusClass(m)}`} src={portrait(m.id, 480)} srcSet={portraitSrcSet(m.id)}
           sizes={sizes} width={480} height={600} decoding="async"
           fetchPriority={i === 0 && priority ? "high" : "auto"}
-          alt={i === current ? `${m.name}, ${m.role}` : ""} aria-hidden={i === current ? undefined : true}
-          style={{ objectPosition: m.focus }} />
+          alt={`${m.name}, ${m.role} of SINC`} aria-hidden={i === current ? undefined : true} />
       ))}
     </div>
   );

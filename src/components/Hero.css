@@ -26,7 +26,8 @@
   font-size: var(--fs-label); font-weight: 800; letter-spacing: var(--tracking-label); text-transform: uppercase;
   color: var(--blue-deep);
 }
-.hero__eyebrow { position: relative; }
+.hero__eyebrow { position: relative; font-family: var(--font-body); line-height: 1.4; }
+.hero__heading { display: block; font-weight: inherit; letter-spacing: normal; line-height: normal; }
 .hero__spark {
   position: absolute; left: calc(-1 * var(--lane) + 2px); top: 50%; margin-top: -6px;
   width: 12px; height: 12px; border-radius: 50%; background: var(--blue); flex: none;
@@ -34,6 +35,7 @@
 }
 
 .hero__title {
+  display: block; font-family: var(--font-display);
   margin-top: var(--space-5);
   font-size: var(--fs-hero); font-weight: 800; line-height: 0.98; letter-spacing: -0.045em;
   color: var(--text);

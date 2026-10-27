@@ -155,3 +155,7 @@ html.intro-pending .intro-cover {
 html.intro-pending #root { visibility: hidden; animation: intro-root-in 0s linear 4s forwards; }
 @keyframes intro-cover-out { to { opacity: 0; visibility: hidden; } }
 @keyframes intro-root-in { to { visibility: visible; } }
+
+/* portrait focus points (see focusClass in data/team.ts) */
+.pf-50-30 { object-position: 50% 30%; }
+.pf-50-25 { object-position: 50% 25%; }

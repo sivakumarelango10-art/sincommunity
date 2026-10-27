@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { SITE } from "../config/site";
-import { TEAM, portrait, portraitSrcSet, type TeamMember } from "../data/team";
+import { TEAM, portrait, portraitSrcSet, focusClass, type TeamMember } from "../data/team";
 import { gsap, useGSAP, SplitText, EASE, finePointer } from "../motion/gsap";
 import { useMotionEnabled } from "../motion/MotionContext";
 import { IconPause, IconPlay, JoinButton, Logo } from "./ui";
@@ -216,9 +216,11 @@ export function Hero({ entrance, fromIntro, onWatchStory }: HeroProps) {
             <path d={guide.d} />
           </svg>
         )}
-        <p className="hero__eyebrow"><span className="hero__spark" aria-hidden="true" />{SITE.fullName}</p>
-        <h1 className="hero__title" id="hero-title">
-          Where ambition <span className="hero__title-accent">finds its people.</span>
+        {/* the page's one h1 names the organisation in full, then the tagline */}
+        <h1 className="hero__heading" id="hero-title">
+          <span className="hero__eyebrow"><span className="hero__spark" aria-hidden="true" />{SITE.name} — {SITE.fullName}</span>
+          <span className="sr-only">: </span>
+          <span className="hero__title">Where ambition <span className="hero__title-accent">finds its people.</span></span>
         </h1>
 
         <div className="hero__lower">
@@ -249,7 +251,7 @@ export function Hero({ entrance, fromIntro, onWatchStory }: HeroProps) {
             <figure className="hero__person hero__person--2" data-depth={1}>
               <div className="hero__frame">
                 <img src={portrait(FOUNDER.id, 480)} srcSet={portraitSrcSet(FOUNDER.id)} sizes={PORTRAIT_SIZES}
-                  width={480} height={600} alt={`${FOUNDER.name}, ${FOUNDER.role}`} style={{ objectPosition: FOUNDER.focus }}
+                  width={480} height={600} alt={`${FOUNDER.name}, ${FOUNDER.role} of SINC`} className={focusClass(FOUNDER)}
                   fetchPriority="high" decoding="async" />
               </div>
             </figure>

@@ -12,7 +12,8 @@ export const SITE = {
   tagline: "Where Ambition Finds Its People.",
   message: "Connect. Collaborate. Innovate.",
   /** other names people search for; used in structured data so Google connects them to this site */
-  alternateNames: ["SINC Community", "sincommunity", "sincommunity.in", "Society for Innovation, Network & Collaboration"],
+  // in order of preference (Google's site-name guidance reads alternateName this way)
+  alternateNames: ["Society for Innovation, Network & Collaboration", "SINC Community", "sincommunity", "sincommunity.in"],
   domain: "sincommunity.in",
   /** public contact address for SINC (supplied by SINC) */
   email: "contact@sincommunity.in",

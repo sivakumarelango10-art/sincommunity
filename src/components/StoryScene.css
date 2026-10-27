@@ -49,3 +49,22 @@
 /* stage 4 : opening outward */
 .story-scene[data-stage="4"] .ss-out-line { stroke-dashoffset: 0; }
 .story-scene[data-stage="4"] .ss-out-node { opacity: 1; transform: none; }
+
+/* per-index delays and spark positions (kept out of inline styles) */
+.ss-i0 { --i: 0; }
+.ss-i1 { --i: 1; }
+.ss-i2 { --i: 2; }
+.ss-i3 { --i: 3; }
+.ss-i4 { --i: 4; }
+.ss-i5 { --i: 5; }
+.ss-reach { transition-delay: calc(var(--i, 0) * 70ms); }
+.ss-spoke { transition-delay: calc(200ms + var(--i, 0) * 90ms); }
+.ss-edge { transition-delay: calc(var(--i, 0) * 90ms); }
+.ss-out, .ss-out-line { transition-delay: calc(var(--i, 0) * 80ms); }
+.ss-out-node { transition-delay: calc(300ms + var(--i, 0) * 80ms); }
+.ss-node { transition-delay: calc(var(--i, 0) * 60ms); }
+.ss-node.ss-i0 { --fx: 92px; --fy: 138px; --nx: 185.6px; --ny: 210.9px; }
+.ss-node.ss-i1 { --fx: 508px; --fy: 112px; --nx: 414.4px; --ny: 196.6px; }
+.ss-node.ss-i2 { --fx: 536px; --fy: 420px; --nx: 429.8px; --ny: 366px; }
+.ss-node.ss-i3 { --fx: 300px; --fy: 540px; --nx: 300px; --ny: 432px; }
+.ss-node.ss-i4 { --fx: 70px; --fy: 428px; --nx: 173.5px; --ny: 370.4px; }

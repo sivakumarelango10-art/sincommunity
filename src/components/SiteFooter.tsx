@@ -24,7 +24,7 @@ export function SiteFooter({ onReplay, onHome = true }: FooterProps) {
       <div className="container">
         <div className="footer__top">
           <div className="footer__brand">
-            <span className="footer__logo"><Logo size={56} /></span>
+            <span className="footer__logo"><Logo size={56} alt="SINC logo" /></span>
             <div>
               <p className="footer__name">SINC</p>
               <p className="footer__full">{SITE.fullName} · {SITE.domain}</p>
