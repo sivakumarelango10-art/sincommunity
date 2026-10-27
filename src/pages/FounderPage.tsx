@@ -20,8 +20,8 @@ export function FounderPage({ route }: { route: RouteMeta }) {
         <LeaderPhoto leader={LEADERS[0]} />
         <div className="founder-hero__text">
           <p className="eyebrow" data-reveal>Founder</p>
-          <h1 className="page-hero__title" data-reveal>{FOUNDER.name}</h1>
-          <p className="founder-hero__role" data-reveal>{FOUNDER.title} · {FOUNDER.headline}</p>
+          <h1 className="page-hero__title" data-reveal>{FOUNDER.name}<span className="page-hero__title-role"> — Founder of SINC</span></h1>
+          <p className="founder-hero__role" data-reveal>{SITE.name} — {SITE.fullName} · {FOUNDER.headline}</p>
           <p className="lead" data-reveal>{FOUNDER.intro}</p>
           <div data-reveal><ProfileLinks links={FOUNDER.links} person={FOUNDER.name} /></div>
         </div>

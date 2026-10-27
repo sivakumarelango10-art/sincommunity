@@ -24,8 +24,8 @@ export function LeaderProfilePage({ route, leader }: { route: RouteMeta; leader:
         <LeaderPhoto leader={leader} />
         <div className="founder-hero__text">
           <p className="eyebrow" data-reveal>{m.role}</p>
-          <h1 className="page-hero__title" data-reveal>{m.name}</h1>
-          <p className="founder-hero__role" data-reveal>{m.role} of SINC · {pr?.headline ?? SITE.fullName}</p>
+          <h1 className="page-hero__title" data-reveal>{m.name}<span className="page-hero__title-role"> — {m.role} of SINC</span></h1>
+          <p className="founder-hero__role" data-reveal>{SITE.name} — {SITE.fullName}{pr?.headline ? ` · ${pr.headline}` : ""}</p>
           <p className="lead" data-reveal>{leader.summary}</p>
           {pr?.links && pr.links.length > 0 && <div data-reveal><ProfileLinks links={pr.links} person={m.name} /></div>}
         </div>

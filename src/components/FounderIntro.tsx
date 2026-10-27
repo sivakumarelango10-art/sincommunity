@@ -24,7 +24,7 @@ export function FounderIntro() {
         </figure>
         <div className="founder__text">
           <p className="eyebrow" data-reveal>Meet the founder</p>
-          <h2 id="founder-title" className="heading-xl" data-reveal>{FOUNDER.name}</h2>
+          <h2 id="founder-title" className="heading-xl" data-reveal><a className="founder__name-link" href={FOUNDER_PATH}>{FOUNDER.name}</a></h2>
           <p className="founder__role" data-reveal>{FOUNDER.title} · {SITE.fullName}</p>
           <p className="lead" data-reveal>{FOUNDER.bio[0]}</p>
           <blockquote className="founder__quote" data-reveal>

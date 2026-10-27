@@ -59,7 +59,8 @@ export const ROUTES: RouteMeta[] = [
   ...LEADERS.map((l): RouteMeta => ({
     id: "leader", leaderSlug: l.slug, path: l.path, file: `${l.path.slice(1)}.html`, crumb: l.member.name, parent: "leadership",
     indexable: true, changefreq: "monthly", priority: l.member.role === "Founder" ? 0.8 : 0.6, ogType: "profile",
-    title: l.member.role === "Founder" ? "Elango S, Founder of SINC | Technology Community" : `${l.member.name}, ${l.member.role} of SINC`,
+    // name — role of SINC, plus the domain, so "<name> SINC" and "<name> sincommunity" searches match
+    title: `${l.member.name} — ${l.member.role} of SINC | sincommunity.in`,
     description: l.member.role === "Founder"
       ? "Elango S is the founder of SINC and a B.Tech CSE (AI & ML) student at Yenepoya University, Bengaluru. His vision for SINC, what he leads, and his projects."
       : l.description,

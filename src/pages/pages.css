@@ -185,3 +185,6 @@
 .leader-photo .founder-hero__photo { max-width: none; }
 .leader-photo__caption { font-size: var(--fs-small); color: var(--text-faint); }
 @media (max-width: 900px) { .leader-photo { max-width: 420px; } }
+
+/* "— Founder of SINC" under the name in a profile's h1 */
+.page-hero__title-role { display: block; margin-top: 0.35em; font-size: clamp(1.15rem, 0.9rem + 1vw, 1.6rem); font-weight: 600; letter-spacing: -0.01em; line-height: 1.3; color: var(--text-soft); }
