@@ -33,7 +33,9 @@ const DEFAULT_OG = { path: "/images/brand/sinc-og.jpg", width: 1200, height: 630
 export const ROUTES: RouteMeta[] = [
   {
     id: "home", path: "/", file: "index.html", indexable: true, changefreq: "weekly", priority: 1,
-    images: ["/images/brand/sinc-logo.jpeg"],
+    // preferred picture for this page in Google results and link previews: the founder's photo
+    ogImage: { path: "/images/team/elango-s-founder-sinc.jpg", width: 664, height: 830, alt: "Elango S, Founder of SINC" },
+    images: ["/images/team/elango-s-founder-sinc.jpg", "/images/brand/sinc-logo.jpeg"],
     // brand searches (SINC, sincommunity, the full name) match the title; the description is the short explanation
     title: "SINC – Society for Innovation, Network & Collaboration",
     description: "SINC (Society for Innovation, Network & Collaboration) is a Bengaluru technology community where developers, designers, students and founders build together.",
@@ -168,7 +170,9 @@ export function structuredData(r: RouteMeta): object | null {
   if (!r.indexable) return null;
   const graph: object[] = [];
   if (r.id === "home") {
-    graph.push(organization(), { "@type": "WebSite", "@id": SITE_ID, url: absolute("/"), name: SITE.name, alternateName: SITE.alternateNames, publisher: { "@id": ORG_ID }, inLanguage: "en" }, webPage(r));
+    const founderPhoto = { "@type": "ImageObject", url: absolute("/images/team/elango-s-founder-sinc.jpg"), width: 664, height: 830, caption: "Elango S, Founder of SINC" };
+    graph.push(organization(), { "@type": "WebSite", "@id": SITE_ID, url: absolute("/"), name: SITE.name, alternateName: SITE.alternateNames, publisher: { "@id": ORG_ID }, inLanguage: "en" },
+      webPage(r, "WebPage", { primaryImageOfPage: founderPhoto, image: founderPhoto }));
   } else {
     const types: Partial<Record<RouteId, string>> = { about: "AboutPage", founder: "ProfilePage", contact: "ContactPage" };
     const extra: Record<string, unknown> = { breadcrumb: { "@id": `${absolute(r.path)}#breadcrumb` } };
