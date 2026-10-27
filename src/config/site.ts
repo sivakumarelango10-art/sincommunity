@@ -39,6 +39,7 @@ export const SITE = {
   /** Verified social accounts only (supplied by SINC). Add more here when they exist. */
   social: {
     instagram: { url: "https://www.instagram.com/sincommunity.in/", handle: "@sincommunity.in" },
+    linkedin: { url: "https://www.linkedin.com/company/sincommunity", handle: "SINC on LinkedIn" },
   },
 } as const;
 

@@ -1,7 +1,7 @@
 import { LEGAL_PAGES, NAV_ITEMS, PAGES, SITE } from "../config/site";
 import { useMotion, useMotionEnabled } from "../motion/MotionContext";
 import { goToSection } from "./SiteHeader";
-import { IconArrowUp, IconArrowUpRight, IconInstagram, IconReplay, Logo } from "./ui";
+import { IconArrowUp, IconArrowUpRight, IconInstagram, IconLinkedIn, IconReplay, Logo } from "./ui";
 import "./SiteFooter.css";
 
 interface FooterProps {
@@ -76,6 +76,12 @@ export function SiteFooter({ onReplay, onHome = true }: FooterProps) {
                 <a href={SITE.social.instagram.url} target="_blank" rel="noopener noreferrer">
                   <IconInstagram /> Instagram <span className="footer__handle">{SITE.social.instagram.handle}</span>
                   <span className="sr-only">(opens Instagram in a new tab)</span>
+                </a>
+              </li>
+              <li>
+                <a href={SITE.social.linkedin.url} target="_blank" rel="noopener noreferrer">
+                  <IconLinkedIn /> LinkedIn <span className="footer__handle">sincommunity</span>
+                  <span className="sr-only">(opens LinkedIn in a new tab)</span>
                 </a>
               </li>
             </ul>

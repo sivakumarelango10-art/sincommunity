@@ -15,7 +15,7 @@ export function llmsTxt(): string {
     "",
     `> ${SITE.definition} Official website: ${SITE_URL}/`,
     "",
-    `${SITE.name} is incubated at ${SITE.incubator}, ${SITE.address.locality}, ${SITE.address.region}, India. Contact: ${SITE.email}. Instagram: ${SITE.social.instagram.url}`,
+    `${SITE.name} is incubated at ${SITE.incubator}, ${SITE.address.locality}, ${SITE.address.region}, India. Contact: ${SITE.email}. Instagram: ${SITE.social.instagram.url}. LinkedIn: ${SITE.social.linkedin.url}`,
     "",
     "## Leadership",
     ...LEADERS.map((l) => link(l.path, `${l.member.name} – ${l.member.role}`, l.summary)),

@@ -112,7 +112,7 @@ export function AboutPage({ route }: { route: RouteMeta }) {
           <p className="page-kicker">Available today</p>
           <ul>
             <li>Create an account or log in on the SINC platform.</li>
-            <li>Follow the community on Instagram at {SITE.social.instagram.handle}.</li>
+            <li>Follow the community on Instagram at {SITE.social.instagram.handle} and on LinkedIn at linkedin.com/company/sincommunity.</li>
           </ul>
         </article>
         <article className="note-card note-card--plain" data-reveal>

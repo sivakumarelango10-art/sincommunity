@@ -36,11 +36,16 @@ export function ContactPage({ route }: { route: RouteMeta }) {
           </li>
           <li className="contact-card" data-reveal>
             <IconInstagram />
-            <h2>Message us on Instagram</h2>
+            <h2>Message us on Instagram or LinkedIn</h2>
             <p>Questions, ideas and collaboration requests: send SINC a direct message.</p>
-            <a className="btn btn-ghost" href={SITE.social.instagram.url} target="_blank" rel="noopener noreferrer">
-              {SITE.social.instagram.handle} <IconArrowUpRight /><span className="sr-only">(opens Instagram in a new tab)</span>
-            </a>
+            <div className="contact-card__actions">
+              <a className="btn btn-ghost" href={SITE.social.instagram.url} target="_blank" rel="noopener noreferrer">
+                {SITE.social.instagram.handle} <IconArrowUpRight /><span className="sr-only">(opens Instagram in a new tab)</span>
+              </a>
+              <a className="btn btn-ghost" href={SITE.social.linkedin.url} target="_blank" rel="noopener noreferrer">
+                LinkedIn <IconArrowUpRight /><span className="sr-only">(opens SINC’s LinkedIn page in a new tab)</span>
+              </a>
+            </div>
           </li>
           <li className="contact-card" data-reveal>
             <IconArrowUpRight />

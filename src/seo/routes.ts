@@ -136,7 +136,7 @@ function organization() {
     email: SITE.email,
     address: postalAddress(),
     contactPoint: { "@type": "ContactPoint", contactType: "general enquiries", email: SITE.email, availableLanguage: ["English", "Tamil"] },
-    sameAs: [SITE.social.instagram.url],
+    sameAs: [SITE.social.instagram.url, SITE.social.linkedin.url],
   };
 }
 
