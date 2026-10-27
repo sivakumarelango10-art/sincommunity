@@ -15,7 +15,7 @@ export const SITE = {
   alternateNames: ["SINC Community", "sincommunity", "sincommunity.in", "Society for Innovation, Network & Collaboration"],
   domain: "sincommunity.in",
   /** public contact address for SINC (supplied by SINC) */
-  email: "sivakumarelango10@gmail.com",
+  email: "contact@sincommunity.in",
   /** SINC is incubated at the founder's university campus (supplied by SINC) */
   incubator: "Yenepoya (Deemed-to-be University), Bengaluru Campus",
   address: {

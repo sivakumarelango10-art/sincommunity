@@ -215,7 +215,7 @@ export const FAQS = [
   {
     id: "where",
     q: "Where is SINC based?",
-    a: "SINC is incubated at Yenepoya (Deemed-to-be University), Bengaluru Campus, in Bengaluru, Karnataka. You can join the community online through the SINC platform, and reach the team at sivakumarelango10@gmail.com.",
+    a: "SINC is incubated at Yenepoya (Deemed-to-be University), Bengaluru Campus, in Bengaluru, Karnataka. You can join the community online through the SINC platform, and reach the team at contact@sincommunity.in.",
   },
   {
     id: "join",
