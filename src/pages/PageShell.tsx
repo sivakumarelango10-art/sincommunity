@@ -1,6 +1,6 @@
 import { useEffect, useRef, type ReactNode } from "react";
 import type { NavId } from "../config/site";
-import type { RouteMeta } from "../seo/routes";
+import { crumbTrail, type RouteMeta } from "../seo/routes";
 import { SiteHeader } from "../components/SiteHeader";
 import { SiteFooter } from "../components/SiteFooter";
 import { useSectionReveal } from "../motion/hooks";
@@ -29,8 +29,9 @@ export function PageShell({ route, current = null, children }: { route: RouteMet
         {route.crumb && (
           <nav className="crumbs container" aria-label="Breadcrumb">
             <ol>
-              <li><a href="/">Home</a></li>
-              <li aria-current="page">{route.crumb}</li>
+              {crumbTrail(route).map((c, i, all) => i < all.length - 1
+                ? <li key={c.path}><a href={c.path}>{c.name}</a></li>
+                : <li key={c.path} aria-current="page">{c.name}</li>)}
             </ol>
           </nav>
         )}

@@ -50,7 +50,7 @@ export const STORAGE_KEYS = {
 /** Public pages, each prerendered to its own HTML file and listed in the sitemap. */
 export const PAGES = [
   { id: "about", path: "/about", label: "About SINC" },
-  { id: "founder", path: "/founder", label: "Founder" },
+  { id: "leadership", path: "/leadership", label: "Leadership" },
   { id: "team", path: "/team", label: "Meet the team" },
   { id: "contact", path: "/contact", label: "Contact" },
 ] as const;

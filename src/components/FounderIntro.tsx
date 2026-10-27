@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import { FOUNDER } from "../data/founder";
+import { FOUNDER_PATH } from "../data/leadership";
 import { SITE } from "../config/site";
 import { useSectionReveal } from "../motion/hooks";
 import { ProfileLinks } from "./ProfileLinks";
@@ -29,7 +30,7 @@ export function FounderIntro() {
             <footer>Elango’s vision for SINC</footer>
           </blockquote>
           <div className="founder__actions" data-reveal>
-            <a className="btn" href="/founder">Read the founder profile <IconArrowRight /></a>
+            <a className="btn" href={FOUNDER_PATH}>Read the founder profile <IconArrowRight /></a>
           </div>
           <div data-reveal><ProfileLinks links={FOUNDER.links.slice(0, 2)} person={FOUNDER.name} className="profile-links--compact" /></div>
         </div>

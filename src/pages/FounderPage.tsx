@@ -2,7 +2,8 @@ import { SITE } from "../config/site";
 import { FOUNDER } from "../data/founder";
 import type { RouteMeta } from "../seo/routes";
 import { ProfileLinks } from "../components/ProfileLinks";
-import { JoinButton } from "../components/ui";
+import { IconArrowRight, JoinButton } from "../components/ui";
+import { LEADERS } from "../data/leadership";
 import { PageShell } from "./PageShell";
 
 const photo = (size: 480 | 800) => `/images/team/${FOUNDER.photo}-${size}.webp?v=3`;
@@ -14,7 +15,7 @@ export function FounderPage({ route }: { route: RouteMeta }) {
   ].filter((s) => s.items.length > 0);
 
   return (
-    <PageShell route={route}>
+    <PageShell route={route} current="team">
       <header className="founder-hero container">
         <figure className="founder-hero__photo" data-reveal="mask">
           <img src={photo(800)} srcSet={`${photo(480)} 480w, ${photo(800)} 664w`} sizes="(min-width: 900px) 40vw, 90vw"
@@ -88,6 +89,18 @@ export function FounderPage({ route }: { route: RouteMeta }) {
           </div>
         </section>
       )}
+
+      <section className="page-section container" aria-labelledby="others-title">
+        <h2 id="others-title" className="page-section__title" data-reveal>SINC leadership</h2>
+        <ul className="leader-mini">
+          {LEADERS.slice(1).map((l) => (
+            <li key={l.slug} data-reveal>
+              <a href={l.path}><strong>{l.member.name}</strong><span>{l.member.role}</span><IconArrowRight /></a>
+            </li>
+          ))}
+        </ul>
+        <p data-reveal><a className="text-link" href="/leadership">All of SINC’s leadership <IconArrowRight /></a></p>
+      </section>
 
       <section className="page-cta container" aria-labelledby="founder-cta">
         <h2 id="founder-cta" className="page-cta__title" data-reveal>Built with a team, for a community.</h2>

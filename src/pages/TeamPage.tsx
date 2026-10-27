@@ -1,5 +1,6 @@
 import { TEAM, portrait, portraitSrcSet, type TeamMember } from "../data/team";
 import { FOUNDER } from "../data/founder";
+import { leaderForMember } from "../data/leadership";
 import type { RouteMeta } from "../seo/routes";
 import { ProfileLinks } from "../components/ProfileLinks";
 import { JoinButton } from "../components/ui";
@@ -7,6 +8,7 @@ import { PageHero, PageShell } from "./PageShell";
 
 function ProfileCard({ m, size = "md" }: { m: TeamMember; size?: "lg" | "md" | "sm" }) {
   const isFounder = m.id === FOUNDER.id;
+  const leader = leaderForMember(m.id);
   return (
     <article className={`profile-card profile-card--${size}`} data-reveal>
       <div className="profile-card__photo" data-reveal="mask">
@@ -23,12 +25,8 @@ function ProfileCard({ m, size = "md" }: { m: TeamMember; size?: "lg" | "md" | "
             {m.responsibilities.map((r) => <li key={r}>{r}</li>)}
           </ul>
         )}
-        {isFounder && (
-          <>
-            <ProfileLinks links={FOUNDER.links.slice(0, 2)} person={m.name} className="profile-links--compact" />
-            <a className="text-link" href="/founder">Read the founder profile</a>
-          </>
-        )}
+        {isFounder && <ProfileLinks links={FOUNDER.links.slice(0, 2)} person={m.name} className="profile-links--compact" />}
+        {leader && <a className="text-link" href={leader.path}>View {isFounder ? "the founder" : `${m.name}’s`} profile</a>}
       </div>
     </article>
   );

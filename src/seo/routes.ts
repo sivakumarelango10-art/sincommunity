@@ -5,9 +5,11 @@
  */
 import { SITE, SITE_URL } from "../config/site";
 import { FOUNDER } from "../data/founder";
-import { TEAM } from "../data/team";
+import { TEAM, type TeamMember } from "../data/team";
+import { LEADERS, FOUNDER_PATH, leaderForMember, type Leader } from "../data/leadership";
+import PHOTO_SIZES from "../data/photo-sizes.json";
 
-export type RouteId = "home" | "about" | "founder" | "team" | "contact" | "privacy" | "terms" | "not-found";
+export type RouteId = "home" | "about" | "leadership" | "leader" | "team" | "contact" | "privacy" | "terms" | "not-found";
 
 export interface RouteMeta {
   id: RouteId;
@@ -19,6 +21,10 @@ export interface RouteMeta {
   description: string;
   /** breadcrumb label (sub-pages) */
   crumb?: string;
+  /** the page above this one in the breadcrumb (e.g. a profile sits under Leadership) */
+  parent?: RouteId;
+  /** leadership profile pages: whose profile */
+  leaderSlug?: string;
   indexable: boolean;
   ogType?: "website" | "profile";
   ogImage?: { path: string; width: number; height: number; alt: string };
@@ -46,12 +52,21 @@ export const ROUTES: RouteMeta[] = [
     description: "What SINC is, who it brings together, and the mission, vision and values behind this technology community for collaboration and innovation.",
   },
   {
-    id: "founder", path: "/founder", file: "founder.html", crumb: "Founder", indexable: true, changefreq: "monthly", priority: 0.8, ogType: "profile",
-    title: "Elango S, Founder of SINC | Technology Community",
-    description: "Elango S is the founder of SINC and a B.Tech CSE (AI & ML) student at Yenepoya University, Bengaluru. His vision for SINC, what he leads, and his projects.",
-    ogImage: { path: "/images/team/elango-s-founder-sinc.jpg", width: 664, height: 830, alt: "Elango S, Founder of SINC" },
-    images: ["/images/team/elango-s-founder-sinc.jpg"],
+    id: "leadership", path: "/leadership", file: "leadership.html", crumb: "Leadership", indexable: true, changefreq: "monthly", priority: 0.8,
+    images: LEADERS.map((l) => leaderImage(l)),
+    title: "SINC Leadership | Founder, Co-Founders & Founding Advisor",
+    description: "SINC is led by founder Elango S, co-founders Karmjit SG and Prajith P, and founding advisor Aaditya R M. Their roles and profiles.",
   },
+  ...LEADERS.map((l): RouteMeta => ({
+    id: "leader", leaderSlug: l.slug, path: l.path, file: `${l.path.slice(1)}.html`, crumb: l.member.name, parent: "leadership",
+    indexable: true, changefreq: "monthly", priority: l.member.role === "Founder" ? 0.8 : 0.6, ogType: "profile",
+    title: l.member.role === "Founder" ? "Elango S, Founder of SINC | Technology Community" : `${l.member.name}, ${l.member.role} of SINC`,
+    description: l.member.role === "Founder"
+      ? "Elango S is the founder of SINC and a B.Tech CSE (AI & ML) student at Yenepoya University, Bengaluru. His vision for SINC, what he leads, and his projects."
+      : l.description,
+    ogImage: { path: leaderImage(l), ...leaderImageSize(l), alt: `${l.member.name}, ${l.member.role} of SINC` },
+    images: [leaderImage(l)],
+  })),
   {
     id: "team", path: "/team", file: "team.html", crumb: "Meet the team", indexable: true, changefreq: "monthly", priority: 0.7,
     images: TEAM.map((m) => `/images/team/${m.id}-portrait-800.webp`),
@@ -80,6 +95,18 @@ export const ROUTES: RouteMeta[] = [
   },
 ];
 
+/** the approved portrait used for a leader in previews, structured data and the sitemap */
+function leaderImage(l: Leader): string {
+  return l.member.role === "Founder" ? "/images/team/elango-s-founder-sinc.jpg" : `/images/team/${l.member.id}-portrait-800.webp`;
+}
+
+function leaderImageSize(l: Leader) {
+  const [width, height] = (PHOTO_SIZES as Record<string, number[]>)[l.member.id] ?? [664, 830];
+  return { width, height };
+}
+
+export const routeById = (id: RouteId) => ROUTES.find((r) => r.id === id)!;
+
 export const routeByPath = (pathname: string): RouteMeta => {
   const clean = pathname.replace(/\/index\.html$/, "/").replace(/\.html$/, "").replace(/\/+$/, "") || "/";
   return ROUTES.find((r) => r.path === clean && r.id !== "not-found") ?? ROUTES.find((r) => r.id === "not-found")!;
@@ -90,7 +117,8 @@ export const absolute = (p: string) => `${SITE_URL}${p === "/" ? "/" : p}`;
 /* ---------------------------------------------------------------- structured data (JSON-LD) */
 const ORG_ID = `${SITE_URL}/#organization`;
 const SITE_ID = `${SITE_URL}/#website`;
-const FOUNDER_ID = `${SITE_URL}/founder#person`;
+const personId = (l: Leader) => `${absolute(l.path)}#person`;
+const FOUNDER_ID = `${absolute(FOUNDER_PATH)}#person`;
 
 function organization() {
   return {
@@ -124,22 +152,32 @@ function postalAddress() {
   };
 }
 
-function founderPerson() {
-  return {
+/** a leader as a Person: only confirmed facts, linked to the one SINC organisation entity */
+function leaderPerson(l: Leader) {
+  const base = {
     "@type": "Person",
-    "@id": FOUNDER_ID,
-    name: FOUNDER.name,
-    jobTitle: FOUNDER.role,
+    "@id": personId(l),
+    name: l.member.name,
+    jobTitle: l.member.role,
+    description: l.summary,
+    image: absolute(leaderImage(l)),
+    url: absolute(l.path),
+    worksFor: { "@id": ORG_ID },
+  };
+  if (l.member.id !== FOUNDER.id) return base;
+  return {
+    ...base,
     description: `${FOUNDER.intro} ${FOUNDER.headline}.`,
     affiliation: UNIVERSITY,
     knowsAbout: FOUNDER.skills,
     knowsLanguage: FOUNDER.languages,
-    image: absolute("/images/team/elango-s-founder-sinc.jpg"),
-    url: absolute("/founder"),
-    worksFor: { "@id": ORG_ID },
-    sameAs: FOUNDER.links.map((l) => l.url),
+    sameAs: FOUNDER.links.map((x) => x.url),
   };
 }
+const teamPerson = (m: TeamMember) => {
+  const l = leaderForMember(m.id);
+  return l ? leaderPerson(l) : { "@type": "Person", name: m.name, jobTitle: m.role, worksFor: { "@id": ORG_ID } };
+};
 
 function webPage(r: RouteMeta, type = "WebPage", extra: Record<string, unknown> = {}) {
   return {
@@ -155,14 +193,18 @@ function webPage(r: RouteMeta, type = "WebPage", extra: Record<string, unknown> 
   };
 }
 
+export function crumbTrail(r: RouteMeta): { name: string; path: string }[] {
+  const trail = [{ name: "Home", path: "/" }];
+  if (r.parent) { const p = routeById(r.parent); trail.push({ name: p.crumb!, path: p.path }); }
+  if (r.crumb) trail.push({ name: r.crumb, path: r.path });
+  return trail;
+}
+
 function breadcrumb(r: RouteMeta) {
   return {
     "@type": "BreadcrumbList",
     "@id": `${absolute(r.path)}#breadcrumb`,
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: absolute("/") },
-      { "@type": "ListItem", position: 2, name: r.crumb, item: absolute(r.path) },
-    ],
+    itemListElement: crumbTrail(r).map((c, i) => ({ "@type": "ListItem", position: i + 1, name: c.name, item: absolute(c.path) })),
   };
 }
 
@@ -174,15 +216,15 @@ export function structuredData(r: RouteMeta): object | null {
     graph.push(organization(), { "@type": "WebSite", "@id": SITE_ID, url: absolute("/"), name: SITE.name, alternateName: SITE.alternateNames, publisher: { "@id": ORG_ID }, inLanguage: "en" },
       webPage(r, "WebPage", { primaryImageOfPage: founderPhoto, image: founderPhoto }));
   } else {
-    const types: Partial<Record<RouteId, string>> = { about: "AboutPage", founder: "ProfilePage", contact: "ContactPage" };
+    const types: Partial<Record<RouteId, string>> = { about: "AboutPage", leader: "ProfilePage", leadership: "CollectionPage", contact: "ContactPage" };
     const extra: Record<string, unknown> = { breadcrumb: { "@id": `${absolute(r.path)}#breadcrumb` } };
-    if (r.id === "founder") extra.mainEntity = { "@id": FOUNDER_ID };
+    const leader = r.leaderSlug ? LEADERS.find((l) => l.slug === r.leaderSlug) : undefined;
+    if (leader) extra.mainEntity = { "@id": personId(leader) };
+    if (r.id === "leadership") extra.mainEntity = { "@type": "ItemList", itemListElement: LEADERS.map((l, i) => ({ "@type": "ListItem", position: i + 1, item: { "@id": personId(l) } })) };
     graph.push(webPage(r, types[r.id] ?? "WebPage", extra), breadcrumb(r), organization());
-    if (r.id === "founder") graph.push(founderPerson());
-    if (r.id === "team") {
-      graph.push(founderPerson());
-      TEAM.filter((m) => m.id !== FOUNDER.id).forEach((m) => graph.push({ "@type": "Person", name: m.name, jobTitle: m.role, worksFor: { "@id": ORG_ID } }));
-    }
+    if (leader) graph.push(leaderPerson(leader));
+    if (r.id === "leadership") LEADERS.forEach((l) => graph.push(leaderPerson(l)));
+    if (r.id === "team") TEAM.forEach((m) => graph.push(teamPerson(m)));
   }
   return { "@context": "https://schema.org", "@graph": graph };
 }

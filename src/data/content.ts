@@ -198,6 +198,16 @@ export const FAQS = [
     a: "SINC, the Society for Innovation, Network & Collaboration, is a technology-focused community and collaboration ecosystem where ambitious people connect, collaborate, learn, build and grow together. It brings developers, designers, students, founders and innovators together so they can find teammates, learn from one another and turn ideas into real projects.",
   },
   {
+    id: "stands",
+    q: "What does SINC stand for?",
+    a: "SINC stands for the Society for Innovation, Network & Collaboration. Its official website is sincommunity.in, and it is on Instagram as @sincommunity.in.",
+  },
+  {
+    id: "leaders",
+    q: "Who founded SINC, and who leads it?",
+    a: "SINC was founded by Elango S. Its co-founders are Karmjit SG and Prajith P, and its founding advisor is Aaditya R M.",
+  },
+  {
     id: "who",
     q: "Who can join?",
     a: "Anyone with ambition and curiosity: students, developers, designers, founders, creators, researchers, freelancers, AI engineers and people who simply want to learn and build with others.",

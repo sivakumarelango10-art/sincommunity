@@ -1,7 +1,8 @@
 import { SITE } from "../config/site";
 import { MISSION, VALUES, VISION } from "../data/content";
 import type { RouteMeta } from "../seo/routes";
-import { JoinButton } from "../components/ui";
+import { IconArrowRight, JoinButton } from "../components/ui";
+import { LEADERS } from "../data/leadership";
 import { PageHero, PageShell } from "./PageShell";
 
 /** Who SINC brings together (supplied by SINC). */
@@ -50,6 +51,18 @@ export function AboutPage({ route }: { route: RouteMeta }) {
             SINC is incubated at <strong>{SITE.incubator}</strong> in {SITE.address.locality}, {SITE.address.region}, where
             its founder, Elango S, is a student. Anyone can join the community online through the SINC platform.
           </p>
+        </div>
+      </section>
+
+      <section className="page-section container split" aria-labelledby="leads-title">
+        <h2 id="leads-title" className="page-section__title" data-reveal>Who leads SINC</h2>
+        <div data-reveal>
+          <ul className="leader-mini leader-mini--stack">
+            {LEADERS.map((l) => (
+              <li key={l.slug}><a href={l.path}><strong>{l.member.name}</strong><span>{l.member.role}</span><IconArrowRight /></a></li>
+            ))}
+          </ul>
+          <a className="text-link" href="/team">Meet the whole SINC team <IconArrowRight /></a>
         </div>
       </section>
 

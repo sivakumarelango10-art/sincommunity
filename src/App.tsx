@@ -18,6 +18,9 @@ import { FounderIntro } from "./components/FounderIntro";
 import { routeByPath, type RouteMeta } from "./seo/routes";
 import { AboutPage } from "./pages/AboutPage";
 import { FounderPage } from "./pages/FounderPage";
+import { LeadershipPage } from "./pages/LeadershipPage";
+import { LeaderProfilePage } from "./pages/LeaderProfilePage";
+import { LEADERS } from "./data/leadership";
 import { TeamPage } from "./pages/TeamPage";
 import { ContactPage } from "./pages/ContactPage";
 import { NotFoundPage, PrivacyPage, TermsPage } from "./pages/LegalPages";
@@ -108,7 +111,11 @@ function RoutePage({ route }: { route: RouteMeta }) {
   switch (route.id) {
     case "home": return <HomePage />;
     case "about": return <AboutPage route={route} />;
-    case "founder": return <FounderPage route={route} />;
+    case "leadership": return <LeadershipPage route={route} />;
+    case "leader": {
+      const leader = LEADERS.find((l) => l.slug === route.leaderSlug)!;
+      return leader.member.role === "Founder" ? <FounderPage route={route} /> : <LeaderProfilePage route={route} leader={leader} />;
+    }
     case "team": return <TeamPage route={route} />;
     case "contact": return <ContactPage route={route} />;
     case "privacy": return <PrivacyPage route={route} />;

@@ -34,6 +34,16 @@ for (const [key, info] of Object.entries(crops)) {
   }
 }
 
+// record the real pixel size of each large portrait, so previews and structured data state it exactly
+{
+  const sizes = {};
+  for (const key of Object.keys(crops)) {
+    const meta = await sharp(out(`team/${key}-portrait-800.webp`)).metadata();
+    sizes[key] = [meta.width, meta.height];
+  }
+  await writeFile(path.join(root, "src", "data", "photo-sizes.json"), JSON.stringify(sizes, null, 2) + "\n");
+}
+
 // Founder profile photo: the same crop as the portrait, named for search and sharing.
 {
   const info = crops["elango-s"];
