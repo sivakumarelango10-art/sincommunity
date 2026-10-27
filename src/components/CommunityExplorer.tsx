@@ -1,7 +1,7 @@
 import { useRef, useState, type KeyboardEvent } from "react";
 import { INTENTS, ROLES, type IntentId, type RoleId } from "../data/content";
 import { gsap, useGSAP, EASE } from "../motion/gsap";
-import { useMotionEnabled } from "../motion/MotionContext";
+import { useDeferredMotion } from "../motion/MotionContext";
 import { useSectionReveal } from "../motion/hooks";
 import { JoinButton } from "./ui";
 import "./CommunityExplorer.css";
@@ -24,7 +24,7 @@ function RoleConnections({ role, intent }: { role: string; intent: IntentId }) {
 }
 
 export function CommunityExplorer() {
-  const motion = useMotionEnabled();
+  const motion = useDeferredMotion(); // built after the first paint
   const root = useRef<HTMLElement>(null);
   const [roleId, setRoleId] = useState<RoleId>("developers");
   const [intentId, setIntentId] = useState<IntentId>("build");

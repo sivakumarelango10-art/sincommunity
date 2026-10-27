@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { STORAGE_KEYS } from "./config/site";
-import { MotionProvider, useMotionEnabled } from "./motion/MotionContext";
+import { MotionProvider, onScenesReady, useMotionEnabled } from "./motion/MotionContext";
 import { safeStorage } from "./motion/storage";
 import { SiteHeader, goToSection } from "./components/SiteHeader";
 import { Hero } from "./components/Hero";
@@ -14,8 +14,15 @@ import { JoinSection } from "./components/JoinSection";
 import { SiteFooter } from "./components/SiteFooter";
 import { IntroStory, type IntroCloseReason } from "./components/IntroStory";
 import { ScrollProgress } from "./components/ScrollProgress";
+import { FounderIntro } from "./components/FounderIntro";
+import { routeByPath, type RouteMeta } from "./seo/routes";
+import { AboutPage } from "./pages/AboutPage";
+import { FounderPage } from "./pages/FounderPage";
+import { TeamPage } from "./pages/TeamPage";
+import { ContactPage } from "./pages/ContactPage";
+import { NotFoundPage, PrivacyPage, TermsPage } from "./pages/LegalPages";
 
-function Page() {
+function HomePage() {
   const motion = useMotionEnabled();
   const [introOpen, setIntroOpen] = useState(false);
   const [heroEntrance, setHeroEntrance] = useState<"wait" | "go">("wait");
@@ -32,6 +39,14 @@ function Page() {
     } else {
       setHeroEntrance("go");
     }
+  }, []);
+
+  /* arriving with a section in the address (e.g. /#team from another page): go there once the
+     scroll scenes have laid out, so the pinned story's extra height is accounted for */
+  useEffect(() => {
+    const id = decodeURIComponent(window.location.hash.slice(1));
+    if (!id || !document.getElementById(id)) return;
+    return onScenesReady(() => goToSection(id, false));
   }, []);
 
   /* every in-page link: smooth only when motion is on, offset for the sticky header, focus follows */
@@ -78,6 +93,7 @@ function Page() {
         <CommunityExplorer />
         <Ecosystem />
         <MissionValues />
+        <FounderIntro />
         <Team />
         <FAQ />
         <JoinSection />
@@ -88,10 +104,24 @@ function Page() {
   );
 }
 
-export default function App() {
+function RoutePage({ route }: { route: RouteMeta }) {
+  switch (route.id) {
+    case "home": return <HomePage />;
+    case "about": return <AboutPage route={route} />;
+    case "founder": return <FounderPage route={route} />;
+    case "team": return <TeamPage route={route} />;
+    case "contact": return <ContactPage route={route} />;
+    case "privacy": return <PrivacyPage route={route} />;
+    case "terms": return <TermsPage route={route} />;
+    default: return <NotFoundPage route={route} />;
+  }
+}
+
+/** One app for every page; the URL path picks the page (each is prerendered to its own HTML file). */
+export default function App({ path }: { path: string }) {
   return (
     <MotionProvider>
-      <Page />
+      <RoutePage route={routeByPath(path)} />
     </MotionProvider>
   );
 }

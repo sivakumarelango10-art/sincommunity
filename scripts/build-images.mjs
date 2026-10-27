@@ -34,6 +34,21 @@ for (const [key, info] of Object.entries(crops)) {
   }
 }
 
+// Founder profile photo: the same crop as the portrait, named for search and sharing.
+{
+  const info = crops["elango-s"];
+  const box = info.crops.portrait;
+  const width = box.right - box.left, height = box.bottom - box.top;
+  const base = sharp(src(info.source)).rotate().extract({ left: box.left, top: box.top, width, height });
+  for (const size of [480, 800]) {
+    const target = Math.min(size, width);
+    await base.clone().resize({ width: target, withoutEnlargement: true }).webp({ quality: 84, effort: 5 }).toFile(out(`team/elango-s-founder-sinc-${size}.webp`));
+  }
+  // JPEG for social previews and structured data (widest support)
+  await base.clone().resize({ width: Math.min(800, width), withoutEnlargement: true }).jpeg({ quality: 86, mozjpeg: true }).toFile(out("team/elango-s-founder-sinc.jpg"));
+  console.log("founder profile photo done");
+}
+
 // Logo: the supplied JPEG (white ground) and the transparent mark derived from the same artwork.
 for (const size of [96, 256, 512]) {
   await sharp(src("sinc-logo.jpeg")).resize(size).webp({ quality: 90 }).toFile(out(`brand/sinc-logo-${size}.webp`));

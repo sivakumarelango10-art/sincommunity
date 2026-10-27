@@ -1,32 +1,36 @@
 import { useEffect, useRef, type RefObject } from "react";
 import { gsap, useGSAP, ScrollTrigger, EASE, DUR, finePointer } from "./gsap";
-import { useMotionEnabled } from "./MotionContext";
+import { useDeferredMotion, useMotionEnabled } from "./MotionContext";
 
 /**
  * Section entrance: every [data-reveal] inside `scope` rises in once as it enters the viewport.
  * [data-reveal="mask"] uses a clip-path wipe instead (portraits, images).
  * [data-draw] SVG strokes draw themselves on scroll.
  * Content is fully visible in CSS; the hidden starting state only exists while motion is on.
+ * Fades use opacity only (never visibility): links and buttons waiting to appear stay in the
+ * keyboard tab order, and focusing one scrolls it into view, which reveals it.
  */
 export function useSectionReveal(scope: RefObject<HTMLElement | null>, deps: unknown[] = []) {
-  const motion = useMotionEnabled();
+  const motion = useDeferredMotion();
   useGSAP(
     () => {
       if (!motion || !scope.current) return;
       const root = scope.current;
 
-      const rise = gsap.utils.toArray<HTMLElement>("[data-reveal]:not([data-reveal='mask'])", root);
+      // anything already on screen when the scenes are built stays as it is (no late flash)
+      const below = (el: Element) => el.getBoundingClientRect().top > window.innerHeight;
+      const rise = gsap.utils.toArray<HTMLElement>("[data-reveal]:not([data-reveal='mask'])", root).filter(below);
       if (rise.length) {
-        gsap.set(rise, { y: 28, autoAlpha: 0 });
+        gsap.set(rise, { y: 28, opacity: 0 });
         ScrollTrigger.batch(rise, {
           start: "top 88%",
           // not `once`: a self-killing trigger during a refresh corrupts ScrollTrigger's list
           onEnter: (batch) =>
-            gsap.to(batch, { y: 0, autoAlpha: 1, duration: DUR.section, ease: EASE.out, stagger: DUR.stagger, overwrite: true }),
+            gsap.to(batch, { y: 0, opacity: 1, duration: DUR.section, ease: EASE.out, stagger: DUR.stagger, overwrite: true }),
         });
       }
 
-      gsap.utils.toArray<HTMLElement>("[data-reveal='mask']", root).forEach((el, i) => {
+      gsap.utils.toArray<HTMLElement>("[data-reveal='mask']", root).filter(below).forEach((el, i) => {
         const img = el.querySelector("img");
         const tl = gsap.timeline({ scrollTrigger: { trigger: el, start: "top 90%", toggleActions: "play none none none" } });
         tl.fromTo(el, { clipPath: "inset(100% 0% 0% 0% round 24px)" },

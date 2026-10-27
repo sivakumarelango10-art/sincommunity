@@ -224,7 +224,7 @@ export function Hero({ entrance, fromIntro, onWatchStory }: HeroProps) {
         <div className="hero__lower">
           <div className="hero__copy">
             <p className="hero__lede lead">
-              Connect with people who share your drive. Find collaborators, learn together, and turn ideas into something real.
+              SINC brings together developers, innovators, designers, students and technology enthusiasts to connect, collaborate and build meaningful projects together.
             </p>
             <div className="hero__actions">
               <JoinButton />

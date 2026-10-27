@@ -1,13 +1,13 @@
 import { useRef, useState } from "react";
 import { MISSION, VALUES, VISION } from "../data/content";
 import { gsap, useGSAP, SplitText, EASE } from "../motion/gsap";
-import { useMotionEnabled } from "../motion/MotionContext";
+import { useDeferredMotion } from "../motion/MotionContext";
 import { useSectionReveal } from "../motion/hooks";
-import { IconPlus } from "./ui";
+import { IconArrowRight, IconPlus } from "./ui";
 import "./MissionValues.css";
 
 export function MissionValues() {
-  const motion = useMotionEnabled();
+  const motion = useDeferredMotion(); // built after the first paint
   const root = useRef<HTMLElement>(null);
   const [open, setOpen] = useState<string>(VALUES[0].id);
   useSectionReveal(root, []);
@@ -17,8 +17,10 @@ export function MissionValues() {
     if (!motion || !root.current) return;
     const q = gsap.utils.selector(root);
     q(".mv__statement").forEach((el: Element) => {
-      const split = SplitText.create(el, { type: "words", wordsClass: "mv__word" });
-      gsap.fromTo(split.words, { opacity: 0.16 }, {
+      // aria "none": the paragraph keeps its own text for screen readers (aria-label is not allowed on <p>);
+      // words start at 0.55 opacity so even unlit text keeps a 3:1 contrast
+      const split = SplitText.create(el, { type: "words", wordsClass: "mv__word", tag: "span", aria: "none" });
+      gsap.fromTo(split.words, { opacity: 0.55 }, {
         opacity: 1, ease: "none", stagger: 0.1,
         scrollTrigger: { trigger: el, start: "top 80%", end: "bottom 45%", scrub: 0.5 },
       });
@@ -47,6 +49,7 @@ export function MissionValues() {
           <div className="values__head">
             <h3 className="values__title" data-reveal>What we value</h3>
             <p className="values__sub" data-reveal>How we build matters as much as what we build.</p>
+            <a className="text-link" href="/about" data-reveal>More about SINC <IconArrowRight /></a>
           </div>
           <ul className="values__list">
             {VALUES.map((v, i) => {

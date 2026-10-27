@@ -195,7 +195,7 @@ export const FAQS = [
   {
     id: "what",
     q: "What is SINC?",
-    a: "SINC, the Society for Innovation, Network & Collaboration, is a growing community that connects people and helps them work toward their ambitions. It brings together people with different skills, ideas and perspectives so they can find collaborators, learn from one another and build together.",
+    a: "SINC, the Society for Innovation, Network & Collaboration, is a technology-focused community and collaboration ecosystem where ambitious people connect, collaborate, learn, build and grow together. It brings developers, designers, students, founders and innovators together so they can find teammates, learn from one another and turn ideas into real projects.",
   },
   {
     id: "who",

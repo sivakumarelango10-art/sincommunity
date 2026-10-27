@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { STORY_CHAPTERS } from "../data/content";
 import { gsap, useGSAP, ScrollTrigger, EASE } from "../motion/gsap";
-import { useMotionEnabled } from "../motion/MotionContext";
+import { useDeferredMotion } from "../motion/MotionContext";
 import { useSectionReveal } from "../motion/hooks";
 import { StoryScene } from "./StoryScene";
 import "./StoryJourney.css";
@@ -14,7 +14,7 @@ function Title({ title, emphasis }: { title: string; emphasis: string }) {
 }
 
 export function StoryJourney() {
-  const motion = useMotionEnabled();
+  const motion = useDeferredMotion(); // built after the first paint
   const root = useRef<HTMLElement>(null);
   useSectionReveal(root, []);
 

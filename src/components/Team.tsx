@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { TEAM, portrait, portraitSrcSet, type TeamMember } from "../data/team";
 import { gsap, useGSAP, EASE } from "../motion/gsap";
-import { useMotionEnabled } from "../motion/MotionContext";
+import { useDeferredMotion, useMotionEnabled } from "../motion/MotionContext";
 import { lockScroll, useSectionReveal } from "../motion/hooks";
-import { IconClose } from "./ui";
+import { IconArrowRight, IconClose } from "./ui";
 import "./Team.css";
 
 function Card({ m, size, onOpen }: { m: TeamMember; size: "lead" | "co" | "advisor" | "team"; onOpen: (m: TeamMember, el: HTMLElement) => void }) {
@@ -62,7 +62,7 @@ function PortraitViewer({ member, onClose }: { member: TeamMember | null; onClos
 }
 
 export function Team() {
-  const motion = useMotionEnabled();
+  const motion = useDeferredMotion(); // built after the first paint
   const root = useRef<HTMLElement>(null);
   const [viewing, setViewing] = useState<TeamMember | null>(null);
   const returnTo = useRef<HTMLElement | null>(null);
@@ -98,6 +98,7 @@ export function Team() {
           <p className="eyebrow" data-reveal>Our team</p>
           <h2 id="team-title" className="heading-xl" data-reveal>The people building SINC.</h2>
           <p className="lead" data-reveal>Different strengths. One shared belief.</p>
+          <a className="text-link team__more" href="/team" data-reveal>See everyone’s role and responsibilities <IconArrowRight /></a>
         </div>
 
         <div className="team__founding" data-draw-trigger>

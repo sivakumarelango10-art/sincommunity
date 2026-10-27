@@ -1,7 +1,7 @@
 import { useRef, useState, type KeyboardEvent } from "react";
 import { STAGES } from "../data/content";
 import { gsap, useGSAP, EASE } from "../motion/gsap";
-import { useMotionEnabled } from "../motion/MotionContext";
+import { useDeferredMotion } from "../motion/MotionContext";
 import { IconArrowLeft, IconArrowRight } from "./ui";
 import "./Ecosystem.css";
 
@@ -59,7 +59,7 @@ function StageArt({ index }: { index: number }) {
 }
 
 export function Ecosystem() {
-  const motion = useMotionEnabled();
+  const motion = useDeferredMotion(); // built after the first paint
   const root = useRef<HTMLElement>(null);
   const [active, setActive] = useState(0);
   const stage = STAGES[active];
@@ -84,13 +84,15 @@ export function Ecosystem() {
       scrollTrigger: { trigger: el, start: "top 95%", end: "top 25%", scrub: true },
     });
     const q = gsap.utils.selector(el);
+    if (el.getBoundingClientRect().top < window.innerHeight * 0.45) return; // already on screen: leave it as it is
     const tl = gsap.timeline({ scrollTrigger: { trigger: el, start: "top 45%", toggleActions: "play none none none" } });
-    tl.from(q(".eco__head > *"), { y: 30, autoAlpha: 0, duration: 0.85, ease: EASE.out, stagger: 0.08 })
+    // opacity only, so the stage buttons stay reachable by keyboard before they appear
+    tl.from(q(".eco__head > *"), { y: 30, opacity: 0, duration: 0.85, ease: EASE.out, stagger: 0.08 })
       .from(q(".eco__track"), { drawSVG: "0%", duration: 1.4, ease: EASE.draw, stagger: 0.12 }, "-=0.4")
       .from(q(".eco__vline"), { scaleY: 0, transformOrigin: "50% 0%", duration: 1.3, ease: EASE.draw }, "<")
-      .from(q(".eco__node"), { scale: 0.6, autoAlpha: 0, duration: 0.55, ease: "back.out(2)", stagger: 0.08 }, "<0.2")
+      .from(q(".eco__node"), { scale: 0.6, opacity: 0, duration: 0.55, ease: "back.out(2)", stagger: 0.08 }, "<0.2")
       .from(q(".eco__return"), { drawSVG: "0%", duration: 1.6, ease: EASE.draw }, "-=0.6")
-      .from(q(".eco__detail"), { y: 30, autoAlpha: 0, duration: 0.8, ease: EASE.out }, "-=1.2");
+      .from(q(".eco__detail"), { y: 30, opacity: 0, duration: 0.8, ease: EASE.out }, "-=1.2");
   }, { scope: root, dependencies: [motion], revertOnUpdate: true });
 
   /* stage change: progress line, illustration and copy */

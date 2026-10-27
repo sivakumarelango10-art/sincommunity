@@ -22,7 +22,7 @@
 }
 
 .brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; min-height: 44px; }
-.brand__logo { display: block; width: 40px; height: 40px; border-radius: 12px; overflow: hidden; }
+.brand__logo { flex: none; display: block; width: 40px; height: 40px; border-radius: 12px; overflow: hidden; }
 .brand__logo img { width: 40px; height: 40px; }
 .brand__word {
   font-family: var(--font-display); font-weight: 800; font-size: 1.32rem; letter-spacing: 0.08em; color: var(--navy);

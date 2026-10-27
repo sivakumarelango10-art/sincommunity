@@ -1,12 +1,12 @@
 import { useRef } from "react";
 import { gsap, useGSAP, EASE } from "../motion/gsap";
-import { useMotionEnabled } from "../motion/MotionContext";
+import { useDeferredMotion } from "../motion/MotionContext";
 import { JoinButton, LoginLink, Logo } from "./ui";
 import "./JoinSection.css";
 
 /** The motif resolves: three paths arrive from different directions and meet at the logo. */
 export function JoinSection() {
-  const motion = useMotionEnabled();
+  const motion = useDeferredMotion(); // built after the first paint
   const root = useRef<HTMLElement>(null);
 
   useGSAP(() => {
@@ -21,11 +21,12 @@ export function JoinSection() {
       drawSVG: "100%", ease: "none", stagger: 0.08,
       scrollTrigger: { trigger: el, start: "top 70%", end: "center 55%", scrub: 0.6 },
     });
+    if (el.getBoundingClientRect().top < window.innerHeight * 0.45) return; // already on screen: leave it as it is
     const tl = gsap.timeline({ scrollTrigger: { trigger: el, start: "top 45%", toggleActions: "play none none none" } });
     tl.from(q(".join__badge"), { scale: 0.4, autoAlpha: 0, duration: 1, ease: "back.out(1.7)" })
       .fromTo(q(".join__pulse"), { scale: 1, autoAlpha: 0.6 }, { scale: 2.4, autoAlpha: 0, duration: 1.6, ease: "power2.out" }, "-=0.5")
       .from(q(".join__title-line"), { yPercent: 110, duration: 1, ease: EASE.out, stagger: 0.1 }, "-=1.4")
-      .from(q(".join__sub, .join__actions"), { y: 20, autoAlpha: 0, duration: 0.8, ease: EASE.out, stagger: 0.1 }, "-=0.7");
+      .from(q(".join__sub, .join__actions"), { y: 20, opacity: 0, duration: 0.8, ease: EASE.out, stagger: 0.1 }, "-=0.7");
   }, { scope: root, dependencies: [motion], revertOnUpdate: true });
 
   return (

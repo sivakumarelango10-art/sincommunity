@@ -100,3 +100,4 @@
   .viewer__photo { aspect-ratio: 4 / 4.4; }
   .viewer__info { padding: var(--space-5); }
 }
+.team__more { align-self: flex-start; }

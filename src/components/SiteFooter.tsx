@@ -1,10 +1,16 @@
-import { NAV_ITEMS, SITE } from "../config/site";
+import { LEGAL_PAGES, NAV_ITEMS, PAGES, SITE } from "../config/site";
 import { useMotion, useMotionEnabled } from "../motion/MotionContext";
 import { goToSection } from "./SiteHeader";
-import { IconArrowUp, IconArrowUpRight, IconReplay, Logo } from "./ui";
+import { IconArrowUp, IconArrowUpRight, IconInstagram, IconReplay, Logo } from "./ui";
 import "./SiteFooter.css";
 
-export function SiteFooter({ onReplay }: { onReplay: (trigger: HTMLElement) => void }) {
+interface FooterProps {
+  /** replays the opening story (home page); other pages link back to the home page instead */
+  onReplay?: (trigger: HTMLElement) => void;
+  onHome?: boolean;
+}
+
+export function SiteFooter({ onReplay, onHome = true }: FooterProps) {
   const { toggle, enabled, systemReduced } = useMotion();   // hydration-safe value for the visible label
   const motion = useMotionEnabled();          // effect-safe value for behaviour
 
@@ -31,12 +37,19 @@ export function SiteFooter({ onReplay }: { onReplay: (trigger: HTMLElement) => v
           <nav aria-label="Footer">
             <p className="footer__heading">Explore</p>
             <ul>
-              {NAV_ITEMS.map((n) => (
+              {[...NAV_ITEMS, { id: "faq", label: "FAQ" }].map((n) => (
                 <li key={n.id}>
-                  <a href={`#${n.id}`} onClick={(e) => { e.preventDefault(); goToSection(n.id, motion); }}>{n.label}</a>
+                  {onHome
+                    ? <a href={`#${n.id}`} onClick={(e) => { e.preventDefault(); goToSection(n.id, motion); }}>{n.label}</a>
+                    : <a href={`/#${n.id}`}>{n.label}</a>}
                 </li>
               ))}
-              <li><a href="#faq" onClick={(e) => { e.preventDefault(); goToSection("faq", motion); }}>FAQ</a></li>
+            </ul>
+          </nav>
+          <nav aria-label="SINC pages">
+            <p className="footer__heading">SINC</p>
+            <ul>
+              {PAGES.map((pg) => <li key={pg.id}><a href={pg.path}>{pg.label}</a></li>)}
             </ul>
           </nav>
           <div>
@@ -52,12 +65,22 @@ export function SiteFooter({ onReplay }: { onReplay: (trigger: HTMLElement) => v
                   Join SINC <IconArrowUpRight /><span className="sr-only">(opens the SINC platform in a new tab)</span>
                 </a>
               </li>
+              <li>
+                <a href={SITE.social.instagram.url} target="_blank" rel="noopener noreferrer">
+                  <IconInstagram /> Instagram <span className="footer__handle">{SITE.social.instagram.handle}</span>
+                  <span className="sr-only">(opens Instagram in a new tab)</span>
+                </a>
+              </li>
             </ul>
           </div>
           <div>
             <p className="footer__heading">Experience</p>
             <ul>
-              <li><button type="button" onClick={(e) => onReplay(e.currentTarget)}><IconReplay /> Replay our story</button></li>
+              <li>
+                {onReplay
+                  ? <button type="button" onClick={(e) => onReplay(e.currentTarget)}><IconReplay /> Replay our story</button>
+                  : <a href="/"><IconReplay /> Home and our story</a>}
+              </li>
               <li>
                 <button type="button" role="switch" aria-checked={enabled} onClick={toggle}>
                   <span className={`footer__switch${enabled ? " is-on" : ""}`} aria-hidden="true"><i /></span>
@@ -74,6 +97,9 @@ export function SiteFooter({ onReplay }: { onReplay: (trigger: HTMLElement) => v
 
         <div className="footer__bottom">
           <p>© <span suppressHydrationWarning>{new Date().getFullYear()}</span> SINC — {SITE.fullName}. All rights reserved.</p>
+          <ul className="footer__legal">
+            {LEGAL_PAGES.map((pg) => <li key={pg.id}><a href={pg.path}>{pg.label}</a></li>)}
+          </ul>
         </div>
       </div>
     </footer>

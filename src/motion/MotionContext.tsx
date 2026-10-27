@@ -81,3 +81,57 @@ export function useMotionEnabled(): boolean {
   }
   return enabled;
 }
+
+/* ------------------------------------------------------------------------------------------
+ * Scroll scenes below the first screen are built once the browser is idle after the page loads,
+ * so that work doesn't compete with the first paint and the hero entrance. Content that is
+ * already on screen is never hidden by a late setup (see useSectionReveal).
+ */
+let idleReady = false;
+let scenesReady = false;
+const idleWaiters = new Set<() => void>();
+const readyWaiters = new Set<() => void>();
+function whenIdle(cb: () => void) {
+  if (idleReady) return cb();
+  idleWaiters.add(cb);
+  if (idleWaiters.size > 1) return;
+  const done = () => {
+    idleReady = true;
+    const list = [...idleWaiters];
+    idleWaiters.clear();
+    list.forEach((f) => f());
+    // every deferred scene now exists: measure them all together, top to bottom
+    requestAnimationFrame(() => {
+      ScrollTrigger.refresh();
+      const after = [...readyWaiters]; readyWaiters.clear(); scenesReady = true;
+      after.forEach((f) => f());
+    });
+  };
+  const schedule = () => {
+    if (typeof window.requestIdleCallback === "function") window.requestIdleCallback(done, { timeout: 900 });
+    else setTimeout(done, 300);
+  };
+  if (document.readyState === "complete") requestAnimationFrame(schedule);
+  else window.addEventListener("load", () => requestAnimationFrame(schedule), { once: true });
+}
+
+/** Like useMotionEnabled, but only true once below-the-fold scroll scenes may be built. */
+export function useDeferredMotion(): boolean {
+  const motion = useMotionEnabled();
+  const [ready, setReady] = useState(idleReady);
+  useEffect(() => {
+    if (ready) return;
+    let alive = true;
+    whenIdle(() => { if (alive) setReady(true); });
+    return () => { alive = false; };
+  }, [ready]);
+  return motion && ready;
+}
+
+/** Runs cb once the deferred scroll scenes exist and have been measured (e.g. to jump to /#team). */
+export function onScenesReady(cb: () => void): () => void {
+  if (scenesReady) { cb(); return () => {}; }
+  readyWaiters.add(cb);
+  whenIdle(() => {});
+  return () => { readyWaiters.delete(cb); };
+}
