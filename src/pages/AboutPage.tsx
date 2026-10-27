@@ -33,8 +33,8 @@ export function AboutPage({ route }: { route: RouteMeta }) {
         <h2 id="what-title" className="page-section__title" data-reveal>What is SINC?</h2>
         <div className="prose" data-reveal>
           <p>
-            SINC stands for the <strong>{SITE.fullName}</strong>. It brings ambitious people together to learn, connect,
-            collaborate and build meaningful projects.
+            SINC stands for the <strong>{SITE.fullName}</strong>, also known as SINC Community, at {SITE.domain}.
+            It brings ambitious people together to learn, connect, collaborate and build meaningful projects.
           </p>
           <p>
             SINC is not simply a social network or a general networking site. The aim is to help people find the right

@@ -11,6 +11,9 @@ export const SITE = {
   fullName: "Society for Innovation, Network & Collaboration",
   tagline: "Where Ambition Finds Its People.",
   message: "Connect. Collaborate. Innovate.",
+  /** other names people search for; used in structured data so Google connects them to this site */
+  alternateNames: ["SINC Community", "sincommunity", "sincommunity.in", "Society for Innovation, Network & Collaboration"],
+  domain: "sincommunity.in",
   /** one-line definition used in copy and structured data */
   definition: "SINC is a technology-focused community and collaboration ecosystem where ambitious people connect, collaborate, learn, build and grow together.",
   belief: "No one should have to pursue their ambitions alone.",

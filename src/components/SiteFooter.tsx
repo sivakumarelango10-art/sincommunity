@@ -27,7 +27,7 @@ export function SiteFooter({ onReplay, onHome = true }: FooterProps) {
             <span className="footer__logo"><Logo size={56} /></span>
             <div>
               <p className="footer__name">SINC</p>
-              <p className="footer__full">{SITE.fullName}</p>
+              <p className="footer__full">{SITE.fullName} · {SITE.domain}</p>
             </div>
           </div>
           <p className="footer__tagline">{SITE.tagline}</p>

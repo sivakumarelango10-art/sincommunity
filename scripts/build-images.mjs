@@ -57,4 +57,9 @@ for (const size of [160, 480, 900]) {
   await sharp(src("sinc-logo-mark-transparent.png")).resize({ width: size }).webp({ quality: 90, alphaQuality: 100 }).toFile(out(`brand/sinc-mark-${size}.webp`));
 }
 await sharp(src("sinc-logo.jpeg")).resize(1200, 630, { fit: "contain", background: "#FBFCFF" }).jpeg({ quality: 88 }).toFile(out("brand/sinc-og.jpg"));
+// favicons for browsers and search results (Google needs a square icon, a multiple of 48 px)
+for (const size of [48, 96, 192]) {
+  await sharp(src("sinc-logo.jpeg")).resize(size, size).png().toFile(path.join(root, "public", `favicon-${size}.png`));
+}
+await sharp(src("sinc-logo.jpeg")).resize(180, 180).png().toFile(path.join(root, "public", "apple-touch-icon.png"));
 console.log("brand images done");

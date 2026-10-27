@@ -31,8 +31,9 @@ const DEFAULT_OG = { path: "/images/brand/sinc-og.jpg", width: 1200, height: 630
 export const ROUTES: RouteMeta[] = [
   {
     id: "home", path: "/", file: "index.html", indexable: true, changefreq: "weekly", priority: 1,
-    title: "SINC | Technology Community for Innovation & Collaboration",
-    description: "SINC brings developers, designers, students, founders and tech enthusiasts together to find teammates, collaborate on projects and build meaningful work.",
+    // brand searches (SINC, sincommunity, the full name) match the title; the description is the short explanation
+    title: "SINC – Society for Innovation, Network & Collaboration",
+    description: "SINC (Society for Innovation, Network & Collaboration) is a technology community where developers, designers, students and founders connect and build together.",
   },
   {
     id: "about", path: "/about", file: "about.html", crumb: "About SINC", indexable: true, changefreq: "monthly", priority: 0.8,
@@ -89,9 +90,9 @@ function organization() {
     "@type": "Organization",
     "@id": ORG_ID,
     name: SITE.name,
-    alternateName: SITE.fullName,
+    alternateName: SITE.alternateNames,
     url: absolute("/"),
-    logo: { "@type": "ImageObject", url: absolute("/images/brand/sinc-logo-512.webp"), width: 512, height: 512 },
+    logo: { "@type": "ImageObject", url: absolute("/images/brand/sinc-logo.jpeg"), width: 1254, height: 1254 },
     image: absolute(DEFAULT_OG.path),
     description: SITE.definition,
     slogan: SITE.tagline,
@@ -143,7 +144,7 @@ export function structuredData(r: RouteMeta): object | null {
   if (!r.indexable) return null;
   const graph: object[] = [];
   if (r.id === "home") {
-    graph.push(organization(), { "@type": "WebSite", "@id": SITE_ID, url: absolute("/"), name: SITE.name, alternateName: SITE.fullName, publisher: { "@id": ORG_ID }, inLanguage: "en" }, webPage(r));
+    graph.push(organization(), { "@type": "WebSite", "@id": SITE_ID, url: absolute("/"), name: SITE.name, alternateName: SITE.alternateNames, publisher: { "@id": ORG_ID }, inLanguage: "en" }, webPage(r));
   } else {
     const types: Partial<Record<RouteId, string>> = { about: "AboutPage", founder: "ProfilePage", contact: "ContactPage" };
     const extra: Record<string, unknown> = { breadcrumb: { "@id": `${absolute(r.path)}#breadcrumb` } };
