@@ -41,7 +41,9 @@ export function MissionValues() {
           <span className="mv__rule" aria-hidden="true" />
           <article className="mv__block mv__block--vision">
             <p className="mv__label" data-reveal><span>Vision</span></p>
-            <p className="mv__statement mv__statement--small">{VISION}</p>
+            <ul className="mv__points">
+              {VISION.map((v) => <li key={v} data-reveal>{v}</li>)}
+            </ul>
           </article>
         </div>
 

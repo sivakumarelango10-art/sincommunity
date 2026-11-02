@@ -63,3 +63,18 @@
   .value__button { grid-template-columns: 36px minmax(0, 1fr) 44px; }
   .value__inner p { padding: 0 8px 22px 48px; }
 }
+
+/* vision as short points */
+.mv__points { display: grid; gap: var(--space-4); margin: 0; padding: 0; list-style: none; counter-reset: vp; }
+.mv__points li {
+  counter-increment: vp; position: relative; padding-left: 2.6rem;
+  font-size: clamp(1.05rem, 0.95rem + 0.4vw, 1.3rem); font-weight: 600; line-height: 1.45; color: var(--text);
+}
+.mv__points li::before {
+  content: counter(vp, decimal-leading-zero); position: absolute; left: 0; top: 0.1em;
+  font-size: 0.78rem; font-weight: 800; letter-spacing: 0.08em; color: var(--blue);
+  width: 1.9rem; height: 1.9rem; display: grid; place-items: center; border-radius: 50%; background: var(--surface-2);
+}
+/* the mission is one longer sentence: a little smaller so it sits neatly beside the vision points */
+.mv__block:not(.mv__block--vision) .mv__statement { font-size: clamp(1.6rem, 1rem + 1.55vw, 2.6rem); line-height: 1.15; }
+.mv__grid { align-items: center; }

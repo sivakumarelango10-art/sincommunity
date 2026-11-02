@@ -10,12 +10,14 @@ import "./StoryScene.css";
 const C = { x: 300, y: 300 };
 // the far/near positions of each spark are also in StoryScene.css (.ss-node.ss-iN), so the
 // prerendered markup carries no inline styles; change both together
-const FAR = [[92, 138], [508, 112], [536, 420], [300, 540], [70, 428]];
+// an upright regular pentagon around the centre, so the final connected shape is level and centred
+const FAR = [[300.0, 68.0], [520.6, 228.3], [436.4, 487.7], [163.6, 487.7], [79.4, 228.3]];
 const NEAR = FAR.map(([x, y]) => [C.x + (x - C.x) * 0.55, C.y + (y - C.y) * 0.55]);
 const TAILS = ["M0 0 c -18 -26 -44 -30 -66 -16", "M0 0 c 22 -22 50 -22 66 -6", "M0 0 c 26 8 44 30 46 56",
   "M0 0 c -8 26 0 52 18 66", "M0 0 c -26 4 -46 26 -50 52"];
-const OUT = [[18, 60], [560, 40], [585, 300], [420, 590], [14, 540], [190, 590]];
-const OUT_FROM = [0, 1, 2, 3, 4, 3];
+// one new connection straight outward from each person (symmetric)
+const OUT = [[300.0, 12.0], [573.9, 211.0], [469.3, 533.0], [130.7, 533.0], [26.1, 211.0]];
+const OUT_FROM = [0, 1, 2, 3, 4];
 
 const lerp = (a: number[], b: number[], t: number) => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t];
 

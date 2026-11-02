@@ -80,7 +80,7 @@ export function AboutPage({ route }: { route: RouteMeta }) {
         </article>
         <article data-reveal>
           <h2 className="page-kicker">Our vision</h2>
-          <p className="statement statement--small">{VISION}</p>
+          <ul className="vision-points">{VISION.map((v) => <li key={v}>{v}</li>)}</ul>
         </article>
       </section>
 

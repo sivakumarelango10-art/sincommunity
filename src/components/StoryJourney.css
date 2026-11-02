@@ -14,8 +14,9 @@
 .chapter__kicker span { color: var(--blue); }
 .chapter__title { font-size: var(--fs-h2); letter-spacing: -0.035em; line-height: 1.06; max-width: 16ch; }
 .chapter__title mark {
-  color: inherit; padding: 0 0.08em; margin: 0 -0.04em; border-radius: 0.12em;
-  background: linear-gradient(transparent 58%, rgba(28, 89, 238, 0.2) 58%) left / 0% 100% no-repeat;
+  /* an even band behind the whole word: from just above the x-height to just below the baseline */
+  color: inherit; padding: 0.02em 0.12em 0.06em; margin: 0 0.02em; border-radius: 0.16em;
+  background: linear-gradient(transparent 12%, rgba(28, 89, 238, 0.16) 12%, rgba(28, 89, 238, 0.16) 96%, transparent 96%) left / 0% 100% no-repeat;
   transition: background-size 900ms var(--ease-out) 150ms, color 600ms;
   -webkit-box-decoration-break: clone; box-decoration-break: clone;
 }

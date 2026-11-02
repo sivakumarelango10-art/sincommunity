@@ -175,10 +175,16 @@ export const STAGES: Stage[] = [
 ];
 
 /* ---------------------------------------------------------------- Mission, vision, values */
+/** one sentence, shown bold */
 export const MISSION =
-  "Bring people with different strengths together, encourage meaningful collaboration, and help them turn shared ambition into action.";
-export const VISION =
-  "A growing ecosystem where people, ideas, and opportunities connect—and progress opens doors for others.";
+  "To bring developers, designers, students and founders together so they can connect, collaborate and turn their ideas into real projects.";
+/** the SINC community's vision, as short points */
+export const VISION = [
+  "A community where no one has to pursue their ambitions alone.",
+  "Finding the right teammates and mentors is easy, whatever your skills or background.",
+  "Ideas grow into collaborations, projects and products through shared work.",
+  "Every success opens new opportunities for the next person.",
+];
 
 export const VALUES = [
   { id: "collaboration", name: "Collaboration", text: "Bring different strengths to the same table, and move forward together." },
