@@ -94,8 +94,8 @@ export const ROLES: Role[] = [
     headline: "Code is better with good company.",
     description: "Write code that matters. Meet designers who shape what you build, founders with real problems, and developers to learn alongside.",
     plans: {
-      build: { points: ["Pair with designers on real products", "Join founders building their first version", "Ship side projects with other developers"], connects: ["Designers", "Founders", "Developers"] },
-      learn: { points: ["Review code with more experienced developers", "Learn new stacks by building together", "Share what you know through mentoring"], connects: ["Senior devs", "Peers", "Mentors"] },
+      build: { points: ["Pair with designers on real products", "Join founders building their first version", "Ship side projects with other developers"], connects: ["Designers", "Founders", "Product teams"] },
+      learn: { points: ["Review code with more experienced developers", "Learn new stacks by building together", "Share what you know through mentoring"], connects: ["Mentors", "Peers", "Code reviewers"] },
       explore: { points: ["Find open projects that need contributors", "Explore AI, web and mobile work", "Meet teams looking for technical partners"], connects: ["Open projects", "Startups", "AI teams"] },
     },
   },
@@ -105,7 +105,7 @@ export const ROLES: Role[] = [
     description: "Give ideas their shape. Meet developers who bring designs to life, founders who value clarity, and creators who think visually.",
     plans: {
       build: { points: ["Design products together with your developers", "Shape a founder’s idea into screens", "Turn rough sketches into usable interfaces"], connects: ["Developers", "Founders", "Creators"] },
-      learn: { points: ["Get honest critique on design work", "Learn how developers build your designs", "Grow your skills in UX research"], connects: ["Designers", "Developers", "Mentors"] },
+      learn: { points: ["Get honest critique on design work", "Learn how developers build your designs", "Grow your skills in UX research"], connects: ["Mentors", "Developers", "Reviewers"] },
       explore: { points: ["Find projects that need design leadership", "Explore brand, product and motion work", "Build a portfolio with real projects"], connects: ["Startups", "Brands", "Projects"] },
     },
   },
@@ -115,7 +115,7 @@ export const ROLES: Role[] = [
     description: "Start with a problem worth solving. Meet possible co-founders, early teammates and advisors who bring the strengths you are missing.",
     plans: {
       build: { points: ["Find a co-founder who complements you", "Recruit early teammates for your idea", "Build and test your first version"], connects: ["Co-founders", "Developers", "Designers"] },
-      learn: { points: ["Learn from founders who started earlier", "Test your idea with honest people", "Find advisors for your next decision"], connects: ["Founders", "Advisors", "Mentors"] },
+      learn: { points: ["Learn from founders who started earlier", "Test your idea with honest people", "Find advisors for your next decision"], connects: ["Advisors", "Mentors", "Early users"] },
       explore: { points: ["Meet people with problems worth solving", "Find collaborators across different skill sets", "Discover ideas that deserve a team"], connects: ["Builders", "Researchers", "Students"] },
     },
   },
@@ -125,7 +125,7 @@ export const ROLES: Role[] = [
     description: "Make work people remember. Meet designers, developers and storytellers, share what you create, and find new ways to reach people.",
     plans: {
       build: { points: ["Produce content with designers and developers", "Launch a channel or project together", "Turn your ideas into shareable work"], connects: ["Designers", "Developers", "Marketers"] },
-      learn: { points: ["Learn editing, design and storytelling skills", "Get feedback before you publish work", "Study how other creators grow audiences"], connects: ["Creators", "Designers", "Mentors"] },
+      learn: { points: ["Learn editing, design and storytelling skills", "Get feedback before you publish work", "Study how other creators grow audiences"], connects: ["Editors", "Designers", "Mentors"] },
       explore: { points: ["Find projects that need a storyteller", "Collaborate with brands and new communities", "Explore video, writing and design work"], connects: ["Brands", "Projects", "Communities"] },
     },
   },
@@ -135,7 +135,7 @@ export const ROLES: Role[] = [
     description: "Take discovery beyond the lab. Meet builders who turn findings into tools, founders with real problems, and other curious minds.",
     plans: {
       build: { points: ["Turn research findings into usable tools", "Find developers to build your prototypes", "Work on projects across different disciplines"], connects: ["Developers", "Founders", "Designers"] },
-      learn: { points: ["Learn methods from other research fields", "Share your findings with curious people", "Get feedback on papers and ideas"], connects: ["Researchers", "Students", "Mentors"] },
+      learn: { points: ["Learn methods from other research fields", "Share your findings with curious people", "Get feedback on papers and ideas"], connects: ["Students", "Mentors", "Other fields"] },
       explore: { points: ["Find real problems that need research", "Explore questions across science and technology", "Meet teams who need research partners"], connects: ["Startups", "Labs", "Projects"] },
     },
   },
@@ -145,7 +145,7 @@ export const ROLES: Role[] = [
     description: "Go further than you can alone. Meet trusted collaborators for bigger projects, complementary skills, and peers who understand independent work.",
     plans: {
       build: { points: ["Team up for projects beyond solo", "Find partners with skills you lack", "Deliver bigger work with trusted collaborators"], connects: ["Developers", "Designers", "Writers"] },
-      learn: { points: ["Learn pricing and client work together", "Pick up skills clients ask for", "Get feedback on proposals and portfolios"], connects: ["Freelancers", "Mentors", "Peers"] },
+      learn: { points: ["Learn pricing and client work together", "Pick up skills clients ask for", "Get feedback on proposals and portfolios"], connects: ["Mentors", "Peers", "Founders"] },
       explore: { points: ["Discover projects that need your skills", "Meet founders looking for flexible help", "Find collaborators for recurring client work"], connects: ["Founders", "Projects", "Agencies"] },
     },
   },
@@ -155,7 +155,7 @@ export const ROLES: Role[] = [
     description: "Point powerful tools at real problems. Meet domain experts with problems worth solving, product thinkers, designers and fellow AI engineers.",
     plans: {
       build: { points: ["Build AI features with product teams", "Pair with domain experts on problems", "Turn models into tools people use"], connects: ["Domain experts", "Designers", "Founders"] },
-      learn: { points: ["Learn new models and tools together", "Share experiments and results with peers", "Get feedback on your model choices"], connects: ["AI engineers", "Researchers", "Mentors"] },
+      learn: { points: ["Learn new models and tools together", "Share experiments and results with peers", "Get feedback on your model choices"], connects: ["Researchers", "Mentors", "Data scientists"] },
       explore: { points: ["Find problems where AI truly helps", "Explore research, product and startup work", "Meet teams looking for AI partners"], connects: ["Startups", "Researchers", "Projects"] },
     },
   },

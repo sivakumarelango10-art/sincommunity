@@ -170,26 +170,36 @@ const ART: Record<RoleId, () => JSX.Element> = {
 };
 
 /** chip anchor points in the 520 × 400 scene (mirrored in CommunityExplorer.css) */
-export const CHIP_POINTS = [[100, 70], [420, 70], [260, 352]] as const;
-const C = { x: 260, y: 196, r: 104 };
+const C = { x: 260, y: 184, r: 96 };
+/*
+ * Three branches 120° apart. Each visible line is the same length (LINE): it starts just outside
+ * the disc and stops at the edge of its label, so labels sit further out on the angled branches,
+ * where a wide pill is cut at an angle, than on the straight one below.
+ */
+const START = C.r + 8, LINE = 58;
+const BRANCHES = [{ a: -150, edge: 46 }, { a: -30, edge: 46 }, { a: 90, edge: 24 }];
+const rad = (a: number) => (a * Math.PI) / 180;
+export const CHIP_POINTS = BRANCHES.map(({ a, edge }) => {
+  const r = START + LINE + edge;
+  return [+(C.x + r * Math.cos(rad(a))).toFixed(1), +(C.y + r * Math.sin(rad(a))).toFixed(1)];
+});
 
 /** the scene: the role's illustration in a soft disc, linked to three people or places */
 export function RoleScene({ role, label, intent }: { role: RoleId; label: string; intent: string }) {
   const Art = ART[role];
   return (
     <svg className="explorer__art" viewBox="0 0 520 400" aria-hidden="true" data-intent={intent}>
-      <circle className="explorer__orbit" cx={C.x} cy={C.y} r={C.r + 46} />
-      {CHIP_POINTS.map(([x, y], i) => {
-        const dx = x - C.x, dy = y - C.y, len = Math.hypot(dx, dy);
-        const sx = C.x + (dx / len) * (C.r + 6), sy = C.y + (dy / len) * (C.r + 6);
-        const ex = x - (dx / len) * 26, ey = y - (dy / len) * 22;
-        return <path key={i} className="explorer__link" d={`M${sx.toFixed(1)} ${sy.toFixed(1)} L${ex.toFixed(1)} ${ey.toFixed(1)}`} />;
+      <circle className="explorer__orbit" cx={C.x} cy={C.y} r={START + LINE / 2} />
+      {BRANCHES.map(({ a }, i) => {
+        const cx = Math.cos(rad(a)), cy = Math.sin(rad(a));
+        const d = `M${(C.x + cx * START).toFixed(1)} ${(C.y + cy * START).toFixed(1)} L${(C.x + cx * (START + LINE)).toFixed(1)} ${(C.y + cy * (START + LINE)).toFixed(1)}`;
+        return <path key={i} className="explorer__link" d={d} />;
       })}
       <g className="explorer__center">
         <circle cx={C.x} cy={C.y} r={C.r} className="explorer__center-disc" />
-        <g transform={`translate(${C.x - 80} ${C.y - 92})`}><Art /></g>
-        <rect x={C.x - 62} y={C.y + 76} width="124" height="30" rx="15" className="explorer__center-pill" />
-        <text x={C.x} y={C.y + 96} textAnchor="middle" className="explorer__center-label">{label}</text>
+        <g transform={`translate(${C.x - 64} ${C.y - 82}) scale(0.8)`}><Art /></g>
+        <rect x={C.x - 60} y={C.y + 52} width="120" height="28" rx="14" className="explorer__center-pill" />
+        <text x={C.x} y={C.y + 71} textAnchor="middle" className="explorer__center-label">{label}</text>
       </g>
     </svg>
   );

@@ -64,9 +64,9 @@
   font-weight: 800; font-size: 0.9rem; white-space: nowrap; box-shadow: var(--shadow-s);
 }
 /* chip positions mirror CHIP_POINTS in RoleArt.tsx (520 × 400 scene) */
-.explorer__node--1 { left: 19.23%; top: 17.5%; }
-.explorer__node--2 { left: 80.77%; top: 17.5%; }
-.explorer__node--3 { left: 50%; top: 88%; }
+.explorer__node--1 { left: 15.36%; top: 20%; }
+.explorer__node--2 { left: 84.64%; top: 20%; }
+.explorer__node--3 { left: 50%; top: 92.5%; }
 
 @media (max-width: 899px) {
   .explorer__panel { grid-template-columns: 1fr; min-height: 0; }
