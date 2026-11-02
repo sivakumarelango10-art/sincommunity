@@ -14,7 +14,7 @@ import { JoinSection } from "./components/JoinSection";
 import { SiteFooter } from "./components/SiteFooter";
 import { IntroStory, type IntroCloseReason } from "./components/IntroStory";
 import { ScrollProgress } from "./components/ScrollProgress";
-import { FounderIntro } from "./components/FounderIntro";
+// FounderIntro (home "Meet the founder" section) is hidden at SINC's request; the component is kept for reuse.
 import { routeByPath, type RouteMeta } from "./seo/routes";
 import { AboutPage } from "./pages/AboutPage";
 import { FounderPage } from "./pages/FounderPage";
@@ -96,7 +96,6 @@ function HomePage() {
         <CommunityExplorer />
         <Ecosystem />
         <MissionValues />
-        <FounderIntro />
         <Team />
         <FAQ />
         <JoinSection />
