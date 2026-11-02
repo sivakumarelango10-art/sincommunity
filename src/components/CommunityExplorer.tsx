@@ -4,24 +4,8 @@ import { gsap, useGSAP, EASE } from "../motion/gsap";
 import { useDeferredMotion } from "../motion/MotionContext";
 import { useSectionReveal } from "../motion/hooks";
 import { JoinButton } from "./ui";
+import { RoleScene } from "./RoleArt";
 import "./CommunityExplorer.css";
-
-/** Illustration: the chosen role at the centre, connected to three complementary strengths. */
-function RoleConnections({ role, intent }: { role: string; intent: IntentId }) {
-  const spots = [[90, 78], [420, 92], [300, 330]];
-  return (
-    <svg className="explorer__art" viewBox="0 0 520 400" aria-hidden="true" data-intent={intent}>
-      <circle className="explorer__orbit" cx="250" cy="200" r="150" />
-      {spots.map(([x, y], i) => (
-        <path key={i} className="explorer__link" d={`M250 200 Q ${(250 + x) / 2 + (i - 1) * 40} ${(200 + y) / 2 - 40} ${x} ${y}`} />
-      ))}
-      <g className="explorer__center">
-        <circle cx="250" cy="200" r="64" className="explorer__center-disc" />
-        <text x="250" y="206" textAnchor="middle" className="explorer__center-label">{role}</text>
-      </g>
-    </svg>
-  );
-}
 
 export function CommunityExplorer() {
   const motion = useDeferredMotion(); // built after the first paint
@@ -31,6 +15,7 @@ export function CommunityExplorer() {
   const lastIndex = useRef(1);
   const role = ROLES.find((r) => r.id === roleId)!;
   const intent = INTENTS.find((i) => i.id === intentId)!;
+  const plan = role.plans[intentId];
   useSectionReveal(root, []);
 
   // restrained directional crossfade on every change; focus stays on the control the visitor used
@@ -91,7 +76,7 @@ export function CommunityExplorer() {
               <h3 className="explorer__headline explorer__swap">{role.headline}</h3>
               <p className="explorer__desc explorer__swap">{role.description}</p>
               <ul className="explorer__list explorer__swap">
-                {intent.possibilities.map((p) => <li key={p}>{p}</li>)}
+                {plan.points.map((p) => <li key={p}>{p}</li>)}
               </ul>
               <div className="explorer__cta explorer__swap">
                 <JoinButton>{`Join SINC as a ${role.singular}`}</JoinButton>
@@ -99,9 +84,9 @@ export function CommunityExplorer() {
               <p className="explorer__note">These are examples of what the community makes possible, not live matches or guaranteed outcomes.</p>
             </div>
             <div className="explorer__visual">
-              <RoleConnections role={role.label} intent={intentId} />
-              <ul className="explorer__nodes" aria-label={`People ${role.label.toLowerCase()} often connect with`}>
-                {role.connects.map((c, i) => <li key={c} className={`explorer__node explorer__node--${i + 1}`}>{c}</li>)}
+              <RoleScene role={role.id} label={role.label} intent={intentId} />
+              <ul className="explorer__nodes" aria-label={`Who ${role.label.toLowerCase()} can connect with to ${intent.label.toLowerCase()}`}>
+                {plan.connects.map((c, i) => <li key={c} className={`explorer__node explorer__node--${i + 1}`}>{c}</li>)}
               </ul>
             </div>
           </div>

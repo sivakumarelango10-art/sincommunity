@@ -72,59 +72,92 @@ export interface Role {
   label: string;
   singular: string;
   headline: string;
+  /** 20 words: who this role meets at SINC */
   description: string;
-  /** complementary strengths shown in the illustration */
-  connects: [string, string, string];
+  /** for each "I want to" choice: three 6-word possibilities and the three kinds of people or places the illustration connects to */
+  plans: Record<IntentId, { points: [string, string, string]; connects: [string, string, string] }>;
 }
 
 export const ROLES: Role[] = [
   {
     id: "students", label: "Students", singular: "student",
     headline: "Learn by building with others.",
-    description: "Bring your curiosity. Find peers to start a project with, people further along who can share what they know, and teammates for your next hackathon.",
-    connects: ["Peers", "Builders", "Mentors"],
+    description: "Bring your curiosity. Meet classmates to build with, seniors who share what they learned, and teams looking for fresh energy.",
+    plans: {
+      build: { points: ["Start a first project with peers", "Find teammates for your next hackathon", "Turn class ideas into working prototypes"], connects: ["Peers", "Developers", "Designers"] },
+      learn: { points: ["Learn from seniors who have shipped", "Get feedback on your first projects", "Pick up skills your course skips"], connects: ["Mentors", "Seniors", "Peers"] },
+      explore: { points: ["Discover fields beyond your own course", "Join projects that need extra hands", "See where your skills fit best"], connects: ["Projects", "Hackathons", "Teams"] },
+    },
   },
   {
     id: "developers", label: "Developers", singular: "developer",
     headline: "Code is better with good company.",
-    description: "Meet designers who can shape what you build, founders with problems worth solving, and other developers to learn alongside.",
-    connects: ["Designers", "Founders", "Developers"],
+    description: "Write code that matters. Meet designers who shape what you build, founders with real problems, and developers to learn alongside.",
+    plans: {
+      build: { points: ["Pair with designers on real products", "Join founders building their first version", "Ship side projects with other developers"], connects: ["Designers", "Founders", "Developers"] },
+      learn: { points: ["Review code with more experienced developers", "Learn new stacks by building together", "Share what you know through mentoring"], connects: ["Senior devs", "Peers", "Mentors"] },
+      explore: { points: ["Find open projects that need contributors", "Explore AI, web and mobile work", "Meet teams looking for technical partners"], connects: ["Open projects", "Startups", "AI teams"] },
+    },
   },
   {
     id: "designers", label: "Designers", singular: "designer",
     headline: "Give great ideas their shape.",
-    description: "Find developers who can bring your designs to life, founders who value clarity, and creators who think visually too.",
-    connects: ["Developers", "Founders", "Creators"],
+    description: "Give ideas their shape. Meet developers who bring designs to life, founders who value clarity, and creators who think visually.",
+    plans: {
+      build: { points: ["Design products together with your developers", "Shape a founder’s idea into screens", "Turn rough sketches into usable interfaces"], connects: ["Developers", "Founders", "Creators"] },
+      learn: { points: ["Get honest critique on design work", "Learn how developers build your designs", "Grow your skills in UX research"], connects: ["Designers", "Developers", "Mentors"] },
+      explore: { points: ["Find projects that need design leadership", "Explore brand, product and motion work", "Build a portfolio with real projects"], connects: ["Startups", "Brands", "Projects"] },
+    },
   },
   {
     id: "founders", label: "Founders", singular: "founder",
     headline: "Find the people who see it too.",
-    description: "Meet people who might become co-founders, early teammates or advisors, and test your idea with people who bring different strengths.",
-    connects: ["Co-founders", "Developers", "Designers"],
+    description: "Start with a problem worth solving. Meet possible co-founders, early teammates and advisors who bring the strengths you are missing.",
+    plans: {
+      build: { points: ["Find a co-founder who complements you", "Recruit early teammates for your idea", "Build and test your first version"], connects: ["Co-founders", "Developers", "Designers"] },
+      learn: { points: ["Learn from founders who started earlier", "Test your idea with honest people", "Find advisors for your next decision"], connects: ["Founders", "Advisors", "Mentors"] },
+      explore: { points: ["Meet people with problems worth solving", "Find collaborators across different skill sets", "Discover ideas that deserve a team"], connects: ["Builders", "Researchers", "Students"] },
+    },
   },
   {
     id: "creators", label: "Creators", singular: "creator",
     headline: "Make something people remember.",
-    description: "Collaborate with designers, developers and storytellers, share your work and learn new ways to bring ideas to an audience.",
-    connects: ["Designers", "Marketers", "Developers"],
+    description: "Make work people remember. Meet designers, developers and storytellers, share what you create, and find new ways to reach people.",
+    plans: {
+      build: { points: ["Produce content with designers and developers", "Launch a channel or project together", "Turn your ideas into shareable work"], connects: ["Designers", "Developers", "Marketers"] },
+      learn: { points: ["Learn editing, design and storytelling skills", "Get feedback before you publish work", "Study how other creators grow audiences"], connects: ["Creators", "Designers", "Mentors"] },
+      explore: { points: ["Find projects that need a storyteller", "Collaborate with brands and new communities", "Explore video, writing and design work"], connects: ["Brands", "Projects", "Communities"] },
+    },
   },
   {
     id: "researchers", label: "Researchers", singular: "researcher",
     headline: "Take discovery beyond the lab.",
-    description: "Explore ideas across disciplines, find builders who can turn findings into something usable, and share knowledge with curious people.",
-    connects: ["Builders", "Founders", "Students"],
+    description: "Take discovery beyond the lab. Meet builders who turn findings into tools, founders with real problems, and other curious minds.",
+    plans: {
+      build: { points: ["Turn research findings into usable tools", "Find developers to build your prototypes", "Work on projects across different disciplines"], connects: ["Developers", "Founders", "Designers"] },
+      learn: { points: ["Learn methods from other research fields", "Share your findings with curious people", "Get feedback on papers and ideas"], connects: ["Researchers", "Students", "Mentors"] },
+      explore: { points: ["Find real problems that need research", "Explore questions across science and technology", "Meet teams who need research partners"], connects: ["Startups", "Labs", "Projects"] },
+    },
   },
   {
     id: "freelancers", label: "Freelancers", singular: "freelancer",
     headline: "Go further than you can alone.",
-    description: "Meet trusted collaborators for larger projects, people with complementary skills, and peers who understand independent work.",
-    connects: ["Collaborators", "Designers", "Developers"],
+    description: "Go further than you can alone. Meet trusted collaborators for bigger projects, complementary skills, and peers who understand independent work.",
+    plans: {
+      build: { points: ["Team up for projects beyond solo", "Find partners with skills you lack", "Deliver bigger work with trusted collaborators"], connects: ["Developers", "Designers", "Writers"] },
+      learn: { points: ["Learn pricing and client work together", "Pick up skills clients ask for", "Get feedback on proposals and portfolios"], connects: ["Freelancers", "Mentors", "Peers"] },
+      explore: { points: ["Discover projects that need your skills", "Meet founders looking for flexible help", "Find collaborators for recurring client work"], connects: ["Founders", "Projects", "Agencies"] },
+    },
   },
   {
     id: "ai-engineers", label: "AI Engineers", singular: "AI engineer",
     headline: "Point powerful tools at real problems.",
-    description: "Find domain experts with problems worth solving, product thinkers and designers, and other engineers exploring what AI can do.",
-    connects: ["Domain experts", "Designers", "Founders"],
+    description: "Point powerful tools at real problems. Meet domain experts with problems worth solving, product thinkers, designers and fellow AI engineers.",
+    plans: {
+      build: { points: ["Build AI features with product teams", "Pair with domain experts on problems", "Turn models into tools people use"], connects: ["Domain experts", "Designers", "Founders"] },
+      learn: { points: ["Learn new models and tools together", "Share experiments and results with peers", "Get feedback on your model choices"], connects: ["AI engineers", "Researchers", "Mentors"] },
+      explore: { points: ["Find problems where AI truly helps", "Explore research, product and startup work", "Meet teams looking for AI partners"], connects: ["Startups", "Researchers", "Projects"] },
+    },
   },
 ];
 
@@ -133,22 +166,12 @@ export type IntentId = "build" | "learn" | "explore";
 export interface Intent {
   id: IntentId;
   label: string;
-  possibilities: [string, string, string];
 }
 
 export const INTENTS: Intent[] = [
-  {
-    id: "build", label: "Build something",
-    possibilities: ["Find a project team", "Meet collaborators with complementary skills", "Turn an idea into a first version"],
-  },
-  {
-    id: "learn", label: "Learn and grow",
-    possibilities: ["Learn from peers and mentors", "Share what you know", "Get honest feedback on your work"],
-  },
-  {
-    id: "explore", label: "Explore opportunities",
-    possibilities: ["Explore ideas across disciplines", "Discover projects to contribute to", "Meet people with different perspectives"],
-  },
+  { id: "build", label: "Build something" },
+  { id: "learn", label: "Learn and grow" },
+  { id: "explore", label: "Explore opportunities" },
 ];
 
 /* ---------------------------------------------------------------- Ecosystem */
