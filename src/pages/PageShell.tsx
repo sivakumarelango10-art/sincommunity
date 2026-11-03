@@ -15,8 +15,11 @@ export function PageShell({ route, current = null, children }: { route: RouteMet
   useSectionReveal(main, [route.id]);
   // the page's opening line draws itself once, as the page arrives
   useGSAP(() => {
-    if (!motion) return;
-    gsap.fromTo(".page-hero__line path", { drawSVG: "0%" }, { drawSVG: "100%", duration: 1.6, ease: EASE.draw, delay: 0.25 });
+    if (!motion || !main.current) return;
+    // profile pages use their own hero without this line: animate it only where it exists
+    const line = main.current.querySelectorAll(".page-hero__line path");
+    if (!line.length) return;
+    gsap.fromTo(line, { drawSVG: "0%" }, { drawSVG: "100%", duration: 1.6, ease: EASE.draw, delay: 0.25 });
   }, { scope: main, dependencies: [motion, route.id], revertOnUpdate: true });
   // production pages already carry their title; this keeps the development server in step
   useEffect(() => { document.title = route.title; }, [route.title]);

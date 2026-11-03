@@ -336,7 +336,8 @@ export function IntroStory({ open, onHandoff, onClose }: IntroProps) {
 
         {g && (
           <div className="intro__logo" style={{ left: g.g.x, top: g.g.y, width: g.logo, height: g.logo }}>
-            <img src="/images/brand/sinc-mark-900.webp" width={900} height={787} alt="" />
+            <img src="/images/brand/sinc-mark-480.webp" srcSet="/images/brand/sinc-mark-160.webp 160w, /images/brand/sinc-mark-480.webp 480w, /images/brand/sinc-mark-900.webp 900w"
+              sizes={`${Math.round(g.logo)}px`} width={900} height={787} alt="" />
           </div>
         )}
 

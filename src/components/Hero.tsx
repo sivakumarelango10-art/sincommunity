@@ -112,11 +112,22 @@ export function Hero({ entrance, fromIntro, onWatchStory }: HeroProps) {
     const spark = el.querySelector<HTMLElement>(".hero__spark");
     const cta = el.querySelector<HTMLElement>(".hero__actions .btn");
     if (!copy || !spark || !cta) return;
-    const c = copy.getBoundingClientRect();
-    const s = spark.getBoundingClientRect(), bt = cta.getBoundingClientRect();
-    // a margin rule: down the lane beside the text, then into the Join button
-    const x0 = s.left + s.width / 2 - c.left, y0 = s.top + s.height / 2 - c.top;
-    const x1 = bt.left - c.left - 12, y1 = bt.top + bt.height / 2 - c.top;
+    // layout positions (offsetTop/offsetLeft), not getBoundingClientRect: the entrance slides the
+    // buttons up from 18px lower, and measuring mid-slide left the line ending below the button
+    const pos = (n: HTMLElement) => {
+      let x = 0, y = 0, e: HTMLElement | null = n;
+      while (e && e !== copy) { x += e.offsetLeft; y += e.offsetTop; e = e.offsetParent as HTMLElement | null; }
+      if (e !== copy) { // copy is not an offset ancestor: fall back to the box, minus any transform
+        const r = n.getBoundingClientRect(), c = copy.getBoundingClientRect();
+        return { x: r.left - c.left, y: r.top - c.top - (Number(gsap.getProperty(n, "y")) || 0) };
+      }
+      return { x, y };
+    };
+    const c = { width: copy.clientWidth, height: copy.clientHeight };
+    const s = pos(spark), b = pos(cta);
+    // a margin rule: down the lane beside the text, then into the middle of the Join button
+    const x0 = s.x + spark.offsetWidth / 2, y0 = s.y + spark.offsetHeight / 2;
+    const x1 = b.x + 2, y1 = b.y + cta.offsetHeight / 2; // runs just under the button edge, so it visibly joins it
     const r = Math.max(4, Math.min(18, (x1 - x0) * 0.7));
     const d = `M ${x0} ${y0 + 12} V ${y1 - r} Q ${x0} ${y1} ${x0 + r} ${y1} H ${x1}`;
     setGuide({ d, w: c.width, h: c.height });

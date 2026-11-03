@@ -99,13 +99,19 @@ function whenIdle(cb: () => void) {
     idleReady = true;
     const list = [...idleWaiters];
     idleWaiters.clear();
-    list.forEach((f) => f());
-    // every deferred scene now exists: measure them all together, top to bottom
-    requestAnimationFrame(() => {
-      ScrollTrigger.refresh();
-      const after = [...readyWaiters]; readyWaiters.clear(); scenesReady = true;
-      after.forEach((f) => f());
-    });
+    // release the sections one at a time, in page order, each in its own task: building every
+    // scene in one go was a single ~0.5 s task on phones that kept the page from responding
+    const next = () => {
+      const f = list.shift();
+      if (f) { f(); setTimeout(next, 24); return; }
+      // every deferred scene now exists: measure them all together, top to bottom
+      requestAnimationFrame(() => {
+        ScrollTrigger.refresh();
+        const after = [...readyWaiters]; readyWaiters.clear(); scenesReady = true;
+        after.forEach((f) => f());
+      });
+    };
+    next();
   };
   const schedule = () => {
     if (typeof window.requestIdleCallback === "function") window.requestIdleCallback(done, { timeout: 900 });
