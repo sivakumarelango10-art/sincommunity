@@ -55,7 +55,9 @@ export function JoinSection() {
           <JoinButton variant="white" />
           <LoginLink className="text-link join__login">Already a member? Log In</LoginLink>
         </div>
-        {/* where SINC will be available: the web app is being built, phone apps later (none are links until they are released) */}
+        {/* where SINC will be available: the web app is being built, phone apps later (none are links until they are released).
+            Store names are text only: Google's and Apple's official badges are for apps already listed (or on pre-registration / pre-order),
+            so swap them in, linked to the listings, once those exist. */}
         <ul className="join__platforms" aria-label="Where SINC will be available">
           <li className="platform platform--soon platform--building">
             <IconGlobe className="platform__icon" />
@@ -63,11 +65,11 @@ export function JoinSection() {
           </li>
           <li className="platform platform--soon">
             <IconPhone className="platform__icon" />
-            <span className="platform__text"><span className="platform__state">Coming soon</span><span className="platform__name">Android app</span></span>
+            <span className="platform__text"><span className="platform__state">Coming soon · Google Play</span><span className="platform__name">Android app</span></span>
           </li>
           <li className="platform platform--soon">
             <IconPhone className="platform__icon" />
-            <span className="platform__text"><span className="platform__state">Coming soon</span><span className="platform__name">iPhone app (iOS)</span></span>
+            <span className="platform__text"><span className="platform__state">Coming soon · App Store</span><span className="platform__name">iPhone app (iOS)</span></span>
           </li>
         </ul>
       </div>
