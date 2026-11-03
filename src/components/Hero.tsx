@@ -3,7 +3,7 @@ import { SITE } from "../config/site";
 import { TEAM, portrait, portraitSrcSet, focusClass, type TeamMember } from "../data/team";
 import { gsap, useGSAP, SplitText, EASE, finePointer } from "../motion/gsap";
 import { useMotionEnabled } from "../motion/MotionContext";
-import { IconPause, IconPlay, JoinButton, LogoMark } from "./ui";
+import { IconPlay, JoinButton, LogoMark } from "./ui";
 import { HeroRotator, type RotatorHandle } from "./HeroRotator";
 import "./Hero.css";
 
@@ -40,7 +40,6 @@ export function Hero({ entrance, fromIntro, onWatchStory }: HeroProps) {
   const left = useRef<RotatorHandle>(null);
   const right = useRef<RotatorHandle>(null);
   const [full, setFull] = useState(false);        // other photos are added once the page has loaded
-  const [userPaused, setUserPaused] = useState(false);
   const [held, setHeld] = useState(false);        // hover or keyboard focus on the portraits
   const [inView, setInView] = useState(true);
   const started = entrance === "go";
@@ -81,7 +80,7 @@ export function Hero({ entrance, fromIntro, onWatchStory }: HeroProps) {
     };
   }, []);
 
-  const rotating = motion && full && !userPaused && !held && inView;
+  const rotating = motion && full && !held && inView; // hover/focus holds it; the footer Motion switch stops it
   const turn = useRef(0);
   useEffect(() => {
     if (!rotating) return;
@@ -257,12 +256,6 @@ export function Hero({ entrance, fromIntro, onWatchStory }: HeroProps) {
             </figure>
             <figure className="hero__person hero__person--3" data-depth={0.75}>
               <HeroRotator ref={right} people={RIGHT} full={full} sizes={PORTRAIT_SIZES} />
-              {motion && full && (
-                <button type="button" className="hero__rot-toggle" onClick={() => setUserPaused((v) => !v)}
-                  aria-label={userPaused ? "Play the team photos" : "Pause the team photos"}>
-                  {userPaused ? <IconPlay /> : <IconPause />}
-                </button>
-              )}
             </figure>
             <div className="hero__badge" data-depth="0.35">
               <LogoMark width={112} eager alt="SINC logo: three people joined around a shared centre" />
