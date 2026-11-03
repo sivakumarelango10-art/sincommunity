@@ -11,6 +11,12 @@ const base = (p: IconProps) => ({
 export const IconArrowUpRight = (p: IconProps) => (
   <svg {...base(p)} className={`icon icon-arrow ${p.className ?? ""}`}><path d="M7 17 17 7" /><path d="M8 7h9v9" /></svg>
 );
+export const IconGlobe = (p: IconProps) => (
+  <svg {...base(p)} className={`icon ${p.className ?? ""}`}><circle cx="12" cy="12" r="9" /><path d="M3 12h18" /><path d="M12 3c2.6 2.6 3.8 5.6 3.8 9s-1.2 6.4-3.8 9c-2.6-2.6-3.8-5.6-3.8-9S9.4 5.6 12 3Z" /></svg>
+);
+export const IconPhone = (p: IconProps) => (
+  <svg {...base(p)} className={`icon ${p.className ?? ""}`}><rect x="6.5" y="2.5" width="11" height="19" rx="2.5" /><path d="M10.5 18.5h3" /></svg>
+);
 export const IconArrowRight = (p: IconProps) => (
   <svg {...base(p)} className={`icon ${p.className ?? ""}`}><path d="M5 12h14" /><path d="m13 6 6 6-6 6" /></svg>
 );

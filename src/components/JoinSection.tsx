@@ -1,7 +1,8 @@
 import { useRef } from "react";
 import { gsap, useGSAP, EASE } from "../motion/gsap";
 import { useDeferredMotion } from "../motion/MotionContext";
-import { JoinButton, LoginLink, LogoMark } from "./ui";
+import { SITE } from "../config/site";
+import { IconArrowUpRight, IconGlobe, IconPhone, JoinButton, LoginLink, LogoMark } from "./ui";
 import "./JoinSection.css";
 
 /** The motif resolves: three paths arrive from different directions and meet at the logo. */
@@ -26,7 +27,7 @@ export function JoinSection() {
     tl.from(q(".join__badge"), { scale: 0.4, autoAlpha: 0, duration: 1, ease: "back.out(1.7)" })
       .fromTo(q(".join__pulse"), { scale: 1, autoAlpha: 0.6 }, { scale: 2.4, autoAlpha: 0, duration: 1.6, ease: "power2.out" }, "-=0.5")
       .from(q(".join__title-line"), { yPercent: 110, duration: 1, ease: EASE.out, stagger: 0.1 }, "-=1.4")
-      .from(q(".join__sub, .join__actions"), { y: 20, opacity: 0, duration: 0.8, ease: EASE.out, stagger: 0.1 }, "-=0.7");
+      .from(q(".join__sub, .join__actions, .join__platforms"), { y: 20, opacity: 0, duration: 0.8, ease: EASE.out, stagger: 0.1 }, "-=0.7");
   }, { scope: root, dependencies: [motion], revertOnUpdate: true });
 
   return (
@@ -55,6 +56,24 @@ export function JoinSection() {
           <JoinButton variant="white" />
           <LoginLink className="text-link join__login">Already a member? Log In</LoginLink>
         </div>
+        {/* where SINC can be used: the web platform today, phone apps later (not links until they exist) */}
+        <ul className="join__platforms" aria-label="Where you can use SINC">
+          <li>
+            <a className="platform platform--live" href={SITE.links.join} target="_blank" rel="noopener noreferrer">
+              <IconGlobe className="platform__icon" />
+              <span className="platform__text"><span className="platform__state">Available now</span><span className="platform__name">In your browser</span></span>
+              <IconArrowUpRight className="platform__go" /><span className="sr-only">(opens the SINC platform in a new tab)</span>
+            </a>
+          </li>
+          <li className="platform platform--soon">
+            <IconPhone className="platform__icon" />
+            <span className="platform__text"><span className="platform__state">Coming soon</span><span className="platform__name">Android app</span></span>
+          </li>
+          <li className="platform platform--soon">
+            <IconPhone className="platform__icon" />
+            <span className="platform__text"><span className="platform__state">Coming soon</span><span className="platform__name">iPhone app (iOS)</span></span>
+          </li>
+        </ul>
       </div>
     </section>
   );
