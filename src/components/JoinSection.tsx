@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { gsap, useGSAP, EASE } from "../motion/gsap";
 import { useDeferredMotion } from "../motion/MotionContext";
-import { JoinButton, LoginLink, Logo } from "./ui";
+import { JoinButton, LoginLink, LogoMark } from "./ui";
 import "./JoinSection.css";
 
 /** The motif resolves: three paths arrive from different directions and meet at the logo. */
@@ -43,7 +43,7 @@ export function JoinSection() {
           </svg>
           <div className="join__badge">
             <span className="join__pulse" aria-hidden="true" />
-            <Logo size={120} alt="SINC logo" />
+            <LogoMark width={120} alt="SINC logo" />
           </div>
         </div>
         <h2 id="join-title" className="join__title">

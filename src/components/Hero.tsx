@@ -3,7 +3,7 @@ import { SITE } from "../config/site";
 import { TEAM, portrait, portraitSrcSet, focusClass, type TeamMember } from "../data/team";
 import { gsap, useGSAP, SplitText, EASE, finePointer } from "../motion/gsap";
 import { useMotionEnabled } from "../motion/MotionContext";
-import { IconPause, IconPlay, JoinButton, Logo } from "./ui";
+import { IconPause, IconPlay, JoinButton, LogoMark } from "./ui";
 import { HeroRotator, type RotatorHandle } from "./HeroRotator";
 import "./Hero.css";
 
@@ -265,7 +265,7 @@ export function Hero({ entrance, fromIntro, onWatchStory }: HeroProps) {
               )}
             </figure>
             <div className="hero__badge" data-depth="0.35">
-              <Logo size={112} eager alt="SINC logo: three people joined around a shared centre" />
+              <LogoMark width={112} eager alt="SINC logo: three people joined around a shared centre" />
             </div>
             <a className="hero__caption" href="#team">Meet the people building SINC</a>
           </div>
