@@ -3,7 +3,7 @@ import { NAV_ITEMS, SITE, type NavId } from "../config/site";
 import { gsap, useGSAP, EASE } from "../motion/gsap";
 import { lockScroll } from "../motion/hooks";
 import { useMotionEnabled } from "../motion/MotionContext";
-import { JoinButton, Logo, LoginLink, IconArrowUpRight } from "./ui";
+import { JoinButton, Logo, IconArrowUpRight } from "./ui";
 import "./SiteHeader.css";
 
 const useIsoLayout = typeof window === "undefined" ? useEffect : useLayoutEffect;
@@ -175,7 +175,6 @@ export function SiteHeader({ onHome = true, current = null }: HeaderProps) {
         </nav>
 
         <div className="site-header__actions">
-          <LoginLink className="text-link site-header__login" />
           <JoinButton small />
           <button
             ref={toggleRef}
@@ -211,7 +210,6 @@ export function SiteHeader({ onHome = true, current = null }: HeaderProps) {
               <a className="btn" href={SITE.links.join} target="_blank" rel="noopener noreferrer">
                 Join SINC <IconArrowUpRight /><span className="sr-only">(opens the SINC platform in a new tab)</span>
               </a>
-              <LoginLink className="btn btn-ghost" />
             </li>
           </ul>
         </nav>
