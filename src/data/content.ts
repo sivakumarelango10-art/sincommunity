@@ -264,6 +264,6 @@ export const FAQS = [
   {
     id: "join",
     q: "How do I join?",
-    a: "Select “Join SINC” to open the SINC platform. There you can sign up for an account, or log in if you already have one. SINC works in your web browser today; Android and iPhone apps are coming soon.",
+    a: "Select “Join SINC” to open the SINC platform. There you can sign up for an account, or log in if you already have one. The SINC web app is being built and releases soon; Android and iPhone apps are coming soon too.",
   },
 ];

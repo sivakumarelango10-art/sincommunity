@@ -46,12 +46,9 @@
 .platform__text { display: grid; line-height: 1.2; }
 .platform__state { font-size: 0.72rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; }
 .platform__name { font-family: var(--font-display); font-weight: 700; font-size: 1.05rem; }
-.platform--live { background: rgba(255, 255, 255, 0.16); border: 1.5px solid rgba(255, 255, 255, 0.85); transition: background-color var(--dur-fast), transform var(--dur-fast) var(--ease-soft); }
-.platform--live:hover, .platform--live:focus-visible { background: rgba(255, 255, 255, 0.26); transform: translateY(-2px); }
-.platform--live .platform__state { color: #d6f5df; }
-.platform--live .platform__state::before { content: ""; display: inline-block; width: 7px; height: 7px; margin-right: 6px; border-radius: 50%; background: #5ee08a; vertical-align: 1px; }
-.platform__go { width: 16px; height: 16px; margin-left: 4px; }
 /* not links: dashed outline and softer text so they never look clickable */
 .platform--soon { border: 1.5px dashed rgba(255, 255, 255, 0.5); color: var(--on-blue-soft); }
 .platform--soon .platform__state { color: var(--on-blue-soft); opacity: 0.9; }
+/* the web app is in progress: an amber dot marks the one being built now */
+.platform--building .platform__state::before { content: ""; display: inline-block; width: 7px; height: 7px; margin-right: 6px; border-radius: 50%; background: #ffc65c; vertical-align: 1px; }
 @media (max-width: 520px) { .join__platforms { flex-direction: column; align-items: stretch; width: 100%; max-width: 320px; } }

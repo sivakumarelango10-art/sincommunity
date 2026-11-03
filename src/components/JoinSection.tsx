@@ -1,8 +1,7 @@
 import { useRef } from "react";
 import { gsap, useGSAP, EASE } from "../motion/gsap";
 import { useDeferredMotion } from "../motion/MotionContext";
-import { SITE } from "../config/site";
-import { IconArrowUpRight, IconGlobe, IconPhone, JoinButton, LoginLink, LogoMark } from "./ui";
+import { IconGlobe, IconPhone, JoinButton, LoginLink, LogoMark } from "./ui";
 import "./JoinSection.css";
 
 /** The motif resolves: three paths arrive from different directions and meet at the logo. */
@@ -56,14 +55,11 @@ export function JoinSection() {
           <JoinButton variant="white" />
           <LoginLink className="text-link join__login">Already a member? Log In</LoginLink>
         </div>
-        {/* where SINC can be used: the web platform today, phone apps later (not links until they exist) */}
-        <ul className="join__platforms" aria-label="Where you can use SINC">
-          <li>
-            <a className="platform platform--live" href={SITE.links.join} target="_blank" rel="noopener noreferrer">
-              <IconGlobe className="platform__icon" />
-              <span className="platform__text"><span className="platform__state">Available now</span><span className="platform__name">In your browser</span></span>
-              <IconArrowUpRight className="platform__go" /><span className="sr-only">(opens the SINC platform in a new tab)</span>
-            </a>
+        {/* where SINC will be available: the web app is being built, phone apps later (none are links until they are released) */}
+        <ul className="join__platforms" aria-label="Where SINC will be available">
+          <li className="platform platform--soon platform--building">
+            <IconGlobe className="platform__icon" />
+            <span className="platform__text"><span className="platform__state">Building · Releasing soon</span><span className="platform__name">Web app</span></span>
           </li>
           <li className="platform platform--soon">
             <IconPhone className="platform__icon" />
