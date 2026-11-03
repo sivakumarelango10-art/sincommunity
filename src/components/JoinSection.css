@@ -48,7 +48,7 @@
 .platform__name { font-family: var(--font-display); font-weight: 700; font-size: 1.05rem; }
 /* not links: dashed outline and softer text so they never look clickable */
 .platform--soon { border: 1.5px dashed rgba(255, 255, 255, 0.5); color: var(--on-blue-soft); }
-.platform--soon .platform__state { color: var(--on-blue-soft); opacity: 0.9; }
+.platform--soon .platform__state { color: var(--on-blue-soft); }
 /* the web app is in progress: an amber dot marks the one being built now */
 .platform--building .platform__state::before { content: ""; display: inline-block; width: 7px; height: 7px; margin-right: 6px; border-radius: 50%; background: #ffc65c; vertical-align: 1px; }
 @media (max-width: 520px) { .join__platforms { flex-direction: column; align-items: stretch; width: 100%; max-width: 320px; } }

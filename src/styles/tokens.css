@@ -14,7 +14,7 @@
   --border-strong: #c3cfe6;
   --white: #ffffff;
   --on-blue: #ffffff;
-  --on-blue-soft: #d9e4ff;    /* 7.9:1 on --blue-deep */
+  --on-blue-soft: #e5ecff;    /* 4.8:1 on --blue, 8.5:1 on --blue-deep */
   --on-navy-soft: #b9c8ec;    /* 9.3:1 on --navy */
   --line: var(--blue);
   --focus: #1c59ee;

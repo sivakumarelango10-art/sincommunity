@@ -154,7 +154,9 @@ export function Hero({ entrance, fromIntro, onWatchStory }: HeroProps) {
   useGSAP((_ctx, contextSafe) => {
     if (!motion || !root.current) return;
     const q = gsap.utils.selector(root);
-    const split = SplitText.create(q(".hero__title")[0], { type: "lines,words", mask: "lines", linesClass: "hero__line" });
+    // aria "none": the words stay readable as normal text (the default puts aria-label on this span,
+    // which screen readers ignore on a plain span, and hides the words from them)
+    const split = SplitText.create(q(".hero__title")[0], { type: "lines,words", mask: "lines", linesClass: "hero__line", aria: "none" });
 
     const t = gsap.timeline({ paused: true, defaults: { ease: EASE.out } });
     t.from(q(".hero__eyebrow"), { y: 16, autoAlpha: 0, duration: 0.7 })
@@ -248,7 +250,7 @@ export function Hero({ entrance, fromIntro, onWatchStory }: HeroProps) {
             </div>
           </div>
 
-          <div className="hero__visual" aria-label="Members of the SINC team, connected to the SINC logo">
+          <div className="hero__visual" role="group" aria-label="Members of the SINC team, connected to the SINC logo">
             <svg className="hero__links" viewBox="0 0 100 106" aria-hidden="true">
               <path className="hero__link" d="M17 72 C 18 86, 32 92, 50 92" />
               <path className="hero__link" d="M51 64 C 51 76, 51 80, 50 84" />
