@@ -6,6 +6,7 @@ import { gsap, useGSAP, EASE } from "../motion/gsap";
 import { lockScroll } from "../motion/hooks";
 import { useMotionEnabled } from "../motion/MotionContext";
 import { IconClose, IconPause, IconPlay, IconReplay } from "./ui";
+import LOGO_ART from "../data/logo-art.json";
 import "./IntroStory.css";
 
 export type IntroCloseReason = "complete" | "skip";
@@ -34,17 +35,28 @@ const OUTSIDE_IN = [...CENTRE_OUT].reverse();
 
 type Pt = { x: number; y: number };
 interface Geometry {
-  w: number; h: number; g: Pt; r: number; wordsTop: number; logo: number;
+  w: number; h: number; g: Pt; r: number; wordsTop: number;
   /** short landscape screens: drawing on the left, words on the right */
   side: boolean; wordsLeft: number;
-  n: [Pt, Pt, Pt];
-  enterL: string; enterR: string; seed: string; swirl: string[]; ring: string; thread: string;
+  /** the three people: the logo's three heads (top, bottom right, bottom left) */
+  n: [Pt, Pt, Pt]; headR: number[];
+  enterL: string; enterR: string; seed: string; thread: string;
+  /** per person, traced from the logo: the line from their head into the centre, and their arm's outline */
+  swirl: string[]; arm: string[];
+  /** where the logo artwork sits, so the drawing and the finished logo line up exactly */
+  logo: { left: number; top: number; width: number; height: number };
   people: { x: number; y: number; size: number }[];
 }
 
-const rot = (p: Pt, deg: number): Pt => {
-  const a = (deg * Math.PI) / 180;
-  return { x: p.x * Math.cos(a) - p.y * Math.sin(a), y: p.x * Math.sin(a) + p.y * Math.cos(a) };
+/* The drawing is the logo itself: the traced parts are placed so the centre of the three heads
+   sits on the story's centre g, scaled so the heads sit at distance ~r from it. */
+const ART = LOGO_ART;
+const mapPath = (d: string, at: (x: number, y: number) => Pt) => {
+  let x = 0, odd = false; // every number in the traced paths is an absolute x or y, in pairs
+  return d.replace(/-?\d+(?:\.\d+)?/g, (v) => {
+    if (!odd) { x = Number(v); odd = true; return "\u0000"; }
+    odd = false; const p = at(x, Number(v)); return `${p.x.toFixed(1)} ${p.y.toFixed(1)}`;
+  }).replace(/\u0000\s*/g, "");
 };
 
 function geometry(w: number, h: number): Geometry {
@@ -52,23 +64,21 @@ function geometry(w: number, h: number): Geometry {
   const side = h < 460 && w / h > 1.5;
   const g = side ? { x: w * 0.27, y: h * 0.5 } : { x: w / 2, y: h * (portraitScreen ? 0.33 : 0.37) };
   const r = side ? Math.max(56, Math.min(h * 0.34, w * 0.14)) : Math.max(70, Math.min(w * 0.27, h * (portraitScreen ? 0.2 : 0.235), 260));
-  const n: [Pt, Pt, Pt] = [
-    { x: g.x, y: g.y - r },
-    { x: g.x + r * 0.87, y: g.y + r * 0.5 },
-    { x: g.x - r * 0.87, y: g.y + r * 0.5 },
-  ];
+  const k = r / ART.reach;
+  const at = (x: number, y: number): Pt => ({ x: g.x + (x - ART.centre.x) * k, y: g.y + (y - ART.centre.y) * k });
+  const heads = ART.heads.map((hd) => at(hd.x, hd.y));
+  const n: [Pt, Pt, Pt] = [heads[0], heads[1], heads[2]];
+  const headR = ART.heads.map((hd) => hd.r * k);
+  const swirl = ART.arms.map((a) => mapPath(a.swirl, at));
+  const arm = ART.arms.map((a) => mapPath(a.outline, at));
+  const origin = at(0, 0);
+  const logo = { left: origin.x, top: origin.y, width: ART.w * k, height: ART.h * k };
   const enterL = `M -40 ${g.y + r * 1.05} C ${w * 0.16} ${g.y + r * 1.05}, ${n[2].x - r * 0.7} ${n[2].y}, ${n[2].x} ${n[2].y}`;
   const enterR = side   // short screens: arrive from above so the line never crosses the words
     ? `M ${n[1].x + r * 0.9} -40 C ${n[1].x + r * 0.9} ${g.y - r * 0.6}, ${n[1].x + r * 0.55} ${n[1].y}, ${n[1].x} ${n[1].y}`
     : `M ${w + 40} ${g.y - r * 0.55} C ${w * 0.84} ${g.y - r * 0.55}, ${n[1].x + r * 0.7} ${n[1].y}, ${n[1].x} ${n[1].y}`;
-  const seed = `M ${g.x} ${g.y + r * 0.6} L ${g.x} ${g.y}`;
-  const swirl = n.map((p) => {
-    const v = { x: p.x - g.x, y: p.y - g.y };
-    const c = rot(v, 55);
-    const e = rot({ x: v.x * 0.22, y: v.y * 0.22 }, 110);
-    return `M ${p.x} ${p.y} Q ${g.x + c.x * 0.8} ${g.y + c.y * 0.8} ${g.x + e.x} ${g.y + e.y}`;
-  });
-  const ring = `M ${g.x} ${g.y - r} a ${r} ${r} 0 1 1 0 ${2 * r} a ${r} ${r} 0 1 1 0 ${-2 * r}`;
+  // the first idea starts at the centre, then rises to become the top person
+  const seed = `M ${n[0].x} ${g.y + r * 0.6} L ${n[0].x} ${g.y}`;
 
   // portraits: one balanced arc on wide screens, two rows on narrow ones
   let people: { x: number; y: number; size: number }[];
@@ -96,10 +106,10 @@ function geometry(w: number, h: number): Geometry {
   const pts = people.map((p) => `${p.x} ${p.y}`);
   const last = people[people.length - 1];
   const thread = `M -40 ${people[0].y + 20} L ${pts.join(" L ")} L ${side ? last.x + last.size * 0.9 : w + 40} ${last.y + 20}`;
-  const logo = Math.min(r * 1.35, 240, w * 0.42);
-  const wordsTop = side ? h / 2 : Math.min(h - 150, g.y + r * 1.22 + 28);
+  // words start below the logo's lowest point (its bottom heads), whatever the screen
+  const wordsTop = side ? h / 2 : Math.min(h - 150, Math.max(g.y + r * 1.22, logo.top + logo.height) + 28);
   const wordsLeft = side ? w * 0.52 : 0;
-  return { w, h, g, r, n, enterL, enterR, seed, swirl, ring, thread, people, logo, wordsTop, side, wordsLeft };
+  return { w, h, g, r, n, headR, enterL, enterR, seed, swirl, arm, thread, people, logo, wordsTop, side, wordsLeft };
 }
 
 interface IntroProps {
@@ -175,9 +185,10 @@ export function IntroStory({ open, onHandoff, onClose }: IntroProps) {
     out.to(d.querySelectorAll(".intro__words, .intro__bar, .intro__top"), { autoAlpha: 0, duration: 0.35 }, 0);
     if (logo && target && atTop) {
       const a = logo.getBoundingClientRect(), b = target.getBoundingClientRect();
+      const now = Number(gsap.getProperty(logo, "scale")) || 1; // the logo may still be settling
       out.to(logo, {
         x: b.left + b.width / 2 - (a.left + a.width / 2), y: b.top + b.height / 2 - (a.top + a.height / 2),
-        scale: b.width / a.width, duration: 0.95, ease: EASE.inOut,
+        scale: (now * b.width) / a.width, duration: 0.95, ease: EASE.inOut,
       }, 0.05);
     } else if (logo) {
       out.to(logo, { autoAlpha: 0, scale: 0.9, duration: 0.5 }, 0);
@@ -203,9 +214,17 @@ export function IntroStory({ open, onHandoff, onClose }: IntroProps) {
 
     // starting state
     gsap.set(q(".intro__words > *, .intro__roles li, .intro__person, .intro__logo, .intro__dot, .intro__hub"), { autoAlpha: 0 });
-    gsap.set(q(".intro__path"), { drawSVG: "0%" });
+    gsap.set(q(".intro__path"), { drawSVG: "0%", autoAlpha: 1 });
     gsap.set(q(".intro__graph"), { transformOrigin: `${geo.g.x}px ${geo.g.y}px`, scale: 1, rotation: 0, autoAlpha: 1 });
+    // fix each dot's and the hub's pivot at its own centre before anything scales them: setting the
+    // pivot later, mid-scale, makes GSAP shift the element to compensate (it left two dots 18px off)
+    gsap.set(q(".intro__dot, .intro__hub"), { transformOrigin: "50% 50%", x: 0, y: 0, scale: 1 });
     gsap.set(q(".intro__seedgroup"), { y: 0 });
+    gsap.set(q(".intro__dot-ring"), { attr: { r: 18 } });
+    gsap.set(q(".intro__dot-core"), { attr: { r: 8 }, autoAlpha: 1 });
+    gsap.set(q(".intro__logo"), { "--fill": "22%", scale: 1 });
+    gsap.set(q(".intro__brand"), { autoAlpha: 0 });
+    gsap.set(q(".intro__brand-ch"), { yPercent: 0, autoAlpha: 1 });
 
     const t = gsap.timeline({
       paused: true,
@@ -223,16 +242,16 @@ export function IntroStory({ open, onHandoff, onClose }: IntroProps) {
 
     /* A — individual ambition */
     t.to(q(".intro__dot--seed"), { autoAlpha: 1, duration: 0.3 }, 0.2)
-      .from(q(".intro__dot--seed"), { scale: M ? 0 : 1, transformOrigin: "50% 50%", duration: mv(0.6), ease: "back.out(3)" }, 0.2);
+      .from(q(".intro__dot--seed"), { scale: M ? 0 : 1, duration: mv(0.6), ease: "back.out(3)" }, 0.2);
     draw(t, q(".intro__seed"), 0.55, 0.9);
     textIn(t, ".intro__line--a", 0.6);
     textOut(t, ".intro__line--a", 1.85);
 
     /* B — different strengths */
-    t.to(q(".intro__seedgroup"), { y: -geo.r, duration: mv(0.95), ease: EASE.inOut }, 2.2);
+    t.to(q(".intro__seedgroup"), { y: geo.n[0].y - geo.g.y, duration: mv(0.95), ease: EASE.inOut }, 2.2);
     draw(t, q(".intro__enter--l"), 2.3, 1.2);
     draw(t, q(".intro__enter--r"), 2.5, 1.2);
-    t.fromTo(q(".intro__dot--l, .intro__dot--r"), { autoAlpha: 0, scale: M ? 0 : 1 }, { autoAlpha: 1, scale: 1, transformOrigin: "50% 50%", duration: mv(0.5) || 0.3, ease: "back.out(3)", stagger: 0.2 }, 3.3);
+    t.fromTo(q(".intro__dot--l, .intro__dot--r"), { autoAlpha: 0, scale: M ? 0 : 1 }, { autoAlpha: 1, scale: 1, duration: mv(0.5) || 0.3, ease: "back.out(3)", stagger: 0.2 }, 3.3);
     t.set(q(".intro__roles"), { autoAlpha: 1 }, 2.5);
     t.fromTo(q(".intro__roles li"), { autoAlpha: 0, y: M ? 20 : 0 }, { autoAlpha: 1, y: 0, duration: M ? 0.7 : 0.3, ease: EASE.out, stagger: 0.6 }, 2.6);
     textOut(t, ".intro__roles", 4.6);
@@ -240,7 +259,7 @@ export function IntroStory({ open, onHandoff, onClose }: IntroProps) {
     /* C — connection */
     draw(t, q(".intro__swirl"), 5.0, 1.2, 0.15);
     t.to(q(".intro__enter"), { autoAlpha: 0.25, duration: 0.8 }, 5.3)
-      .fromTo(q(".intro__hub"), { autoAlpha: 0, scale: M ? 0.3 : 1 }, { autoAlpha: 1, scale: 1, transformOrigin: "50% 50%", duration: mv(0.6) || 0.3, ease: "back.out(2.5)" }, 5.9)
+      .fromTo(q(".intro__hub"), { autoAlpha: 0, scale: M ? 0.3 : 1 }, { autoAlpha: 1, scale: 1, duration: mv(0.6) || 0.3, ease: "back.out(2.5)" }, 5.9)
       .to(q(".intro__graph"), { scale: M ? 1.1 : 1, rotation: M ? 12 : 0, duration: mv(2.4), ease: EASE.inOut }, 5.2);
     textIn(t, ".intro__line--c", 5.5);
     textOut(t, ".intro__line--c", 7.15);
@@ -263,17 +282,33 @@ export function IntroStory({ open, onHandoff, onClose }: IntroProps) {
     }, 10.2)
       .to(q(".intro__thread"), { autoAlpha: 0, duration: 0.5 }, 10.3)
       .to(q(".intro__graph"), { autoAlpha: 1, scale: 1, rotation: 0, duration: mv(1) || 0.4, ease: EASE.inOut }, 10.5)
-      .to(q(".intro__enter"), { autoAlpha: 0, duration: 0.5 }, 10.5);
-    draw(t, q(".intro__ring"), 10.75, 1.3);
+      .to(q(".intro__enter"), { autoAlpha: 0, duration: 0.5 }, 10.5)
+      .to(q(".intro__seed"), { autoAlpha: 0, duration: 0.5 }, 10.5)
+      .to(q(".intro__hub"), { autoAlpha: 0, scale: M ? 0.5 : 1, duration: M ? 0.6 : 0.3, ease: "power2.in" }, 10.55);
+    // the three dots become the logo's three heads...
+    t.to(q(".intro__dot-ring"), {
+      attr: { r: (i: number) => geo.headR[i] }, duration: mv(1.1) || 0.3, ease: EASE.inOut, stagger: M ? 0.1 : 0,
+    }, 10.7)
+      .to(q(".intro__dot-core"), { attr: { r: M ? 0 : 8 }, autoAlpha: 0, duration: M ? 0.6 : 0.3, ease: "power2.in" }, 10.7);
+    // ...and each person's arm grows out from their shoulder in both directions, tracing the real mark
+    if (M) t.fromTo(q(".intro__arm"), { drawSVG: "50% 50%" }, { drawSVG: "0% 100%", duration: 1.6, ease: EASE.draw, stagger: 0.12 }, 10.85);
+    else t.set(q(".intro__arm"), { drawSVG: "0% 100%" }, 10.85);
+    // the inner guide lines retire once the outline is complete, leaving a clean line drawing of the logo
+    t.to(q(".intro__swirl"), { autoAlpha: 0, duration: M ? 0.8 : 0.3, ease: "power1.inOut" }, 12.0);
     textIn(t, ".intro__line--e", 10.8);
     textOut(t, ".intro__line--e", 12.65);
 
-    /* F — brand arrival */
-    t.to(q(".intro__graph"), { autoAlpha: 0, scale: M ? 0.35 : 1, duration: mv(0.8) || 0.4, ease: "power2.in" }, 13.0)
-      .fromTo(q(".intro__logo"), { autoAlpha: 0, scale: M ? 0.6 : 1, clipPath: M ? "circle(0% at 50% 50%)" : "circle(75% at 50% 50%)" },
-        { autoAlpha: 1, scale: 1, clipPath: "circle(75% at 50% 50%)", duration: M ? 1.1 : 0.4, ease: EASE.out }, 13.25);
-    textIn(t, ".intro__brand", 13.9);
-    textIn(t, ".intro__tagline", 14.25);
+    /* F — brand arrival: the colour flows into the drawing from the shared centre, then the line work steps back */
+    // (the reveal starts at the edge of the logo's open centre, 22% out, so the colour is moving from the first frame)
+    if (M) t.fromTo(q(".intro__logo"), { autoAlpha: 1, "--fill": "22%" }, { "--fill": "112%", duration: 1.3, ease: "power1.inOut" }, 13.0);
+    else t.fromTo(q(".intro__logo"), { autoAlpha: 0, "--fill": "135%" }, { autoAlpha: 1, duration: 0.4 }, 13.0);
+    t.to(q(".intro__graph"), { autoAlpha: 0, duration: M ? 0.7 : 0.3, ease: "power1.inOut" }, M ? 13.55 : 13.2);
+    // a gentle settle; the fading line work scales with the logo (both pivot on g) so they never drift apart
+    if (M) t.to(q(".intro__logo, .intro__graph"), { scale: 0.94, duration: 1.6, ease: "power2.out" }, 13.95);
+    t.set(q(".intro__brand"), { autoAlpha: 1 }, 13.85);
+    if (M) t.fromTo(q(".intro__brand-ch"), { yPercent: 105, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: 0.9, ease: EASE.out, stagger: 0.06 }, 13.85);
+    else t.fromTo(q(".intro__brand-ch"), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.35 }, 13.85);
+    textIn(t, ".intro__tagline", 14.3);
     t.to({}, { duration: 0.01 }, END);
 
     tl.current = t;
@@ -316,14 +351,14 @@ export function IntroStory({ open, onHandoff, onClose }: IntroProps) {
               <path className="intro__path intro__enter intro__enter--l" d={g.enterL} />
               <path className="intro__path intro__enter intro__enter--r" d={g.enterR} />
               {g.swirl.map((d, i) => <path key={i} className="intro__path intro__swirl" d={d} />)}
-              <path className="intro__path intro__ring" d={g.ring} />
+              {g.arm.map((d, i) => <path key={i} className="intro__path intro__arm" d={d} />)}
               <circle className="intro__hub" cx={g.g.x} cy={g.g.y} r={g.r * 0.2} />
               <g className="intro__seedgroup">
                 <path className="intro__path intro__seed" d={g.seed} />
-                <g className="intro__dot intro__dot--seed"><circle cx={g.g.x} cy={g.g.y} r={18} className="intro__dot-ring" /><circle cx={g.g.x} cy={g.g.y} r={8} /></g>
+                <g className="intro__dot intro__dot--seed"><circle cx={g.n[0].x} cy={g.g.y} r={18} className="intro__dot-ring" /><circle cx={g.n[0].x} cy={g.g.y} r={8} className="intro__dot-core" /></g>
               </g>
-              <g className="intro__dot intro__dot--r"><circle cx={g.n[1].x} cy={g.n[1].y} r={18} className="intro__dot-ring" /><circle cx={g.n[1].x} cy={g.n[1].y} r={8} /></g>
-              <g className="intro__dot intro__dot--l"><circle cx={g.n[2].x} cy={g.n[2].y} r={18} className="intro__dot-ring" /><circle cx={g.n[2].x} cy={g.n[2].y} r={8} /></g>
+              <g className="intro__dot intro__dot--r"><circle cx={g.n[1].x} cy={g.n[1].y} r={18} className="intro__dot-ring" /><circle cx={g.n[1].x} cy={g.n[1].y} r={8} className="intro__dot-core" /></g>
+              <g className="intro__dot intro__dot--l"><circle cx={g.n[2].x} cy={g.n[2].y} r={18} className="intro__dot-ring" /><circle cx={g.n[2].x} cy={g.n[2].y} r={8} className="intro__dot-core" /></g>
             </g>
           </svg>
         )}
@@ -335,9 +370,11 @@ export function IntroStory({ open, onHandoff, onClose }: IntroProps) {
         ))}
 
         {g && (
-          <div className="intro__logo" style={{ left: g.g.x, top: g.g.y, width: g.logo, height: g.logo }}>
+          // placed on the exact spot the line drawing was traced from, so the colour fills the drawing
+          <div className="intro__logo" style={{ left: g.logo.left, top: g.logo.top, width: g.logo.width, height: g.logo.height,
+            transformOrigin: `${g.g.x - g.logo.left}px ${g.g.y - g.logo.top}px` }}>
             <img src="/images/brand/sinc-mark-480.webp" srcSet="/images/brand/sinc-mark-160.webp 160w, /images/brand/sinc-mark-480.webp 480w, /images/brand/sinc-mark-900.webp 900w"
-              sizes={`${Math.round(g.logo)}px`} width={900} height={787} alt="" />
+              sizes={`${Math.round(g.logo.width)}px`} width={900} height={787} alt="" />
           </div>
         )}
 
@@ -351,7 +388,11 @@ export function IntroStory({ open, onHandoff, onClose }: IntroProps) {
           <p className="intro__line intro__line--c">Progress begins when people connect.</p>
           <p className="intro__line intro__line--d">Different strengths. <span>One shared belief.</span></p>
           <p className="intro__line intro__line--e">No one should have to pursue their ambitions alone.</p>
-          <p className="intro__brand">SINC</p>
+          {/* letters rise one by one; screen readers get the whole word, not "S I N C" */}
+          <p className="intro__brand">
+            <span className="sr-only">SINC</span>
+            {"SINC".split("").map((ch, i) => <span key={i} className="intro__brand-ch" aria-hidden="true">{ch}</span>)}
+          </p>
           <p className="intro__tagline">{SITE.tagline}</p>
         </div>
         <p className="sr-only" id="intro-live" aria-live="polite">{SCENE_TEXT[scene]}</p>

@@ -26,10 +26,12 @@
 .intro__svg { position: absolute; inset: 0; overflow: visible; }
 .intro__path { fill: none; stroke: var(--blue); stroke-width: 3; stroke-linecap: round; }
 .intro__thread { stroke-width: 2; stroke: var(--blue); opacity: 0.6; }
-.intro__ring { stroke-width: 2; opacity: 0.55; }
+.intro__swirl { stroke-width: 2.5; }
+/* the traced arms of the logo: a clean single-weight outline */
+.intro__arm { stroke-width: 2.5; stroke-linejoin: round; }
 .intro__hub { fill: var(--surface-2); stroke: var(--blue); stroke-width: 2.5; }
 .intro__dot circle { fill: var(--blue); }
-.intro__dot .intro__dot-ring { fill: #fff; stroke: var(--blue); stroke-width: 3; }
+.intro__dot .intro__dot-ring { fill: #fff; stroke: var(--blue); stroke-width: 2.5; }
 
 .intro__person {
   position: absolute; translate: -50% -50%; border-radius: 50%; overflow: hidden;
@@ -37,8 +39,14 @@
 }
 .intro__person img { width: 100%; height: 100%; object-fit: cover; }
 
-.intro__logo { position: absolute; translate: -50% -50%; display: grid; place-items: center; transform-origin: 50% 50%; }
-.intro__logo img { width: 100%; height: auto; }
+/* the finished logo sits exactly over the line drawing; --fill grows a soft-edged reveal from the
+   centre of the three heads outwards, so the colour flows into the outline */
+.intro__logo {
+  position: absolute; display: block; --fill: 112%;
+  -webkit-mask-image: radial-gradient(circle at 50% 60.2%, #000 calc(var(--fill) - 22%), transparent var(--fill));
+  mask-image: radial-gradient(circle at 50% 60.2%, #000 calc(var(--fill) - 22%), transparent var(--fill));
+}
+.intro__logo img { display: block; width: 100%; height: 100%; }
 
 .intro__words {
   position: absolute; left: 0; right: 0; top: var(--words-top, 64%);
@@ -59,9 +67,11 @@
 }
 .intro__roles li span { width: 10px; height: 10px; border-radius: 50%; background: var(--blue); flex: none; }
 .intro__brand {
+  display: flex; overflow: hidden; padding-block: 0.06em; /* letters rise into place from below a clean edge */
   font-family: var(--font-display); font-weight: 800; font-size: clamp(2.6rem, 1.6rem + 4vw, 5rem);
   letter-spacing: 0.08em; line-height: 1; color: var(--navy);
 }
+.intro__brand-ch { display: inline-block; }
 .intro__tagline {
   margin-top: clamp(3.4rem, 2.6rem + 3.6vw, 6.2rem);
   font-family: var(--font-display); font-weight: 600; font-size: clamp(1.05rem, 0.9rem + 0.8vw, 1.6rem); color: var(--blue-deep);

@@ -77,11 +77,13 @@ photo to the page that names the person. The home, team and leadership pages use
 
 `assets-original/sinc-logo.jpeg` is the supplied logo. `sinc-logo-mark-transparent.png` is the same artwork with the white background removed, used where the logo sits on blue or pale backgrounds. Optimised sizes are in `public/images/brand/`.
 
+The opening story draws the logo's real outline before the colour fills in. That outline is traced from `public/images/brand/sinc-mark-900.webp` into `src/data/logo-art.json`. If the logo artwork ever changes, re-run the trace with `python3 scripts/trace-logo.py` (its first lines list the Python packages it needs) and open `logo-trace-check.svg` to see the trace over the artwork.
+
 ---
 
 ## The opening story and motion settings
 
-- **First visit** (motion on): the ~15-second opening story plays in six scenes, then the logo travels into the header and the hero entrance plays. The visit is remembered as soon as the story starts, so refreshing never forces it again.
+- **First visit** (motion on): the ~15-second opening story plays in six scenes. In "Our belief" the three people become the logo: the dots grow into its three heads and each arm's outline grows out from the shoulder. In the last scene the colour flows into that drawing from the centre, then the logo travels into the header and the hero entrance plays. The visit is remembered as soon as the story starts, so refreshing never forces it again.
 - **Returning visits**: the page loads directly with a short hero entrance.
 - **Controls**: *Skip intro* (visible from the first frame), *Pause/Resume*, *Replay*, and `Esc`. Scrolling and focus are restored on close. *Watch our story* (hero) and *Replay our story* (footer) replay it at any time.
 - **Motion off** (footer switch, remembered in this browser) or **reduced motion** set in the operating system: no automatic story, no pinned scrolling, parallax, path drawing or magnetic buttons. Content is identical, and the story can still be watched as gentle crossfades.
